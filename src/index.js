@@ -7,8 +7,8 @@ import { Button, Tabbar, TabbarItem } from 'vant'
 import 'assets/css/app.styl'
 
 Vue.use(Button)
-Vue.use(Tabbar);
-Vue.use(TabbarItem);
+Vue.use(Tabbar)
+Vue.use(TabbarItem)
 
 new Vue({
   router,
