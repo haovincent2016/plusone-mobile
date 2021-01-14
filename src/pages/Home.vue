@@ -1,16 +1,15 @@
 <template>
   <div class="full-width center-content">
-    <img src="static/img/logo.png">
-    <WelcomeMessage name="World" />
+    <BottomPart />
   </div>
 </template>
 
 <script>
-import WelcomeMessage from 'components/Home/WelcomeMessage'
+import BottomPart from 'components/Home/BottomPart'
 
 export default {
   components: {
-    WelcomeMessage
+    BottomPart
   }
 }
 </script>
