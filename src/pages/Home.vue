@@ -9,7 +9,7 @@
       <van-swipe-item 
         v-for="(image, index) in images" 
         :key="index">
-        <img width="100%" height="250px" v-lazy="image" />
+        <img width="100%" height="250px" :src="image" />
       </van-swipe-item>
       <template #indicator>
         <div class="custom-indicator">{{ current + 1 }}/3</div>
@@ -30,7 +30,7 @@
     </div>
 
     <van-dialog v-model="show" title="视频">
-      <video src="/static/video/intro1.mp4" width="100%" height="310px" controls="controls">暂不支持播放</video>
+      <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video>
     </van-dialog>
 
     <van-divider
@@ -108,7 +108,7 @@
       v-model="showCode" 
       position="bottom" 
       :style="{height:'30%'}">
-      <img src="/static/img/wechatcode.jpg" width="220px" height="100%" />
+      <img :src="qrUrl" width="220px" height="100%" />
     </van-popup>
 
     <BottomPart />
@@ -125,10 +125,12 @@ export default {
       current: 0,
       activeNames: ['1'],
       images: [
-        '/static/img/ad1.png',
-        '/static/img/ad2.png',
-        '/static/img/ad3.png'
+        require('../../static/img/ad1.png'),
+        require('../../static/img/ad2.png'),
+        require('../../static/img/ad3.png')
       ],
+      videoUrl: require('../../static/video/intro1.mp4'),
+      qrUrl: require('../../static/img/wechatcode.jpg'),
       show: false,
       showCode: false
     }

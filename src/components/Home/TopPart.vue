@@ -2,17 +2,21 @@
   <van-nav-bar
     fixed
     right-text="更多"
-    left-arrow
     @click-left="onClickLeft"
     @click-right="onClickRight">
     <template #title>
-      <img src="/static/img/site-logo.png" class="logo" />
+      <img :src="logoUrl" class="logo" />
     </template>
   </van-nav-bar>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      logoUrl: require('../../../static/img/site-logo.png')
+    }
+  },
   methods: {
     onClickLeft() {
       this.$toast('返回')
