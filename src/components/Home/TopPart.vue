@@ -1,7 +1,7 @@
 <template>
   <van-nav-bar
-    left-text="返回"
-    right-text="详情"
+    fixed
+    right-text="更多"
     left-arrow
     @click-left="onClickLeft"
     @click-right="onClickRight">

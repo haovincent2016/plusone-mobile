@@ -47,10 +47,11 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 100000,
             name: utils.assetsPath('media/[name].[hash:7].[ext]')
           }
-        }
+        },
+        esModule:false
       }, {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         use: {
