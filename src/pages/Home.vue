@@ -19,6 +19,7 @@
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
+      <van-icon class="icon-style" name="friends-o" color="#1989fa" />
       我们的教师
     </van-divider>
 
@@ -26,16 +27,19 @@
       <p style="font-size:14px;">Lucy老师和Vince老师</p>
       <p style="font-size:14px;">多年英语教学经验</p>
       <p style="font-size:14px;">助力孩子英语能力长足提高</p>
-      <van-button plain hairline type="info" @click="showVideo">查看视频</van-button>
+      <!-- <van-button plain hairline type="info" @click="showVideo">查看视频</van-button> -->
     </div>
 
-    <van-dialog v-model="show" title="视频">
+    <!-- <van-dialog v-model="show" title="视频">
       <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video>
-    </van-dialog>
+    </van-dialog> -->
+
+    <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video>
 
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
+      <van-icon class="icon-style" name="thumb-circle-o" color="#1989fa" />
       我们的课程
     </van-divider>
 
@@ -63,6 +67,7 @@
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
+      <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
       更多资讯
     </van-divider>
 
@@ -88,9 +93,10 @@
     <van-divider
       :style="{color:'#1989fa',borderColor:'#1989fa',padding:'0 16px'}"
     >
+      <van-icon class="icon-style" name="scan" color="#1989fa" />
       扫码关注
     </van-divider>
-    <div style="text-align:center;">
+    <!-- <div style="text-align:center;">
       <van-button 
         plain 
         hairline 
@@ -109,15 +115,15 @@
       position="bottom" 
       :style="{height:'30%'}">
       <img :src="qrUrl" width="220px" height="100%" />
-    </van-popup>
-
-    <BottomPart />
+    </van-popup> -->
+    <div style="text-align:center;">
+      <img style="margin-bottom:80px;" :src="qrUrl" width="220px" height="100%" />
+    </div>
   </div>
 </template>
 
 <script>
 import TopPart from 'components/Home/TopPart'
-import BottomPart from 'components/Home/BottomPart'
 
 export default {
   data() {
@@ -147,13 +153,15 @@ export default {
     }
   },
   components: {
-    TopPart,
-    BottomPart
+    TopPart
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+.icon-style
+ font-size 20px
+ margin-right: 4px
 .my-swipe
   margin-top 46px
 .custom-indicator

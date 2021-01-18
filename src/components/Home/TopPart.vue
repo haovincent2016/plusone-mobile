@@ -1,9 +1,5 @@
 <template>
-  <van-nav-bar
-    fixed
-    right-text="更多"
-    @click-left="onClickLeft"
-    @click-right="onClickRight">
+  <van-nav-bar fixed>
     <template #title>
       <img :src="logoUrl" class="logo" />
     </template>
