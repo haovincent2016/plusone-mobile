@@ -129,7 +129,7 @@ export default {
   data() {
     return {
       current: 0,
-      activeNames: ['1'],
+      activeNames: [],
       images: [
         require('../../static/img/ad1.png'),
         require('../../static/img/ad2.png'),

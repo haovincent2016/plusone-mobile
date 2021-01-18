@@ -2,7 +2,7 @@
 <div class="full-width">
   <van-dropdown-menu>
     <van-dropdown-item v-model="country" :options="option" @change="getTitle" />
-    <van-dropdown-item title="筛选" ref="item">
+    <van-dropdown-item title="看套餐" ref="item">
       <van-cell center title="套餐价">
         <template #right-icon>
           <van-switch v-model="switch1" size="24" active-color="#ee0a24" />
@@ -33,19 +33,51 @@
     </van-divider>
     <div v-if="country == 0">
       <van-cell title="TOP30" value="1500 / 所" />
-      <van-field v-model="digit" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-field v-model="us1" type="digit" label="数量" placeholder="请输入申请数量" />
       <van-cell title="TOP 31 - 60" value="1200 / 所" />
-      <van-field v-model="digit" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-field v-model="us2" type="digit" label="数量" placeholder="请输入申请数量" />
       <van-cell title="TOP 61 - 100" value="900 / 所" />
-      <van-field v-model="digit" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-field v-model="us3" type="digit" label="数量" placeholder="请输入申请数量" />
       <van-cell title="TOP 100 -" value="600 / 所" />
-      <van-field v-model="digit" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-field v-model="us4" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="总计费用" :value="ustotal" />
+      <div style="text-align:center;padding-top:4px;">
+        <van-button plain hairline type="info" @click="resetUSAll">重置表格</van-button>
+      </div>
     </div>
     <div v-if="country == 1">
+      <van-cell title="*G5（5所大学）" value="1500 / 所" />
+      <van-field v-model="uk1" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="非G5" value="1000 / 所" />
+      <van-field v-model="uk2" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="总计费用" :value="uktotal" />
+      <div style="text-align:center;padding-top:4px;">
+        <van-button plain hairline type="info" @click="resetUKAll">重置表格</van-button>
+      </div>
+      <div class="notice">*英国G5超级精英大学包括剑桥大学、牛津大学、帝国理工学院、伦敦大学学院、伦敦政治经济学院</div>
     </div>
     <div v-if="country == 2">
+      <van-cell title="*澳洲八大（8所大学）" value="1500 / 所" />
+      <van-field v-model="oc1" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="非澳洲八大" value="1000 / 所" />
+      <van-field v-model="oc2" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="总计费用" :value="uktotal" />
+      <div style="text-align:center;padding-top:4px;">
+        <van-button plain hairline type="info" @click="resetOCAll">重置表格</van-button>
+      </div>
+      <div class="notice">*澳大利亚八校联盟（Group of Eight，简称Go8或G8）包括墨尔本大学、蒙纳士大学、澳大利亚国立大学、悉尼大学、新南威尔士大学、西澳大学、阿德莱德大学、昆士兰大学</div>
     </div>
     <div v-if="country == 3">
+      <van-cell title="加拿大" value="1100 / 所" />
+      <van-field v-model="canada" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="香港" value="1100 / 所" />
+      <van-field v-model="hk" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="新加坡" value="1100 / 所" />
+      <van-field v-model="singapore" type="digit" label="数量" placeholder="请输入申请数量" />
+      <van-cell title="总计费用" :value="othertotal" />
+      <div style="text-align:center;padding-top:4px;">
+        <van-button plain hairline type="info" @click="resetOtherAll">重置表格</van-button>
+      </div>
     </div>
   </div>
 </div>
@@ -64,8 +96,32 @@ export default {
         { text: '澳洲申请', value: 2 },
         { text: '其他申请', value: 3 },
       ],
-      digit: ''
+      us1: 0,
+      us2: 0,
+      us3: 0,
+      us4: 0,
+      uk1: 0,
+      uk2: 0,
+      oc1: 0,
+      oc2: 0,
+      hk: 0,
+      singapore: 0,
+      canada: 0
     };
+  },
+  computed: {
+    ustotal: function () {
+      return this.us1 * 1500 + this.us2 * 1200 + this.us3 * 900 + this.us4 * 600
+    },
+    uktotal: function () {
+      return this.uk1 * 1500 + this.uk2 * 1000
+    },
+    octotal: function () {
+      return this.oc1 * 1500 + this.oc2 * 1000
+    },
+    othertotal: function () {
+      return ( this.hk + this.singapore + this.canada ) * 1100
+    }
   },
   methods: {
     onConfirm() {
@@ -86,11 +142,34 @@ export default {
           this.title = '其他申请'
           break
       }
+    },
+    resetUSAll() {
+      this.us1 = 0
+      this.us2 = 0
+      this.us3 = 0
+      this.us4 = 0
+    },
+    resetUKAll() {
+      this.uk1 = 0
+      this.uk2 = 0
+    },
+    resetOCAll() {
+      this.oc1 = 0
+      this.oc2 = 0
+    },
+    resetOtherAll() {
+      this.hk = 0
+      this.canada = 0
+      this.singapore = 0
     }
   },
 }
 </script>
 
 <style lang="stylus" scoped>
-
+.notice
+ margin 5px
+ padding 5px
+ border 1px solid #f1f1f1
+ color #a2a2a2
 </style>
