@@ -2,10 +2,13 @@ import Vue from 'vue'
 import router from './router'
 import App from './App'
 
-import { Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
+import { Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
 
 import 'assets/css/app.styl'
 
+Vue.use(Col)
+Vue.use(Row)
+Vue.use(VanImage)
 Vue.use(Field)
 Vue.use(Switch)
 Vue.use(DropdownMenu)

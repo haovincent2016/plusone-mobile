@@ -1,8 +1,9 @@
 <template>
 <div class="full-width">
-  <van-dropdown-menu>
+  <TopPart />
+  <van-dropdown-menu class="my-menu">
     <van-dropdown-item v-model="country" :options="option" @change="getTitle" />
-    <van-dropdown-item title="看套餐" ref="item">
+    <!-- <van-dropdown-item title="看套餐" ref="item">
       <van-cell center title="套餐价">
         <template #right-icon>
           <van-switch v-model="switch1" size="24" active-color="#ee0a24" />
@@ -13,77 +14,82 @@
           确认
         </van-button>
       </div>
-    </van-dropdown-item>
+    </van-dropdown-item> -->
   </van-dropdown-menu>
-  <!-- 套餐价 -->
-  <div v-if="switch1">
-    <van-cell-group>
-      <van-cell icon="location-o" title="加拿大" value="3900（4所大学）" label="加拿大的大学，不限排名任选" />
-      <van-cell icon="location-o" title="香港" value="3900（4所大学）" label="香港的大学，不限排名任选" />
-      <van-cell icon="location-o" title="新加坡" value="2900（3所大学）" label="新加坡的大学，不限排名任选" />
-    </van-cell-group>
-  </div>
+ 
   <!-- 单选价 -->
-  <div v-else>
-    <van-divider
-      :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
-    >
-      <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
-      {{ title }}
-    </van-divider>
-    <div v-if="country == 0">
-      <van-cell title="TOP30" value="1500 / 所" />
-      <van-field v-model="us1" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="TOP 31 - 60" value="1200 / 所" />
-      <van-field v-model="us2" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="TOP 61 - 100" value="900 / 所" />
-      <van-field v-model="us3" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="TOP 100 -" value="600 / 所" />
-      <van-field v-model="us4" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="总计费用" :value="ustotal" />
-      <div style="text-align:center;padding-top:4px;">
-        <van-button plain hairline type="info" @click="resetUSAll">重置表格</van-button>
-      </div>
-    </div>
-    <div v-if="country == 1">
-      <van-cell title="*G5（5所大学）" value="1500 / 所" />
-      <van-field v-model="uk1" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="非G5" value="1000 / 所" />
-      <van-field v-model="uk2" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="总计费用" :value="uktotal" />
-      <div style="text-align:center;padding-top:4px;">
-        <van-button plain hairline type="info" @click="resetUKAll">重置表格</van-button>
-      </div>
-      <div class="notice">*英国G5超级精英大学包括剑桥大学、牛津大学、帝国理工学院、伦敦大学学院、伦敦政治经济学院</div>
-    </div>
-    <div v-if="country == 2">
-      <van-cell title="*澳洲八大（8所大学）" value="1500 / 所" />
-      <van-field v-model="oc1" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="非澳洲八大" value="1000 / 所" />
-      <van-field v-model="oc2" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="总计费用" :value="uktotal" />
-      <div style="text-align:center;padding-top:4px;">
-        <van-button plain hairline type="info" @click="resetOCAll">重置表格</van-button>
-      </div>
-      <div class="notice">*澳大利亚八校联盟（Group of Eight，简称Go8或G8）包括墨尔本大学、蒙纳士大学、澳大利亚国立大学、悉尼大学、新南威尔士大学、西澳大学、阿德莱德大学、昆士兰大学</div>
-    </div>
-    <div v-if="country == 3">
-      <van-cell title="加拿大" value="1100 / 所" />
-      <van-field v-model="canada" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="香港" value="1100 / 所" />
-      <van-field v-model="hk" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="新加坡" value="1100 / 所" />
-      <van-field v-model="singapore" type="digit" label="数量" placeholder="请输入申请数量" />
-      <van-cell title="总计费用" :value="othertotal" />
-      <div style="text-align:center;padding-top:4px;">
-        <van-button plain hairline type="info" @click="resetOtherAll">重置表格</van-button>
-      </div>
+  <van-divider
+    :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+  >
+    <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
+    {{ title }}
+  </van-divider>
+  <div v-if="country == 0">
+    <van-cell title="TOP30" value="1500 / 所" />
+    <van-field v-model="us1" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="TOP 31 - 60" value="1200 / 所" />
+    <van-field v-model="us2" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="TOP 61 - 100" value="900 / 所" />
+    <van-field v-model="us3" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="TOP 100 -" value="600 / 所" />
+    <van-field v-model="us4" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="总计费用" :value="ustotal" />
+    <div style="text-align:center;padding-top:4px;">
+      <van-button plain hairline type="info" @click="resetUSAll">重置表格</van-button>
     </div>
   </div>
+  <div v-if="country == 1">
+    <van-cell title="*G5（5所大学）" value="1500 / 所" />
+    <van-field v-model="uk1" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="非G5" value="1000 / 所" />
+    <van-field v-model="uk2" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="总计费用" :value="uktotal" />
+    <div style="text-align:center;padding-top:4px;">
+      <van-button plain hairline type="info" @click="resetUKAll">重置表格</van-button>
+    </div>
+    <div class="notice">*英国G5超级精英大学包括剑桥大学、牛津大学、帝国理工学院、伦敦大学学院、伦敦政治经济学院</div>
+  </div>
+  <div v-if="country == 2">
+    <van-cell title="*澳洲八大（8所大学）" value="1500 / 所" />
+    <van-field v-model="oc1" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="非澳洲八大" value="1000 / 所" />
+    <van-field v-model="oc2" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="总计费用" :value="uktotal" />
+    <div style="text-align:center;padding-top:4px;">
+      <van-button plain hairline type="info" @click="resetOCAll">重置表格</van-button>
+    </div>
+    <div class="notice">*澳大利亚八校联盟（Group of Eight，简称Go8或G8）包括墨尔本大学、蒙纳士大学、澳大利亚国立大学、悉尼大学、新南威尔士大学、西澳大学、阿德莱德大学、昆士兰大学</div>
+  </div>
+  <div v-if="country == 3">
+    <van-cell title="加拿大" value="1100 / 所" />
+    <van-field v-model="canada" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="香港" value="1100 / 所" />
+    <van-field v-model="hk" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="新加坡" value="1100 / 所" />
+    <van-field v-model="singapore" type="digit" label="数量" placeholder="请输入申请数量" />
+    <van-cell title="总计费用" :value="othertotal" />
+    <div style="text-align:center;padding-top:4px;">
+      <van-button plain hairline type="info" @click="resetOtherAll">重置表格</van-button>
+    </div>
+  </div>
+   <!-- 套餐价 -->
+   <van-divider
+    :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+  >
+    <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
+    套餐价
+  </van-divider>
+  <van-cell-group style="margin-bottom:80px;">
+    <van-cell icon="location-o" title="加拿大" value="3900（4所大学）" label="加拿大的大学，不限排名任选" />
+    <van-cell icon="location-o" title="香港" value="3900（4所大学）" label="香港的大学，不限排名任选" />
+    <van-cell icon="location-o" title="新加坡" value="2900（3所大学）" label="新加坡的大学，不限排名任选" />
+  </van-cell-group>
 </div>
 </template>
 
 <script>
+import TopPart from 'components/Home/TopPart'
+
 export default {
   data() {
     return {
@@ -163,10 +169,18 @@ export default {
       this.singapore = 0
     }
   },
+  components: {
+    TopPart
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
+.icon-style
+ font-size 20px
+ margin-right: 4px
+.my-menu
+  margin-top 46px
 .notice
  margin 5px
  padding 5px
