@@ -1,7 +1,7 @@
 <template>
   <van-nav-bar fixed>
     <template #title>
-      <img :src="logoUrl" class="logo" />
+      <img @click="goHome" :src="logoUrl" class="logo" />
     </template>
   </van-nav-bar>
 </template>
@@ -14,12 +14,9 @@ export default {
     }
   },
   methods: {
-    onClickLeft() {
-      this.$toast('返回')
-    },
-    onClickRight() {
-      this.$toast('详情')
-    },
+    goHome() {
+      this.$router.push({name: 'Home'})
+    }
   },
 }
 </script>
@@ -29,4 +26,5 @@ export default {
   width 30px
   height 30px
   border-radius 50%
+  padding 5px 15px
 </style>
