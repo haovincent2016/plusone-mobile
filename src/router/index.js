@@ -5,6 +5,8 @@ import Home from 'pages/Home'
 import Price from 'pages/Price'
 import About from 'pages/About'
 import Contact from 'pages/Contact'
+import User from 'pages/User'
+import Login from 'pages/Login'
 
 Vue.use(Router)
 
@@ -28,6 +30,16 @@ const routes = [
     path: '/contact',
     component: Contact,
     name: 'Contact'
+  },
+  {
+    path: '/user',
+    component: User,
+    name: 'User'
+  },
+  {
+    path: '/login',
+    component: Login,
+    name: 'Login'
   }
 ]
 

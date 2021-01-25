@@ -1,6 +1,6 @@
 <template>
 <div class="full-width">
-  <TopPart />
+  <TopPart :isLogin="false" />
   <img style="margin-top:46px;margin-bottom:20px;" :src="topUrl" width="100%" />
   <div style="text-align:center;">
     <van-image

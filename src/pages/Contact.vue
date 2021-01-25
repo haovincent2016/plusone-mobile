@@ -1,6 +1,6 @@
 <template>
   <div class="full-width">
-    <TopPart />
+    <TopPart :isLogin="false" />
     <img style="margin-top:46px;" :src="topUrl" width="100%" />
     <van-divider
     :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"

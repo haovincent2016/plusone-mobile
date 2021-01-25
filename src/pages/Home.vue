@@ -1,6 +1,6 @@
 <template>
   <div class="full-width">
-    <TopPart />
+    <TopPart :isLogin="false" />
     <van-swipe 
       class="my-swipe" 
       @change="onChange"
@@ -34,8 +34,10 @@
       <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video>
     </van-dialog> -->
 
-    <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video>
-
+    <!-- <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video> -->
+    <div style="text-align:center">
+      <iframe frameborder="0" style="width:100%;height:310px;" src="https://v.qq.com/txp/iframe/player.html?vid=k3223ziv8nq" allowFullScreen="true"></iframe>
+    </div>
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
@@ -84,9 +86,8 @@
         :autoplay="5000"
         :show-indicators="false"
       >
-        <van-swipe-item>资讯1</van-swipe-item>
-        <van-swipe-item>资讯2</van-swipe-item>
-        <van-swipe-item>资讯3</van-swipe-item>
+        <van-swipe-item><a style="text-decoration:none;color:#1989fa;" href="https://mp.weixin.qq.com/s/j3Tvn7lZuAwexgTf4oUUng" target="_blank">拜登总统就任典礼签署17项行政命令，留学生移民迎来新时代...</a></van-swipe-item>
+        <van-swipe-item><a style="text-decoration:none;color:#1989fa;" href="https://mp.weixin.qq.com/s/9YYTOtWiHTVsIEE962xbqQ" target="_blank">拜登欢迎留学生：博士直接拿绿卡，扩大就业签证配额...</a></van-swipe-item>
       </van-swipe>
     </van-notice-bar>
 
@@ -211,7 +212,7 @@ export default {
   bottom 70px
   right 20px
   border 1px solid #ddd
-  padding 13px 15px
+  padding 12px 15px 15px 15px
   border-radius 50%
   background-color #1989fa
   color #fff

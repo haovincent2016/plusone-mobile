@@ -1,6 +1,6 @@
 <template>
 <div class="full-width">
-  <TopPart />
+  <TopPart :isLogin="false" />
   <van-tabs v-model="activeName" style="margin-top:46px;">
     <van-tab title="课堂" name="lesson">课堂价格设置~</van-tab>
     <van-tab title="文章" name="essay">作文及文书书写修改价格设置~</van-tab>
