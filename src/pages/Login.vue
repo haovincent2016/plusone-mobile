@@ -78,6 +78,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
+import { register, login } from '../api/request'
 export default {
   data() {
     return {
@@ -97,6 +98,13 @@ export default {
   methods: {
     onSubmit(values) {
       console.log('submit', values);
+      let data = {
+        username: this.username,
+        password: this.password
+      }
+      register(data).then(res => {
+        console.log(res)
+      })
     },
     onFailed(errors) {
       console.log('failed', errors);
@@ -104,7 +112,7 @@ export default {
     sendCode() {
       this.$toast.success("已发送")
       this.codeSended = true
-      this.countDown = 6
+      this.countDown = 60
       let timer = setInterval(() => {
         this.countDown--;
         if(this.countDown <= 0) {

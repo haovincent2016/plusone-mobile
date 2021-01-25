@@ -2,8 +2,27 @@
 <div class="full-width">
   <TopPart :isLogin="false" />
   <van-tabs v-model="activeName" style="margin-top:46px;">
-    <van-tab title="课堂" name="lesson">课堂价格设置~</van-tab>
-    <van-tab title="文章" name="essay">作文及文书书写修改价格设置~</van-tab>
+    <van-tab title="课程" name="lesson">
+      <van-divider
+        :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+      >
+        <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
+        课程价格
+      </van-divider>
+      <van-cell title="一对一课程" value="250 / 小时" />
+      <van-cell title="2 - 3人班" value="150 / 小时" />
+      <van-cell title="4 - 6人班" value="100 / 小时" />
+    </van-tab>
+    <van-tab title="文章" name="essay">
+      <van-divider
+        :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+      >
+        <van-icon class="icon-style" name="bullhorn-o" color="#1989fa" />
+        文书/作文
+      </van-divider>
+      <van-cell title="文书修改" value="0.5元 / 字" />
+      <van-cell title="作文批改" value="价格面议" />
+    </van-tab>
     <van-tab title="申请" name="application">
       <van-dropdown-menu class="my-menu">
         <van-dropdown-item v-model="country" :options="option" @change="getTitle" />

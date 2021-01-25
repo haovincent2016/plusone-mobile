@@ -1,13 +1,17 @@
-var router = require('koa-router')();
+const Router = require('koa-router');
+const userController = require('../controller/user')
 
-router.prefix('/users');
-
-router.get('/', function *(next) {
-  this.body = 'this is a users response!';
+const router = new Router({
+    prefix: '/user'
 });
 
-router.get('/bar', function *(next) {
-  this.body = 'this is a users/bar response!';
-});
+//用户注册
+router.post('/register',userController.create)
+
+//密码登陆
+router.post('/login',userController.login)
+
+//获取用户信息
+router.post('/getUserInfo',userController.getUserInfo)
 
 module.exports = router;

@@ -29,7 +29,7 @@
   <van-cell value="教学善于发掘规律，总结提高。开创的托福写作范本提分显著" />
   <van-cell value="擅长全科教学，文书修改，留学指导。受家长信赖，学生欢迎" />
 
-  <van-divider
+  <!-- <van-divider
     :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
   >
     <van-icon class="icon-style" name="thumb-circle-o" color="#1989fa" />
@@ -42,7 +42,7 @@
     <video width="200px" height="200px" controls="controls">
       <source :src="video2" type="video/mp4" />
     </video>
-  </div>
+  </div> -->
 
   <van-divider
     :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
