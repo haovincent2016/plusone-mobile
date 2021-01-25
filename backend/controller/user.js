@@ -7,14 +7,8 @@ const tools = require('../public/tools')
 //统一设置token有效时间  为了方便观察，设为10s
 const expireTime = '10s'
 
-//引入db配置
-const db = require('../config/db')
-
-//引入sequelize对象
-const Sequelize = db.sequelize
-
 //引入数据表模型
-const user = Sequelize.import('../model/user')
+const user = require('../model/user')
 //自动创建表
 user.sync({ force: false }); 
 
@@ -66,6 +60,7 @@ class userController {
           }
         }
       } catch (error) {
+        console.log(error)
         ctx.response.status = 416;
         ctx.body = {
           code: -1,
