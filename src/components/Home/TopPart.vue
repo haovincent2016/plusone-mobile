@@ -1,14 +1,15 @@
 <template>
-  <van-nav-bar 
+  <van-nav-bar
+    class="custom-top" 
     fixed
     @click-right="goLogin"
     @click-left="goBack">
     <template #left>
-      <van-icon v-show="isLogin" name="arrow-left" size="18" />
+      <van-icon color="#fff" v-show="isLogin" name="arrow-left" size="18" />
       <span v-show="isLogin" class="func-title">返回</span>
     </template>
     <template #right>
-      <van-icon v-show="!isLogin" name="user-circle-o" size="18" />
+      <van-icon color="#fff" v-show="!isLogin" name="user-circle-o" size="18" />
       <span v-show="!isLogin" class="func-title">登录</span>
     </template>
     <template #title>
@@ -49,6 +50,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.custom-top
+  background-image: linear-gradient(45deg, #0081ff, #1cbbb4);
 .logo
   width 30px
   height 30px
@@ -56,5 +59,5 @@ export default {
   padding 5px 15px
 .func-title
   margin-left 3px
-  color #1989fa
+  color #fff
 </style>
