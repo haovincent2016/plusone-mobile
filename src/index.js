@@ -3,11 +3,13 @@ import router from './router'
 import store from './store'
 import App from './App'
 
-import { Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
+import { Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
 
 import 'font-awesome/css/font-awesome.min.css'
 import 'assets/css/app.styl'
 
+Vue.use(Step)
+Vue.use(Steps)
 Vue.use(Checkbox)
 Vue.use(Uploader)
 Vue.use(CountDown)
