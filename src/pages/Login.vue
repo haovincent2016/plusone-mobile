@@ -2,7 +2,7 @@
 <div>
   <TopPart :isLogin="true" />
   <van-tabs v-model="activeWay" style="margin-top:46px;">
-    <van-tab title="用户名密码" name="username">
+    <van-tab title="用户名登录" name="username">
       <van-form class="custom-form" @submit="onSubmit" @fail="onFailed">
         <van-field
           v-model="username"
@@ -27,7 +27,7 @@
         </div>
       </van-form>
     </van-tab>
-    <van-tab title="手机验证码" name="phone">
+    <!-- <van-tab title="手机登录" name="phone">
       <van-form class="custom-form" @submit="onSubmit" @fail="onFailed">
         <van-field
           v-model="phone"
@@ -71,14 +71,16 @@
           <div class="hint">*未注册用户将自动注册</div>
         </div>
       </van-form>
-    </van-tab>
+    </van-tab> -->
   </van-tabs>
 </div>   
 </template>
 
 <script>
 import TopPart from 'components/Home/TopPart'
-import { register, login } from '../api/request'
+import { register, login, getUserInfo } from '../api/request'
+import { mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
@@ -96,6 +98,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['userLogin']),
     onSubmit(values) {
       console.log('submit', values);
       let data = {
@@ -104,6 +107,11 @@ export default {
       }
       register(data).then(res => {
         console.log(res)
+        if(res.code === '0') {
+          this.$toast.success("登陆成功")
+          this.userLogin(res.userInfo)
+          this.$router.replace({ name: 'Home' })
+        }
       })
     },
     onFailed(errors) {

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import router from './router'
+import store from './store'
 import App from './App'
 
 import { CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
@@ -38,5 +39,6 @@ Vue.use(Divider)
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

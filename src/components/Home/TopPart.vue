@@ -9,8 +9,8 @@
       <span v-show="isLogin" class="func-title">返回</span>
     </template>
     <template #right>
-      <van-icon color="#fff" v-show="!isLogin" name="user-circle-o" size="18" />
-      <span v-show="!isLogin" class="func-title">登录</span>
+      <van-icon color="#fff" v-show="!isLogin && !logined" name="user-circle-o" size="18" />
+      <span v-show="!isLogin && !logined" class="func-title">登录</span>
     </template>
     <template #title>
       <img @click="goHome" :src="logoUrl" class="logo" />
@@ -19,10 +19,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
+    // 是否位于登录页
     isLogin: Boolean
   },
+  computed: mapState([ 'logined' ]),
   data() {
     return {
       logoUrl: require('../../../static/img/site-logo.png')

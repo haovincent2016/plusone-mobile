@@ -15,7 +15,7 @@
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
-    "koa-cors": "0.0.16",
+    "koa-convert": "^2.0.0",
     "koa-json": "^2.0.2",
     "koa-jwt": "^4.0.0",
     "koa-logger": "^3.2.1",
@@ -23,6 +23,7 @@
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "koa-views": "^7.0.0",
+    "koa2-cors": "^2.0.6",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "sequelize": "^6.4.0"

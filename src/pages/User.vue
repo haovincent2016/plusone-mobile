@@ -2,7 +2,7 @@
   <div class="container">
     <TopPart :isLogin="true" />
     <van-button 
-      v-if="userLogin" 
+      v-if="!logined" 
       @click="goLogin" 
       class="custom-btn" 
       color="linear-gradient(to right, #ff6034, #ee0a24)">
@@ -31,12 +31,20 @@
         <van-cell title="单元格" icon="location-o" value="展示信息" />
         <van-cell title="单元格" icon="location-o" value="展示信息"  />
       </div>
+      <van-button 
+      @click="goLogout" 
+      class="logout-btn" 
+      color="linear-gradient(to right, #ff6034, #ee0a24)">
+        退出登录
+      </van-button>
     </div>
   </div>
 </template>
 
 <script>
 import TopPart from 'components/Home/TopPart'
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
@@ -45,9 +53,15 @@ export default {
       avatarUrl: require('../../static/img/vince.jpg'),
     }
   },
+  computed: mapState([ 'logined' ]),
   methods: {
+    ...mapMutations(['userLogout']),
     goLogin() {
       this.$router.push({name: 'Login'})
+    },
+    goLogout() {
+      this.userLogout()
+      this.$toast.success("成功退出登录")
     }
   },
   components: {
@@ -66,7 +80,7 @@ export default {
 .custom-btn
   position absolute
   bottom 18%
-  border-radius 15px
+  border-radius 20px
 
 
 .user-content
@@ -93,4 +107,8 @@ export default {
   color #fff
 .van-cell__title
   text-align left
+.logout-btn
+  margin 25px 0
+  border-radius 20px
+  padding 0 25px
 </style>

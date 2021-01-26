@@ -5,8 +5,9 @@ const logger = require('koa-logger')
   , views = require('koa-views')
   , onerror = require('koa-onerror')
   , koajwt = require('koa-jwt')
-  , koacors = require('koa-cors')
-  , koastatic = require('koa-static');
+  , koacors = require('koa2-cors')
+  , koastatic = require('koa-static')
+  , convert = require('koa-convert');
 
 
 //const index = require('./routes/index');
@@ -25,14 +26,14 @@ app.use(json());
 app.use(logger());
 app.use(koacors());
 
-app.use(function *(next){
+app.use(convert(function *(next){
   const start = new Date;
   yield next;
   const ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
-});
+  console.log(`${this.method} ${this.url} - ${ms}ms`);
+}));
 
-app.use(koastatic(__dirname + '/public'));
+app.use(convert(koastatic(__dirname + '/public')));
 
 // routes definition
 //app.use(index.routes(), index.allowedMethods());

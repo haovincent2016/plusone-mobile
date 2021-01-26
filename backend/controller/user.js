@@ -31,45 +31,7 @@ class userModule {
 }
 
 class userController {
-  //注册用户
-  static async create(ctx) {
-    const req = ctx.request.body;
-    if (req.username && req.password) {
-      try {
-        const query = await userModule.getUser(req.username);
-        if (query) {
-          ctx.response.status = 200;
-          ctx.body = {
-            code: -1,
-            desc: '用户已存在'
-          }
-        } else {
-          const param = {
-            password: req.password,
-            username: req.username
-          }
-          const data = await userModule.userRegister(param);
-
-          ctx.response.status = 200;
-          ctx.body = {
-            code: 0,
-            desc: '用户注册成功',
-            userInfo: {
-              username: req.username
-            }
-          }
-        }
-      } catch (error) {
-        console.log(error)
-        ctx.response.status = 416;
-        ctx.body = {
-          code: -1,
-          desc: '参数不齐全'
-        }
-      }
-    }
-  }
-
+  
   //密码登陆
   static async login(ctx) {
     const req = ctx.request.body;
@@ -112,6 +74,48 @@ class userController {
           }
         }
     };
+  }
+  //注册用户
+  static async create(ctx) {
+    const req = ctx.request.body;
+    if (req.username && req.password) {
+      try {
+        const query = await userModule.getUser(req.username);
+        if (query) {
+          ctx.response.status = 200;
+          ctx.body = {
+            code: -1,
+            desc: '用户已存在'
+          }
+          // 已注册用户自动登录，验证密码
+          const auto = await userController.login(ctx)
+        } else {
+          const param = {
+            password: req.password,
+            username: req.username
+          }
+          const data = await userModule.userRegister(param);
+
+          ctx.response.status = 200;
+          ctx.body = {
+            code: 0,
+            desc: '用户注册成功',
+            userInfo: {
+              username: req.username
+            }
+          }
+          //注册成功后自动登录
+          const auto = await userController.login(ctx)
+        }
+      } catch (error) {
+        console.log(error)
+        ctx.response.status = 416;
+        ctx.body = {
+          code: -1,
+          desc: '注册失败，请重试'
+        }
+      }
+    }
   }
 
   //获取用户信息(除密码外)
