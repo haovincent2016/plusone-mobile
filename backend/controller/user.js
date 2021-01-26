@@ -10,13 +10,16 @@ const expireTime = '10s'
 //引入数据表模型
 const user = require('../model/user')
 //自动创建表
-user.sync({ force: false }); 
+user.sync({ force: false })
+
+//引入encrypt
+const crypt = require('../public/encrypt')
 
 //数据库操作类
 class userModule {
   static async userRegister(data) {
     return await user.create({
-      password: data.password,
+      password: crypt.encrypt(data.password),
       username: data.username
     })
   }
@@ -43,7 +46,7 @@ class userController {
     } else {
       const data = await userModule.getUser(req.username);
       if (data) {
-          if (data.password === req.password) {
+          if (crypt.decrypt(req.password, data.password)) {
             //生成token，验证登录有效期
             const token = jwt.sign({
               user: req.username,
