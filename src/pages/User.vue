@@ -18,18 +18,20 @@
       <!-- 个人中心功能栏 -->
       <div class="user-function">
         <van-row gutter="20">
-          <van-col class="func-title" span="8">打卡</van-col>
-          <van-col class="func-title" span="8">课程</van-col>
-          <van-col class="func-title" span="8">资讯</van-col>
+          <van-col class="func-title" span="6" @click="goDetail('1')">打卡</van-col>
+          <van-col class="func-title" span="6" @click="goDetail('2')">测试</van-col>
+          <van-col class="func-title" span="6" @click="goDetail('3')">收藏</van-col>
+          <van-col class="func-title" span="6" @click="goDetail('4')">资料</van-col>
         </van-row>
       </div>
       <!-- 个人中心列表栏 -->
       <div class="user-body">
-        <van-cell title="单元格" icon="location-o" value="展示信息" />
-        <van-cell title="单元格" icon="location-o" value="展示信息" />
-        <van-cell title="单元格" icon="location-o" value="展示信息" />
-        <van-cell title="单元格" icon="location-o" value="展示信息" />
-        <van-cell title="单元格" icon="location-o" value="展示信息"  />
+        <van-cell title="我的收藏" is-link value="更多" :to="{ name: 'Collection' }" />
+        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
+        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
+        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
+        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
+        <van-cell title="文章名" icon="label-o" is-link value="文章页"  />
       </div>
       <van-button 
       @click="goLogout" 
@@ -62,6 +64,22 @@ export default {
     goLogout() {
       this.userLogout()
       this.$toast.success("成功退出登录")
+    },
+    goDetail(index) {
+      switch(index) {
+        case '1':
+          this.$router.push({ name: 'Task' })
+          break
+        case '2':
+          this.$router.push({ name: 'Quiz' })
+          break
+        case '3':
+          this.$router.push({ name: 'Collection' })
+          break
+        case '4':
+          this.$router.push({ name: 'Files' })
+          break
+      }
     }
   },
   components: {

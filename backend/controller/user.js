@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const tools = require('../public/tools')
 
 //统一设置token有效时间  为了方便观察，设为10s
-const expireTime = '10s'
+const expireTime = '24h'
 
 //引入数据表模型
 const user = require('../model/user')

@@ -24,6 +24,7 @@
         </div>
         <div style="margin:16px;">
           <div class="hint">*未注册用户将自动注册</div>
+          <div class="hint">*注册后将自动登录</div>
         </div>
       </van-form>
     </van-tab>
@@ -108,10 +109,14 @@ export default {
       register(data).then(res => {
         console.log(res)
         if(res.code === '0') {
-          this.$toast.success("登陆成功")
+          this.$toast.success("登录成功")
           this.userLogin(res.userInfo)
           this.$router.replace({ name: 'Home' })
+        } else {
+          this.$toast.fail(res.desc)
         }
+      }).catch(err => {
+        this.$toast.fail("登录失败")
       })
     },
     onFailed(errors) {

@@ -5,10 +5,14 @@
     @click-right="goLogin"
     @click-left="goBack">
     <template #left>
-      <van-icon color="#fff" v-show="isLogin" name="arrow-left" size="18" />
-      <span v-show="isLogin" class="func-title">返回</span>
+      <!-- 登录页 -->
+      <span v-show="isLogin" class="func-title">首页</span>
+      <!-- 各功能页返回个人页 -->
+      <van-icon color="#fff" v-show="isFunc" name="arrow-left" size="18" />
+      <span v-show="isFunc" class="func-title">返回</span>
     </template>
     <template #right>
+      <!-- 非登录页 && 未登录-->
       <van-icon color="#fff" v-show="!isLogin && !logined" name="user-circle-o" size="18" />
       <span v-show="!isLogin && !logined" class="func-title">登录</span>
     </template>
@@ -24,7 +28,11 @@ import { mapState } from 'vuex'
 export default {
   props: {
     // 是否位于登录页
-    isLogin: Boolean
+    isLogin: Boolean,
+    isFunc: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: mapState([ 'logined' ]),
   data() {
@@ -47,6 +55,10 @@ export default {
     goBack() {
       if(this.isLogin) {
         this.$router.push({name: 'Home'})
+        return
+      }
+      if(this.isFunc) {
+        this.$router.push({name: 'User'})
       }
     }
   },

@@ -7,6 +7,10 @@ import About from 'pages/About'
 import Contact from 'pages/Contact'
 import User from 'pages/User'
 import Login from 'pages/Login'
+import Quiz from 'pages/Quiz'
+import Collection from 'pages/Collection'
+import Task from 'pages/Task'
+import Files from 'pages/Files'
 
 Vue.use(Router)
 
@@ -40,6 +44,30 @@ const routes = [
     path: '/login',
     component: Login,
     name: 'Login'
+  },
+  //每日任务打卡
+  {
+    path: '/Task',
+    component: Task,
+    name: 'Task'
+  },
+  //免费英语能力测试
+  {
+    path: '/Quiz',
+    component: Quiz,
+    name: 'Quiz'
+  },
+  //文章收藏夹
+  {
+    path: '/Collection',
+    component: Collection,
+    name: 'Collection'
+  },
+  //资料下载中心
+  {
+    path: '/Files',
+    component: Files,
+    name: 'Files'
   }
 ]
 
