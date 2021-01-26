@@ -2,6 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 import route from '../router';
 
+const requestUrl = 'http://localhost:3000'
+
 axios.interceptors.request.use(function(config) {
     // 处理请求参数
     config.data = qs.stringify(config.data)
@@ -42,15 +44,15 @@ axios.interceptors.response.use(
 
 //注册
 export const register = params => {
-    return axios.post('http://localhost:3000/user/register', params, {}).then(res => res.data)
+    return axios.post(requestUrl+'/user/register', params, {}).then(res => res.data)
 }
 
 //登录
 export const login = params => {
-    return axios.post('http://localhost:3000/user/login', params, {}).then(res => res.data)
+    return axios.post(requestUrl+'/user/login', params, {}).then(res => res.data)
 }
 
 //获取用户信息
 export const getUserInfo = params => {
-    return axios.post('http://localhost:3000/user/getUserInfo', params, {}).then(res => res.data)
+    return axios.post(requestUrl+'/user/getUserInfo', params, {}).then(res => res.data)
 }
