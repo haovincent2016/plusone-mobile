@@ -21,6 +21,16 @@
             </template>
         </van-field>
     </van-form>
+    <!-- 上传听写图片，建议最多上传4张, 每张10M -->
+    <van-uploader 
+        :after-read="afterRead" 
+        v-model="imageList" 
+        multiple 
+        :max-count="4" 
+        :max-size="1000 * 1024"   
+        @oversize="onOversize" 
+    />
+
     <div style="margin:15px 0;">
         <van-button color="linear-gradient(to right, #ff6034, #ee0a24)">一键打卡</van-button>
     </div>
@@ -30,6 +40,7 @@
 <script>
 import TopPart from 'components/Home/TopPart'
 import Steps from "components/Common/Steps"
+import { uploadTask } from '../api/task'
 
 export default {
     data() {
@@ -37,7 +48,33 @@ export default {
             task1: true,
             task2: true,
             currStep: 1,
-            stepList: ['1天', '2天', '3天', '4天', '5天', '6天']
+            stepList: ['1天', '2天', '3天', '4天', '5天', '6天'],
+            imageList: []
+        }
+    },
+    methods: {
+        afterRead(file) {
+            //正在上传
+            file.status = 'uploading'
+            file.message = '上传中...'
+            //上传接口
+            let formData = new FormData()
+            formData.append('pic', file.file)
+            console.log(formData)
+            uploadTask(formData).then(res => {
+                console.log(res.data)
+                this.$toast.success("图片上传成功~")
+            }).catch(err => {
+                //上传后，失败
+                file.status = 'failed'
+                file.message = '上传失败'
+            })
+            
+            console.log(file)
+        },
+        // 超过上传图片大小限制
+        onOversize(file) {
+            this.$toast.error('图片不能超过10MB~')
         }
     },
     components: {

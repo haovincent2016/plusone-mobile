@@ -13,6 +13,7 @@ const logger = require('koa-logger')
 const users = require('./routes/users')
 const articles = require('./routes/article')
 const collections = require('./routes/collection')
+const tasks = require('./routes/task')
 
 //引入数据表模型
 const user = require('./model/user')
@@ -61,7 +62,7 @@ article.sync().then(
   })()
 )
 
-// error handlers
+// error handler
 onerror(app);
 
 // global middlewares
@@ -87,6 +88,7 @@ app.use(convert(koastatic(__dirname + '/public')));
 app.use(users.routes(), users.allowedMethods());
 app.use(articles.routes(), articles.allowedMethods());
 app.use(collections.routes(), collections.allowedMethods());
+app.use(tasks.routes(), tasks.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
