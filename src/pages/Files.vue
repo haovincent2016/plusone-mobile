@@ -1,5 +1,7 @@
 <template>
     <TopPart :isLogin="false" :isFunc="true" />
+    <!--文章区-->
+    
 </template>
 
 <script>
