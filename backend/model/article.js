@@ -8,7 +8,7 @@ const sequelize = db.sequelize
 
 class Article extends Model {}
 const article = Article.init({
-  articleid: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: true,

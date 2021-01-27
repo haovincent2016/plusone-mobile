@@ -210,7 +210,7 @@ export default {
 .notice
  margin 5px
  padding 5px
- border 1px solid #f1f1f1
+ border 1px solid #f3f3f3
  font-size 14px
  color #ee0a24
 </style>

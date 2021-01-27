@@ -8,10 +8,11 @@ const sequelize = db.sequelize
 
 const collection = require('./collection')
 const article = require('./article')
+const task = require('./task')
 
 class User extends Model {}
 const user = User.init({
-  userid:{
+  id:{
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: true,
@@ -49,6 +50,23 @@ const user = User.init({
     allowNull: false,
     defaultValue: 0
   },
+  // 总打卡天数
+  days: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  // 一周打卡天数（每周更新数据）
+  // days: {
+  //     type: DataTypes.INTEGER,
+  //     allowNull: false,
+  //     defaultValue: 0
+  // },
+  // 历史打卡数据（日期）
+  // records: {
+  //   type: DataTypes.STRING,
+  //   allowNull: true
+  // },
   // 非必填项
   nickname: {
     type: DataTypes.STRING,
@@ -93,6 +111,20 @@ user.hasMany(article, {
 article.belongsTo(user, {
   foreignKey: {
     name: 'authorId',
+    allowNull: true
+  }
+})
+
+// 一个用户拥有多条打卡记录
+user.hasMany(task, {
+  foreignKey: {
+    name: 'userId',
+    allowNull: true
+  }
+})
+task.belongsTo(user, {
+  foreignKey: {
+    name: 'userId',
     allowNull: true
   }
 })
