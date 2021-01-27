@@ -2,9 +2,12 @@ import axios from 'axios';
 import qs from 'qs';
 import route from '../router';
 
-const requestUrl = 'http://localhost:3000'
+const service = axios.create({
+    baseURL: 'http://localhost:3000',
+    timeout: 10000
+})
 
-axios.interceptors.request.use(function(config) {
+service.interceptors.request.use(function(config) {
     // 处理请求参数
     config.data = qs.stringify(config.data)
 
@@ -19,7 +22,7 @@ axios.interceptors.request.use(function(config) {
     return Promise.reject(error);
 });
 
-axios.interceptors.response.use(
+service.interceptors.response.use(
     response => {
         return response
     },
@@ -42,17 +45,4 @@ axios.interceptors.response.use(
     }
 );
 
-//注册
-export const register = params => {
-    return axios.post(requestUrl+'/user/register', params, {}).then(res => res.data)
-}
-
-//登录
-export const login = params => {
-    return axios.post(requestUrl+'/user/login', params, {}).then(res => res.data)
-}
-
-//获取用户信息
-export const getUserInfo = params => {
-    return axios.post(requestUrl+'/user/getUserInfo', params, {}).then(res => res.data)
-}
+export default service

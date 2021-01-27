@@ -13,7 +13,7 @@
       <div class="user-header">
         <!-- 头像 -->
         <img :src="userInfo.avatar" class="avatar" />
-        <div class="nickname">Vincent</div>
+        <div class="nickname">{{ userInfo.nickname? userInfo.nickname : userInfo.username }}</div>
       </div>
       <!-- 个人中心功能栏 -->
       <div class="user-function">

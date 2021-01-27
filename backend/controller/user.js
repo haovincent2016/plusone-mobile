@@ -7,17 +7,10 @@ const tools = require('../public/tools')
 //统一设置token有效时间24h
 const expireTime = '24h'
 
-//引入数据表模型
-const user = require('../model/user')
-const collection = require('../model/collection')
-const article = require('../model/article')
-//自动创建表
-user.sync()
-collection.sync()
-article.sync()
-
 //引入encrypt
 const crypt = require('../public/encrypt')
+
+const user = require('../model/user')
 
 //数据库操作类
 class userModule {
@@ -166,15 +159,9 @@ class userController {
           } else {
             let data = await userModule.getUser(req.username);
             if (req.username == data.username) {
-              const info = {
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-                username: data.username,
-                userid: data.userid
-              };
               return ctx.body = {
                 code: '0',
-                userInfo: JSON.stringify(info),
+                userInfo: JSON.stringify(data),
                 desc: '获取用户信息成功'
               }
             }

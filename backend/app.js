@@ -7,13 +7,61 @@ const logger = require('koa-logger')
   , koajwt = require('koa-jwt')
   , koacors = require('koa2-cors')
   , koastatic = require('koa-static')
-  , convert = require('koa-convert');
+  , convert = require('koa-convert')
 
+//引入routes
+const users = require('./routes/users')
+const articles = require('./routes/article')
+const collections = require('./routes/collection')
 
-//const index = require('./routes/index');
-const users = require('./routes/users');
+//引入数据表模型
+const user = require('./model/user')
+const collection = require('./model/collection')
+const article = require('./model/article')
 
-// error handler
+//自动创建表，并导入初始数据,导入数据需按顺序
+user.sync().then(
+  (async () => {
+    await user.create({
+      id: 1,
+      username: 'haovincent',
+      password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
+      points: 233,
+      nickname: '遨游',
+      phone: '18639289962',
+      description: '此人很懒，什么也没写'
+    })
+  })()
+)
+collection.sync().then(
+  (async() => {
+    await collection.create({
+      id: 2,
+      title: '我的收藏',
+      description: '主要关于英语学习类文章',
+      public: true,
+      ownerId: 1
+    })
+  })()
+)
+article.sync().then(
+  (async () => {
+    await article.create({
+      id: 1,
+      authorId: 1,
+      colId: 2,
+      title: '三千字说废就废',
+      userId: 1,
+      content: '我最近在靠写历史稿吃饭，昨天写了一篇三千字的，其实稿费只有三十五元，不过因我文笔一般，愣是写了一个多小时。当我把它发给老板之后，很快就被打回来了',
+      picture: '/static/img/bg2.png',
+      status: true,
+      view: 101,
+      like: 3
+    })
+  })()
+)
+
+// error handlers
 onerror(app);
 
 // global middlewares
@@ -36,8 +84,9 @@ app.use(convert(function *(next){
 app.use(convert(koastatic(__dirname + '/public')));
 
 // routes definition
-//app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(articles.routes(), articles.allowedMethods());
+app.use(collections.routes(), collections.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

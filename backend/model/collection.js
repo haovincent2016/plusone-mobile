@@ -10,7 +10,7 @@ const article = require('./article')
 
 class Collection extends Model {}
 const collection = Collection.init({
-  collectionid:{
+  id:{
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: true,
@@ -42,6 +42,11 @@ collection.hasMany(article, {
     allowNull: true
   }
 })
-article.belongsTo(collection)
+article.belongsTo(collection, {
+  foreignKey: {
+    name: 'colId',
+    allowNull: true
+  }
+})
 
 module.exports = collection

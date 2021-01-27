@@ -60,7 +60,8 @@ const user = User.init({
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+    defaultValue: '什么也没有~'
   }
 
 
@@ -75,7 +76,12 @@ user.hasMany(collection, {
     allowNull: true
   }
 })
-collection.belongsTo(user)
+collection.belongsTo(user, {
+  foreignKey: {
+    name: 'ownerId',
+    allowNull: true
+  }
+})
 
 // 一个用户拥有多个文章
 user.hasMany(article, {
@@ -84,6 +90,11 @@ user.hasMany(article, {
     allowNull: true
   }
 })
-article.belongsTo(user)
+article.belongsTo(user, {
+  foreignKey: {
+    name: 'authorId',
+    allowNull: true
+  }
+})
 
 module.exports = user

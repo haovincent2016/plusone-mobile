@@ -1,59 +1,116 @@
 <template>
   <div>
     <TopPart :isLogin="false" :isFunc="true" />
-    <!-- 收藏页顶部 -->
-    <div class="col-header">
-      <img :src="backgroundUrl" class="background" />
-      <div class="wrapper">
-        <img :src="avatarUrl" class="avatar" />
-      </div>
-      <div class="username">
-        <div class="content">vincent</div>
-        <van-button class="custom-btn" round type="info">编辑我的信息</van-button>
-      </div>
-    </div>
-    <!-- 收藏页tab -->
-    <div class="col-tab">
-      <van-tabs v-model="active">
-      <van-tab title="收藏">
-        <div class="col-body">
-          <div class="col-title">默认收藏夹</div>
-          <div class="col-date">收藏日期：2021-01-26</div>
+    <div v-if="logined">
+      <!-- 收藏页顶部 -->
+      <div class="col-header">
+        <img :src="backgroundUrl" class="background" />
+        <div class="wrapper">
+          <img :src="avatarUrl" class="avatar" />
         </div>
-      </van-tab>
-      <van-tab title="热门">
-        <div class="list">
-          <div class="list-item">
-            <div class="item-title">
-              Spring Boot要如何学习？
-            </div>
-            <div class="item-author">
-              作者：vincent
-            </div>
-            <div class="item-content">
-               Spring Boot 是由 Pivotal 团队提供的全新框架，其设计目的是用来简化新 Spring 应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。采用 Spring Boot 可以大大的简化你的开发模式，所有你想集成的常用框架，它都…
-            </div>
-            <div class="item-func">
-              <van-button type="info">点赞</van-button>
-              <van-icon style="margin-left:8px;font-size:20px;" name="star-o" /><span style="color:#a1a1a1">收藏</span>
+        <div class="username">
+          <div class="content">vincent</div>
+          <van-button class="custom-btn" round type="info">编辑我的信息</van-button>
+        </div>
+      </div>
+      <!-- 收藏页tab -->
+      <div class="col-tab">
+        <van-tabs v-model="active">
+        <van-tab title="收藏">
+          <div class="col-body" v-for="item in collections" :key="item.id">
+            <div class="col-title">{{ item.title }}</div>
+            <div class="col-date">创建日期：{{ item.createdAt | convertTime }}</div>
+          </div>
+        </van-tab>
+        <van-tab title="热门">
+          <div class="list">
+            <div class="list-item" v-for="item in articles" :key="item.id">
+              <div class="item-title">
+                {{ item.title }}
+              </div>
+              <div class="item-author">
+                <div class="author-name">作者：{{ item.user.username }}</div>
+                <img :src="item.user.avatar" />
+              </div>
+              <div class="item-content">
+                {{ item.content }}
+              </div>
+              <div class="item-func">
+                <van-button type="info">点赞 {{ item.like }}</van-button>
+                <van-icon style="margin-left:8px;font-size:20px;" name="star-o" /><span style="color:#a1a1a1">收藏</span>
+              </div>
             </div>
           </div>
-        </div>
       </van-tab>
     </van-tabs>
+      </div>
     </div>
   </div>  
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
+import { getCollectionsByOwner } from '../api/collection'
+import { getArticles } from '../api/article'
 
 export default {
   data() {
     return {
       active: 0,
+      collections: [],
+      articles: [],
       backgroundUrl: require('../../static/img/bg1.png'),
       avatarUrl: require('../../static/img/vince.jpg'),
+    }
+  },
+  filters: {
+    convertTime: function(val) {
+      return new Date(val).toLocaleDateString()
+    }
+  },
+  computed: mapState([ 'logined', 'userInfo' ]),
+  // created() {
+  //   this.getData()
+  // },
+  watch: {
+    active: {
+      handler(val) {
+        this.getData(val)
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    getData(val) {
+      if(val === 0) {
+        let data = {
+          author: this.userInfo.userid
+        }
+        getCollectionsByOwner(data).then(res => {
+          console.log(res)
+          if(res.data.code === '0') {
+            this.$toast.success(res.data.desc)
+            this.collections = JSON.parse(res.data.collections)
+          } else {
+            this.$toast.fail(res.data.desc)
+          }
+        }).catch(err => {
+          this.$toast.fail(res.data.desc)
+        })
+      } else {
+        getArticles().then(res => {
+          console.log(res)
+          if(res.data.code === '0') {
+            this.$toast.success(res.data.desc)
+            this.articles = JSON.parse(res.data.articles)
+          } else {
+            this.$toast.fail(res.data.desc)
+          }
+        }).catch(err => {
+          this.$toast.fail(res.data.desc)
+        })
+      }
     }
   },
   components: {
@@ -105,11 +162,23 @@ export default {
 .list
   padding 15px
   .list-item
+    box-shadow 0 1px 3px rgba(18,18,18,.1)
+    margin 8px 0
+    padding 8px 0
     .item-title
       font-size 18px
     .item-author
       margin 10px 0
-      color #a1a1a1
+      display flex
+      align-items center
+      justify-content flex-start
+      .author-name
+        color #a1a1a1
+      img
+        width 20px
+        height 20px
+        border-radius 50%
+        margin-left 6px
     .item-content
       max-height 120px
       margin-bottom 10px

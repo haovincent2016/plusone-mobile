@@ -79,7 +79,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
-import { register, login, getUserInfo } from '../api/request'
+import { register } from '../api/user'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -108,15 +108,15 @@ export default {
       }
       register(data).then(res => {
         console.log(res)
-        if(res.code === '0') {
-          this.$toast.success(res.desc)
-          this.userLogin(res)
+        if(res.data.code === '0') {
+          this.$toast.success(res.data.desc)
+          this.userLogin(res.data)
           this.$router.replace({ name: 'Home' })
         } else {
-          this.$toast.fail(res.desc)
+          this.$toast.fail(res.data.desc)
         }
       }).catch(err => {
-        this.$toast.fail(res.desc)
+        this.$toast.fail(res.data.desc)
       })
     },
     onFailed(errors) {
