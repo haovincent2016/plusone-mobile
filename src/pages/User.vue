@@ -12,7 +12,7 @@
       <!-- 个人中心头部 -->
       <div class="user-header">
         <!-- 头像 -->
-        <img :src="avatarUrl" class="avatar" />
+        <img :src="userInfo.avatar" class="avatar" />
         <div class="nickname">Vincent</div>
       </div>
       <!-- 个人中心功能栏 -->
@@ -51,11 +51,10 @@ export default {
   data() {
     return {
       //暂时赋值
-      userLogin: false,
-      avatarUrl: require('../../static/img/vince.jpg'),
+      userLogin: false
     }
   },
-  computed: mapState([ 'logined' ]),
+  computed: mapState([ 'logined', 'userInfo' ]),
   methods: {
     ...mapMutations(['userLogout']),
     goLogin() {

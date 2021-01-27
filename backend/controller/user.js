@@ -69,7 +69,8 @@ class userController {
                 createdAt: data.createdAt,
                 updatedAt: data.updatedAt,
                 username: data.username,
-                userid: data.userid
+                userid: data.userid,
+                avatar: data.avatar
               }
               return ctx.body = {
                 code: '0',

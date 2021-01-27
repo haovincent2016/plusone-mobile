@@ -109,14 +109,14 @@ export default {
       register(data).then(res => {
         console.log(res)
         if(res.code === '0') {
-          this.$toast.success("登录成功")
-          this.userLogin(res.userInfo)
+          this.$toast.success(res.desc)
+          this.userLogin(res)
           this.$router.replace({ name: 'Home' })
         } else {
           this.$toast.fail(res.desc)
         }
       }).catch(err => {
-        this.$toast.fail("登录失败")
+        this.$toast.fail(res.desc)
       })
     },
     onFailed(errors) {

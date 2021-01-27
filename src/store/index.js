@@ -6,21 +6,21 @@ Vue.use(Vuex)
 const state = {
     logined: false,
     token: '',
-    userInfo: {
-        username: ''
-    }
+    userInfo: {}
 }
 
 const mutations = {
     userLogin (state, user) {
         state.logined = true
-        state.userInfo.username = user.username
+        state.userInfo = JSON.parse(user.userInfo)
         state.token = user.token
+        sessionStorage.setItem("store", JSON.stringify(state))
     },
     userLogout (state) {
         state.logined = false
-        state.userInfo.username = ''
+        state.userInfo = {}
         state.token = ''
+        sessionStorage.removeItem("store")
     }
 }
 
