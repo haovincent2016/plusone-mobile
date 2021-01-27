@@ -49,7 +49,8 @@ export default {
             task2: true,
             currStep: 1,
             stepList: ['1天', '2天', '3天', '4天', '5天', '6天'],
-            imageList: []
+            imageList: [],
+            imagePath: []
         }
     },
     methods: {
@@ -57,20 +58,32 @@ export default {
             //正在上传
             file.status = 'uploading'
             file.message = '上传中...'
-            //上传接口
             let formData = new FormData()
-            formData.append('pic', file.file)
-            console.log(formData)
-            uploadTask(formData).then(res => {
-                console.log(res.data)
-                this.$toast.success("图片上传成功~")
+            // this.imageList.forEach(item => {
+            //     formData.append('file', item)
+            // })
+            formData.append('file', file.file)
+            //上传接口
+            this.$axios.post('http://localhost:3000/task/uploadTask', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                }
+            }).then(res => {
+                if(res.data.code === '0') {
+                    this.$toast.success("图片上传成功~")
+                    this.imagePath.push(res.data.filename)
+                    file.status = 'done'
+                    file.message = '上传成功'
+                } else {
+                    //上传后，失败
+                    file.status = 'failed'
+                    file.message = '上传失败'
+                }
             }).catch(err => {
                 //上传后，失败
                 file.status = 'failed'
                 file.message = '上传失败'
             })
-            
-            console.log(file)
         },
         // 超过上传图片大小限制
         onOversize(file) {
