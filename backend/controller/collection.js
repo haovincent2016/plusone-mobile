@@ -5,9 +5,10 @@ class collectionController {
   static async getCollectionsByOwner(ctx) {
     try {
       const req = ctx.request.body
+      const ownerId = req.author
       const collections = await collection.findAll({
         where: {
-          ownerId: req.author
+          ownerId
         }
       })
       return ctx.body = {

@@ -36,8 +36,8 @@
                 {{ item.content }}
               </div>
               <div class="item-func">
-                <van-button type="info">点赞 {{ item.like }}</van-button>
-                <van-icon style="margin-left:8px;font-size:20px;" name="star-o" /><span style="color:#a1a1a1">收藏</span>
+                <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ article.like }}</van-button>
+                <van-button icon="star-o" class="like" color="#ff9900" plain>收藏</van-button>
               </div>
             </div>
           </div>
@@ -85,10 +85,9 @@ export default {
     getData(val) {
       if(val === 0) {
         let data = {
-          author: this.userInfo.userid
+          author: this.userInfo.id
         }
         getCollectionsByOwner(data).then(res => {
-          console.log(res)
           if(res.data.code === '0') {
             this.$toast.success(res.data.desc)
             this.collections = JSON.parse(res.data.collections)
@@ -100,7 +99,6 @@ export default {
         })
       } else {
         getArticles().then(res => {
-          console.log(res)
           if(res.data.code === '0') {
             this.$toast.success(res.data.desc)
             this.articles = JSON.parse(res.data.articles)
@@ -186,6 +184,8 @@ export default {
       display flex
       justify-content flex-start
       align-items center
-
+      .like
+        font-size 16px
+        margin-right 8px
 
 </style>

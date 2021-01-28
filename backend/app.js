@@ -19,8 +19,10 @@ const tasks = require('./routes/task')
 const user = require('./model/user')
 const collection = require('./model/collection')
 const article = require('./model/article')
+const task = require('./model/task')
 
 //自动创建表，并导入初始数据,导入数据需按顺序
+// (测试数据正式环境需删除)
 user.sync().then(
   (async () => {
     await user.create({
@@ -61,6 +63,7 @@ article.sync().then(
     })
   })()
 )
+task.sync()
 
 // error handler
 onerror(app);

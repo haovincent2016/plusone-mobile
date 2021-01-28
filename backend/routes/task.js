@@ -23,9 +23,11 @@ router.post('/uploadTask', upload.single('file'), async(ctx, next) => {
     
     return ctx.body = {
         code: '0',
-        filename: ctx.req.filename,
+        filename: ctx.req.file.filename,
         desc: '图片上传成功~'
     } 
 })
+
+router.post('/saveTask', taskController.saveTask)
 
 module.exports = router

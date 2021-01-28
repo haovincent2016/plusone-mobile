@@ -57,18 +57,11 @@ class userController {
               const token = jwt.sign({
                 user: req.username,
                 passWord: req.password
-              }, 'qweasd789456', { expiresIn: expireTime });
-              const info = {
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-                username: data.username,
-                userid: data.userid,
-                avatar: data.avatar
-              }
+              }, 'qweasd789456', { expiresIn: expireTime })
               return ctx.body = {
                 code: '0',
                 token: token,
-                userInfo: JSON.stringify(info),
+                userInfo: JSON.stringify(data),
                 desc: status === 1? '登陆成功，欢迎回来~' : '注册成功，已自动登录~'
               }
             } else {

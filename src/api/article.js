@@ -23,3 +23,11 @@ export function getArticlesByCollection(data) {
         data: data
     })
 }
+
+export function getArticleById(data) {
+    return request({ 
+        url: '/article/getArticleById', 
+        method: 'post',
+        data: data
+    })
+}

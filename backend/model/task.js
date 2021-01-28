@@ -27,7 +27,7 @@ const task = Task.init({
         defaultValue: false
     },
     // 完成视频
-    status: {
+    finishVideo: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false

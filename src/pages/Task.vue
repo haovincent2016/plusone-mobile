@@ -3,11 +3,12 @@
     <TopPart :isLogin="false" :isFunc="true" />
     <!-- 积分 -->
     <van-row gutter="20" style="margin-top:76px;">
-        <van-col span="12" class="number">346 积分</van-col>
-        <van-col span="12"><van-button round type="info">获得积分</van-button></van-col>
+        <van-col span="12" class="number">{{ userInfo.points ? userInfo.points : 0 }} 积分</van-col>
+        <van-col span="12"><van-button round type="info" @click="usePoints">使用积分</van-button></van-col>
     </van-row>
     <!-- 打卡进度 -->
     <Steps :step="currStep" :list="stepList" />
+    <div class="range">（本周:1/25 - 1/31）</div>
     <!-- 打卡任务 -->
     <van-form style="margin:15px 10px" >
         <van-field label-width="9em" name="checkbox1" label="是否完成听写任务">
@@ -22,25 +23,29 @@
         </van-field>
     </van-form>
     <!-- 上传听写图片，建议最多上传4张, 每张10M -->
+    <div class="range">（上传你的听写图片，最多4张~）</div>
     <van-uploader 
+        style="margin-top:15px"
         :after-read="afterRead" 
         v-model="imageList" 
         multiple 
         :max-count="4" 
         :max-size="1000 * 1024"   
-        @oversize="onOversize" 
+        @oversize="onOversize"
+        @click-preview="clickPreview"
     />
 
     <div style="margin:15px 0;">
-        <van-button color="linear-gradient(to right, #ff6034, #ee0a24)">一键打卡</van-button>
+        <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" @click="saveTask">一键打卡</van-button>
     </div>
 </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
 import Steps from "components/Common/Steps"
-import { uploadTask } from '../api/task'
+import { saveTask } from '../api/task'
 
 export default {
     data() {
@@ -48,20 +53,19 @@ export default {
             task1: true,
             task2: true,
             currStep: 1,
-            stepList: ['1天', '2天', '3天', '4天', '5天', '6天'],
+            stepList: ['1天', '2天', '3天', '4天', '5天', '6天', '7天'],
             imageList: [],
+            // 上传的图片路径
             imagePath: []
         }
     },
+    computed: mapState([ 'userInfo' ]),
     methods: {
         afterRead(file) {
             //正在上传
             file.status = 'uploading'
             file.message = '上传中...'
             let formData = new FormData()
-            // this.imageList.forEach(item => {
-            //     formData.append('file', item)
-            // })
             formData.append('file', file.file)
             //上传接口
             this.$axios.post('http://localhost:3000/task/uploadTask', formData, {
@@ -70,7 +74,7 @@ export default {
                 }
             }).then(res => {
                 if(res.data.code === '0') {
-                    this.$toast.success("图片上传成功~")
+                    console.log(res.data)
                     this.imagePath.push(res.data.filename)
                     file.status = 'done'
                     file.message = '上传成功'
@@ -88,6 +92,45 @@ export default {
         // 超过上传图片大小限制
         onOversize(file) {
             this.$toast.error('图片不能超过10MB~')
+        },
+        // 打开预览提示关闭操作
+        clickPreview() {
+            this.$toast({
+                message: '点击任意位置关闭',
+                icon: 'like-o'
+            })
+        },
+
+        // 保存打卡信息
+        saveTask() {
+            if(this.imagePath.length === 0) {
+                this.$toast({
+                    message: '请上传听写图片~',
+                    icon: 'like-o'
+                })
+                return
+            }
+            let data = {
+                finishWrite: this.task1,
+                finishVideo: this.task2,
+                taskImages: this.imagePath.join(','),
+                userId: this.userInfo.id
+            }
+            saveTask(data).then(res => {
+                if(res.data.code === '0') {
+                    this.$toast.success(res.data.desc)
+                } else {
+                    this.$toast.fail(res.data.desc)
+                }
+            }).catch(error => {
+                this.$toast.fail(res.data.desc)
+            })
+        },
+        // 查询一周打卡次数
+
+        // 使用积分页
+        usePoints() {
+
         }
     },
     components: {
@@ -101,9 +144,15 @@ export default {
 .container
     width 100%
     text-align center
-    background-color #f3f3f3
+    background-color #f2f2f2
     height: 100vh;
 .number
     font-size 20px
     line-height 44px
+    font-weight 300
+.range
+    display flex
+    font-size 13px
+    color #a3a3a3
+    justify-content center
 </style>

@@ -27,11 +27,14 @@
       <!-- 个人中心列表栏 -->
       <div class="user-body">
         <van-cell title="我的收藏" is-link value="更多" :to="{ name: 'Collection' }" />
-        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
-        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
-        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
-        <van-cell title="文章名" icon="label-o" is-link value="文章页" />
-        <van-cell title="文章名" icon="label-o" is-link value="文章页"  />
+        <van-cell 
+          v-for="item in articles" 
+          :key="item.id" 
+          :title="item.title" 
+          icon="label-o" 
+          is-link 
+          :url="`/#/Articles/${item.id}`"
+          value="详情" />
       </div>
       <van-button 
       @click="goLogout" 
@@ -46,17 +49,33 @@
 <script>
 import TopPart from 'components/Home/TopPart'
 import { mapState, mapMutations } from 'vuex'
+import { getArticles } from '../api/article'
 
 export default {
   data() {
     return {
-      //暂时赋值
-      userLogin: false
+      articles: []
     }
   },
   computed: mapState([ 'logined', 'userInfo' ]),
+  created() {
+    this.getData()
+  },
   methods: {
     ...mapMutations(['userLogout']),
+    getData() {
+      let data = { limit: 5 }
+      getArticles(data).then(res => {
+        if(res.data.code === '0') {
+          this.$toast.success(res.data.desc)
+          this.articles = JSON.parse(res.data.articles)
+        } else {
+          this.$toast.fail(res.data.desc)
+        }
+      }).catch(err => {
+        this.$toast.fail(res.data.desc)
+      })
+    },
     goLogin() {
       this.$router.push({name: 'Login'})
     },

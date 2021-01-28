@@ -11,6 +11,7 @@ import Quiz from 'pages/Quiz'
 import Collection from 'pages/Collection'
 import Task from 'pages/Task'
 import Files from 'pages/Files'
+import Article from 'pages/Article'
 
 Vue.use(Router)
 
@@ -68,7 +69,12 @@ const routes = [
     path: '/Files',
     component: Files,
     name: 'Files'
-  }
+  },
+  {
+    path: '/Articles/:id',
+    component: Article,
+    name: 'Article'
+  },
 ]
 
 export default new Router({

@@ -1,8 +1,8 @@
 import request from './request';
 
-export function uploadTask (data) {
+export function saveTask (data) {
     return request({ 
-        url: '/task/uploadTask', 
+        url: '/task/saveTask', 
         method: 'post',
         data: data
     })
