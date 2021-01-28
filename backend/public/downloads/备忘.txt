@@ -1,0 +1,245 @@
+1. 用vue+spring boot完成个管理系统
+
+2. rn做个小app
+
+3. 微信小程序
+
+
+0. （http://lyhb.jxsdpay.com/）
+服务器地址
+账号 root
+密码 sf851100@
+47.110.131.79
+
+联赢伙伴APP
+18537920252    
+123456
+
+后台
+13706735639
+abcd1234@@@
+
+node版本
+8.17.0
+12.20.1
+
+1. github图片不显示
+
+修改hosts
+
+C:\Windows\System32\drivers\etc\hosts
+
+在文件末尾添加：
+
+# GitHub Start 
+
+192.30.253.112    github.com 
+192.30.253.119    gist.github.com
+151.101.184.133    assets-cdn.github.com
+151.101.184.133    raw.githubusercontent.com
+151.101.184.133    gist.githubusercontent.com
+151.101.184.133    cloud.githubusercontent.com
+151.101.184.133    camo.githubusercontent.com
+151.101.184.133    avatars0.githubusercontent.com
+151.101.184.133    avatars1.githubusercontent.com
+151.101.184.133    avatars2.githubusercontent.com
+151.101.184.133    avatars3.githubusercontent.com
+151.101.184.133    avatars4.githubusercontent.com
+151.101.184.133    avatars5.githubusercontent.com
+151.101.184.133    avatars6.githubusercontent.com
+151.101.184.133    avatars7.githubusercontent.com
+151.101.184.133    avatars8.githubusercontent.com
+ 
+ # GitHub End
+
+刷新dns：cmd里输入
+
+
+2. form标签enctype
+text/plain 无编码
+application/x-www-form-urlencoded 编码所有字符（空格+，特殊符号ASCII）
+multipart/form-data 文件上传
+
+3. formData
+
+4.
+JSON.parse() 方法用于将一个 JSON 字符串转换为对象。
+JSON.stringify() 方法用于将 JavaScript 值转换为 JSON 字符串。
+
+5.
+把对象转化为查询字符串
+getQueryString: (data) => {
+let paramsArr = [];
+if (data instanceof Object) {
+  Object.keys(data).forEach(key => {
+	let val = data[key];
+	// todo 参数Date类型需要根据后台api酌情处理
+	if (val instanceof Date) {
+	  // val = dateFormat(val, 'yyyy-MM-dd hh:mm:ss');
+	}
+	// encodeURIComponent() 函数可把字符串作为 URI 组件进行编码
+	paramsArr.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+  });
+}
+return paramsArr.join('&');
+}
+
+6. 更新依赖
+npm install -g npm-check-updates
+检查package.json中dependencies的最新版本：
+ncu
+更新dependencies到新版本：
+ncu -u
+更新全部到最新版本：
+npm install
+
+7. cnpm
+npm install -g cnpm -registry=https://registry.npm.taobao.org
+8. yarn
+npm install -g yarn
+查看版本：yarn --version
+
+9. vue打包图片不显示
+require() + :src="imgUrl"
+
+10. node多版本
+nvm install
+nvm ls
+nvm use
+
+11. 原型链
+Person: Person.prototype 
+Person.prototype: Person.prototype.constructor -> Person
+person: person._proto_. -> Person.prototype
+
+Person.prototype._proto_ -> Object.prototype
+Object.prototype._proto_ -> null
+
+12. 作用域
+局部作用域：变量在函数里声明，函数执行完销毁
+全局作用域：变量在函数外声明，页面关闭后销毁
+html：window
+
+13. 生命周期
+$el, data
+bC: undefined, undefined
+c: undefined(无dom), defined(methods)
+bM: defined(virtual dom), defined
+m: defined(real dom), defined
+bU: data(not sync)
+u: data(sync)
+bD: usable
+d: destroyed, dom <no function call, eventListener, dom binding>
+
+14. node-sass安装问题
+npm i node-sass --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+
+15. mysql
+root管理员
+root
+aoyou123
+进入mysql：mysql -u root -p
+开启服务：net start mysqlvincent
+
+16.
+删除远程连接
+
+git remote rm origin
+
+添加远程连接
+
+git remote add origin <url>
+
+17.
+vue springboot流程
+vue接口请求 -->
+spring controller（拦截）-->
+（entity提供数据格式及操作）
+service impl（service原型）-->
+mapper（sql操作）-->
+util （api handler处理返回数据） -->
+返回给vue
+
+18. maven下载速度慢， apache-maven - settings.xml
+<!-- 阿里云仓库 -->
+	 <mirror>
+	  <id>alimaven</id>
+	  <mirrorOf>central</mirrorOf>
+	  <name>aliyun maven</name>
+	  <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+	 </mirror>
+	 <mirror>
+	  <id>nexus-aliyun</id>
+	  <mirrorOf>*</mirrorOf>
+	  <name>Nexus aliyun</name>
+	  <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+	 </mirror>
+	 <!-- 中央仓库1 -->
+	 <mirror>
+	  <id>repo1</id>
+	  <mirrorOf>central</mirrorOf>
+	  <name>Human Readable Name for this Mirror.</name>
+	  <url>http://repo1.maven.org/maven2/</url>
+	 </mirror>
+	 
+	 <!-- 中央仓库2 -->
+	 <mirror>
+	  <id>repo2</id>
+	  <mirrorOf>central</mirrorOf>
+	  <name>Human Readable Name for this Mirror.</name>
+	  <url>http://repo2.maven.org/maven2/</url>
+	 </mirror>
+
+19. vscode settings.json修改
+{
+    "workbench.startupEditor": "newUntitledFile",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.home":"C:\\Program Files\\Java\\jdk1.8.0_271",
+    "java.configuration.maven.userSettings": "D:\\apache-maven-3.6.3-bin\\apache-maven-3.6.3\\conf\\settings.xml",
+    "maven.executable.path": "D:\\apache-maven-3.6.3-bin\\apache-maven-3.6.3\\bin\\mvn.cmd",
+    "maven.terminal.useJavaHome": true,
+    "maven.terminal.customEnv": [
+        {
+            "environmentVariable": "JAVA_HOME",
+            "value": "C:\\Program Files\\Java\\jdk1.8.0_271"
+        }
+    ],
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "java.configuration.checkProjectSettingsExclusions": false,
+    "java.semanticHighlighting.enabled": false,
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -javaagent:\"c:\\Users\\Administrator\\.vscode\\extensions\\gabrielbb.vscode-lombok-1.0.1\\server\\lombok.jar\"",
+    "window.zoomLevel": 0,
+}
+
+20. spring*
+application.properties存放位置（优先级递减）
+当前项目根目录下的 config 目录下
+当前项目的根目录下
+resources 目录下的 config 目录下
+resources 目录下
+
+21. 注入配置（yaml 配置目前不支持 @PropertySource 注解）
+@Component
+@ConfigurationProperties(prefix="my")
+@PropertySource(value = { "classpath:app.properties" })
+
+22.注解
+@Configuration
+@Component
+@Bean
+@Autowired
+@Profile
+@Conditional
+
+23.自定义配置静态资源
+默认：
+classpath:/META-INF/resources/
+classpath:/resources/
+classpath:/static/
+classpath:/public/
+/
+配置：
+WebMvcConfigurer (:interface)
+registry.addResourceHandler("/**").addResourceLocations("classpath:/aaa/")
+

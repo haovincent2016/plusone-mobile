@@ -14,6 +14,7 @@ const users = require('./routes/users')
 const articles = require('./routes/article')
 const collections = require('./routes/collection')
 const tasks = require('./routes/task')
+const downloads = require('./routes/download')
 
 //引入数据表模型
 const user = require('./model/user')
@@ -92,6 +93,7 @@ app.use(users.routes(), users.allowedMethods());
 app.use(articles.routes(), articles.allowedMethods());
 app.use(collections.routes(), collections.allowedMethods());
 app.use(tasks.routes(), tasks.allowedMethods());
+app.use(downloads.routes(), downloads.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

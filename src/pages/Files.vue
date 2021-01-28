@@ -12,26 +12,27 @@
   <van-collapse v-model="activeNames">
     <van-collapse-item title="文件1" name="1">
       <template #title>
-        <div>文件1 --- 下载</div>
+        <div>文件1 --- <span class="download" @click="downloadFile('11.png')">下载</span></div>
       </template>
       文件内容介绍
-      <van-button class="pos" plain size="small" type="info">下载</van-button>
+      <van-button class="pos" plain size="small" type="info" @click="downloadFile('11.png')">下载</van-button>
     </van-collapse-item>
     <van-collapse-item title="文件1" name="2">
       <template #title>
-        <div>文件2 --- 下载</div>
+        <div>文件2 --- <span class="download" @click="downloadFile('22.png')">下载</span></div>
       </template>
       文件内容介绍
-      <van-button class="pos" plain size="small" type="info">下载</van-button>
+      <van-button class="pos" plain size="small" type="info" @click="downloadFile('22.png')">下载</van-button>
     </van-collapse-item>
     <van-collapse-item title="文件1" name="3">
       <template #title>
-        <div>文件3 --- 下载</div>
+        <div>文件3 --- <span class="download" @click="downloadFile('备忘.txt')">下载</span></div>
       </template>
       文件内容介绍
-      <van-button class="pos" plain size="small" type="info">下载</van-button>
+      <van-button class="pos" plain size="small" type="info" @click="downloadFile('备忘.txt')">下载</van-button>
     </van-collapse-item>
   </van-collapse>
+  <iframe name="myIframe" style="display:none"></iframe>
 </div>
 
 </template>
@@ -43,6 +44,11 @@ export default {
     data() {
       return {
         activeNames: []
+      }
+    },
+    methods: {
+      downloadFile(name) {
+        window.open('http://localhost:3000/download/' + name, 'myIframe')
       }
     },
     components: {
@@ -63,4 +69,7 @@ export default {
   position absolute
   right 15px
   bottom 5px
+.download
+  color #1989fa
+  
 </style>
