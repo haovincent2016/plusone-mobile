@@ -10,8 +10,22 @@
     </div>
     <div class="article-body">{{ article.content }}</div>
     <div class="article-footer">
-      <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ article.like }}</van-button>
-      <van-button icon="star-o" class="like" color="#ff9900" plain>收藏</van-button>
+      <van-button 
+        icon="good-job-o" 
+        class="like" 
+        type="info" 
+        plain
+        @click="likeArticle">
+        点赞 {{ article.like }}
+      </van-button>
+      <van-button 
+        icon="star-o" 
+        class="like" 
+        color="#ff9900" 
+        plain
+        @click="addArticle">
+        收藏
+      </van-button>
       <div class="view">浏览量 {{ article.view}}</div>
     </div>
   </div>
@@ -44,6 +58,14 @@ export default {
       }).catch(err => {
         this.$toast.fail(res.data.desc)
       })
+    },
+    //点赞
+    likeArticle() {
+
+    },
+    //收藏
+    addArticle() {
+
     }
   },
   components: {

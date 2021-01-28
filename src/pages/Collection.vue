@@ -111,7 +111,7 @@ export default {
       }
     },
     goDetail(id) {
-      this.$router.push('/Articles/'+id)
+      this.$router.push('/articles/'+id)
     }
   },
   components: {
