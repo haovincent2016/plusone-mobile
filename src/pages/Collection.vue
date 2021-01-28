@@ -9,7 +9,7 @@
           <img :src="avatarUrl" class="avatar" />
         </div>
         <div class="username">
-          <div class="content">vincent</div>
+          <div class="content">{{ userInfo.usernmae }}</div>
           <van-button class="custom-btn" round type="info">编辑我的信息</van-button>
         </div>
       </div>
@@ -24,7 +24,7 @@
         </van-tab>
         <van-tab title="热门">
           <div class="list">
-            <div class="list-item" v-for="item in articles" :key="item.id">
+            <div class="list-item" v-for="item in articles" :key="item.id" @click="goDetail(item.id)">
               <div class="item-title">
                 {{ item.title }}
               </div>
@@ -36,7 +36,7 @@
                 {{ item.content }}
               </div>
               <div class="item-func">
-                <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ article.like }}</van-button>
+                <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ item.like }}</van-button>
                 <van-button icon="star-o" class="like" color="#ff9900" plain>收藏</van-button>
               </div>
             </div>
@@ -109,6 +109,9 @@ export default {
           this.$toast.fail(res.data.desc)
         })
       }
+    },
+    goDetail(id) {
+      this.$router.push('/Articles/'+id)
     }
   },
   components: {

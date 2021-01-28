@@ -60,7 +60,9 @@ export default {
   },
   computed: mapState([ 'logined', 'userInfo' ]),
   created() {
-    this.getData()
+    if(this.logined) {
+      this.getData()
+    }
   },
   methods: {
     ...mapMutations(['userLogout']),
