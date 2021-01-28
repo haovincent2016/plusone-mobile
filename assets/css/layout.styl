@@ -1,0 +1,51 @@
+@import "~assets/css/variable"
+
+.sidebar-container
+  transition width 0.28s
+  width sideMenuWidth!important
+  background-color menuBg
+  height 100%
+  position fixed
+  font-size 0px
+  top 0
+  bottom 0
+  left 0
+  z-index 1001
+  overflow hidden
+  .scrollbar-wrapper
+    overflow-x hidden!important
+  .el-scrollbar
+    height 100%
+  .hasLogo
+    .el-scrollbar 
+      height calc(100% - 50px)
+
+.hideMenu
+  .sidemenu-container
+    width 54px!important
+  .main-container
+    margin-left 54px
+
+.main-container 
+  min-height 100%
+  transition margin-left .28s
+  margin-left sideMenuWidth
+  position relative
+  
+.mobile 
+  .main-container 
+    margin-left 0px
+  
+
+  .sidebar-container 
+    transition transform .28s
+    width $sideMenuWidth !important
+  
+
+  &.hideSidebar 
+    .sidebar-container 
+      pointer-events none
+      transition-duration 0.3s
+      transform translate3d(-$sideMenuWidth, 0, 0)
+    
+  

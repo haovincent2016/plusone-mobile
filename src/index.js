@@ -8,7 +8,11 @@ import { Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, 
 import 'font-awesome/css/font-awesome.min.css'
 import 'assets/css/app.styl'
 
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import Cookies from 'js-cookie'
 import axios from 'axios'
+
 Vue.prototype.$axios = axios
 
 Vue.use(Step)
@@ -43,6 +47,8 @@ Vue.use(Toast)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(Divider)
+
+Vue.use(Element)
 
 new Vue({
   router,

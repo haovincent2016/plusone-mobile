@@ -13,6 +13,9 @@ import Task from 'pages/Task'
 import Files from 'pages/Files'
 import Article from 'pages/Article'
 
+//后台管理系统
+import Layout from '@/layout'
+
 Vue.use(Router)
 
 const routes = [
@@ -48,33 +51,48 @@ const routes = [
   },
   //每日任务打卡
   {
-    path: '/Task',
+    path: '/task',
     component: Task,
     name: 'Task'
   },
   //免费英语能力测试
   {
-    path: '/Quiz',
+    path: '/quiz',
     component: Quiz,
     name: 'Quiz'
   },
   //文章收藏夹
   {
-    path: '/Collection',
+    path: '/collection',
     component: Collection,
     name: 'Collection'
   },
   //资料下载中心
   {
-    path: '/Files',
+    path: '/files',
     component: Files,
     name: 'Files'
   },
   {
-    path: '/Articles/:id',
+    path: '/articles/:id',
     component: Article,
     name: 'Article'
   },
+
+  //后台管理首页
+  {
+    path: '/admin',
+    component: Layout,
+    //redirect: '/admin/dashboard',
+    // children: [
+    //   {
+    //     path: 'dashboard',
+    //     component: () => import('@/views/dashboard/index'),
+    //     name: 'Dashboard',
+    //     meta: { title: 'dashboard', icon: 'dashboard', affix: true }
+    //   }
+    // ]
+  }
 ]
 
 export default new Router({
