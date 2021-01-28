@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <TopPart :isLogin="true" />
+    <div v-if="!logined" class="common-content">
     <van-button 
-      v-if="!logined" 
       @click="goLogin" 
       class="custom-btn" 
       color="linear-gradient(to right, #ff6034, #ee0a24)">
-      登录/注册解锁更多功能~
+      注册/登录解锁更多功能~
     </van-button>
+    </div>
     <div class="user-content" v-else>
       <!-- 个人中心头部 -->
       <div class="user-header">
@@ -113,15 +114,22 @@ export default {
   display flex
   align-items center
   justify-content center
-.custom-btn
-  position absolute
-  bottom 18%
-  border-radius 20px
 
-
-.user-content
-  background-image: linear-gradient(45deg, #0081ff, #1cbbb4);
+.common-content 
+  background-image linear-gradient(45deg, #0081ff, #1cbbb4)
   width 100%
+  height 100vh
+  display flex 
+  justify-content center 
+  align-items center
+  .custom-btn 
+    font-size 16px
+    padding 16px 18px
+    border-radius 20px
+.user-content
+  background-image linear-gradient(45deg, #0081ff, #1cbbb4)
+  width 100%
+  height 100vh
   text-align center
 .user-header
   margin-top 46px
