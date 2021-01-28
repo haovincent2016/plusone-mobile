@@ -1,7 +1,7 @@
 <template>
-  <div class="container center-content">
+  <div class="app-container">
     <RouterView />
-    <van-tabbar route>
+    <van-tabbar v-if="!isAdmin" route>
       <van-tabbar-item replace to="/" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item replace to="/Price" icon="gold-coin-o">价格</van-tabbar-item>
       <van-tabbar-item replace to="/About" icon="smile-o">师资</van-tabbar-item>
@@ -12,7 +12,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  computed: mapState([ 'isAdmin' ]),
   created() {
     if (sessionStorage.getItem("store")) {
       this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
@@ -25,7 +27,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.container
+.app-container
   font-family 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-  max-width 1200px
 </style>

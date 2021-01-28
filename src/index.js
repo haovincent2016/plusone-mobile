@@ -7,6 +7,7 @@ import { Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, 
 
 import 'font-awesome/css/font-awesome.min.css'
 import 'assets/css/app.styl'
+import 'assets/css/index.scss'
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'

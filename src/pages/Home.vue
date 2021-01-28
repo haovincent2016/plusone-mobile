@@ -128,6 +128,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
+import { mapMutations } from 'vuex'
 
 export default {
   data() {
@@ -148,6 +149,10 @@ export default {
       showTip: false
     }
   },
+  created() {
+    //暂时这样
+    this.adminLogout()
+  },
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
   },
@@ -155,6 +160,7 @@ export default {
     window.removeEventListener('scroll', this.scrollToTop)
   },
   methods: {
+    ...mapMutations(['adminLogout']),
     onChange(index) {
       this.current = index
     },

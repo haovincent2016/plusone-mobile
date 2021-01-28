@@ -10,6 +10,7 @@ const state = {
     userInfo: {},
 
     //后台管理系统
+    isAdmin: false,
     //左菜单
     sideMenu: {
         opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true
@@ -25,6 +26,12 @@ const state = {
 }
 
 const mutations = {
+    adminLogin (state) {
+        state.isAdmin = true
+    },
+    adminLogout (state) {
+        state.isAdmin = false
+    },
     userLogin (state, user) {
         state.logined = true
         state.userInfo = JSON.parse(user.userInfo)

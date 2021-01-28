@@ -38,6 +38,13 @@ module.exports = merge(baseConfig, {
           'css-loader',
           'stylus-loader'
         ]
+      }, {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
       }
     ]
   },

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import SideMenu from './components/SideMenu'
 
 export default {
@@ -41,6 +41,13 @@ export default {
       }
     }
   },
+  created() {
+    // 暂时为这样
+    this.adminLogin()
+  },
+  methods: {
+    ...mapMutations(['adminLogin'])
+  },
   components: {
     SideMenu,
     // Tags,
@@ -51,35 +58,46 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-@import "~assets/css/layout"
-@import "~assets/css/variable"
+<style lang="scss" scoped>
+  @import "~assets/css/mixin.scss";
+  @import "~assets/css/variables.scss";
 
-.container
-  width 100%
-  height 100%
-  .drawer
-    background #000
-    opacity 0.3
-    width 100%
-    top 0
-    height 100%
-    position absolute
-    z-index 999
-.fixedTop
-  position fixed
-    top 0
-    right 0
-    z-index 9
-    width calc(100% - sideMenuWidth)
-    transition width 0.28s
-.mobile
-  .openMenu
-    position fixed
-    top 0
-    .fixedTop
-      width calc(100% - 54px)
-  .hideMenu
-    .fixedTop
-      width 100%
+  .container {
+    @include clearfix;
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    &.mobile.openMenu {
+      position: fixed;
+      top: 0;
+    }
+  }
+
+  .drawer {
+    background: #000;
+    opacity: 0.3;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
+  }
+
+  .fixedTop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9;
+    width: calc(100% - #{$sideMenuWidth});
+    transition: width 0.28s;
+  }
+
+  .hideMenu .fixedTop {
+    width: calc(100% - 54px)
+  }
+
+  .mobile .fixed-header {
+    width: 100%;
+  }
 </style>
