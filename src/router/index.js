@@ -79,7 +79,7 @@ const routes = [
     name: 'Article'
   },
 
-  //后台管理首页
+  //后台管理首页,meta带有affix不可去掉tag
   {
     path: '/admin',
     component: Layout,
@@ -89,7 +89,7 @@ const routes = [
         path: 'dashboard',
         component: () => import('@/pages/admin/dashboard'),
         name: 'Dashboard',
-        meta: { title: 'dashboard' }
+        meta: { title: 'dashboard', affix: true }
       }
     ]
   },

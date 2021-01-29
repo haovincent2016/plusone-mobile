@@ -13,8 +13,10 @@
         mode="vertical"
       >
         <el-menu-item index="1" class="submenu-title-noDropdown">
-          <i class="el-icon-menu"></i>
-          <span slot="title">首页</span>
+          <router-link :to="{path: '/admin-user/user'}">
+            <i class="el-icon-menu"></i>
+            <span slot="title">首页</span>
+          </router-link>
         </el-menu-item>
         <el-submenu index="2">
           <template slot="title">
@@ -22,7 +24,7 @@
             <span>用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1">普通用户</el-menu-item>
+            <el-menu-item index="2-1"><router-link :to="{path: '/admin-user/user'}">普通用户</router-link></el-menu-item>
             <el-menu-item index="2-2">管理员</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

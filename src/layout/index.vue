@@ -11,7 +11,7 @@
         <!-- 顶部导航栏 -->
         <navbar />
         <!-- Breadcrumb，待做 -->
-        <!-- <tags v-if="isTagsView" /> -->
+        <tags v-if="isTagsView" />
       </div>
       <!-- 主内容部分 -->
       <main-content />
@@ -26,6 +26,7 @@ import { mapState, mapMutations } from 'vuex'
 import SideMenu from './components/SideMenu'
 import Navbar from './components/Navbar'
 import MainContent from './components/MainContent'
+import Tags from './components/Tags'
 
 export default {
   computed: {
@@ -53,7 +54,7 @@ export default {
   components: {
     SideMenu,
     Navbar,
-    // Tags,
+    Tags,
     MainContent,
     // Setting
   }
