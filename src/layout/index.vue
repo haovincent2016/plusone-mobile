@@ -14,7 +14,7 @@
         <!-- <tags v-if="isTagsView" /> -->
       </div>
       <!-- 主内容部分 -->
-      <!-- <main-content /> -->
+      <main-content />
       <!-- 右设置 -->
       <!-- <setting /> -->
     </div>
@@ -25,6 +25,7 @@
 import { mapState, mapMutations } from 'vuex'
 import SideMenu from './components/SideMenu'
 import Navbar from './components/Navbar'
+import MainContent from './components/MainContent'
 
 export default {
   computed: {
@@ -53,7 +54,7 @@ export default {
     SideMenu,
     Navbar,
     // Tags,
-    // MainContent,
+    MainContent,
     // Setting
   }
 }
@@ -98,7 +99,7 @@ export default {
     width: calc(100% - 54px)
   }
 
-  .mobile .fixed-header {
+  .mobile .fixedTop {
     width: 100%;
   }
 </style>

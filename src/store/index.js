@@ -23,6 +23,8 @@ const state = {
     isTagsView: true,
     //浏览过的页面
     visitedView: [],
+    //缓存的页面
+    cachedView: [],
     //是否固定上导航栏
     isFixedView: true
 }

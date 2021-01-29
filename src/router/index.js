@@ -83,15 +83,35 @@ const routes = [
   {
     path: '/admin',
     component: Layout,
-    //redirect: '/admin/dashboard',
-    // children: [
-    //   {
-    //     path: 'dashboard',
-    //     component: () => import('@/views/dashboard/index'),
-    //     name: 'Dashboard',
-    //     meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-    //   }
-    // ]
+    redirect: '/admin/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/pages/admin/dashboard'),
+        name: 'Dashboard',
+        meta: { title: 'dashboard' }
+      }
+    ]
+  },
+  //后台管理用户管理
+  {
+    path: '/admin-user',
+    component: Layout,
+    redirect: '/admin-user/user',
+    children: [
+      {
+        path: 'user',
+        component: () => import('@/pages/admin-user/user'),
+        name: 'User',
+        meta: { title: 'user' }
+      },
+      {
+        path: 'operator',
+        component: () => import('@/pages/admin-user/operator'),
+        name: 'Operator',
+        meta: { title: 'operator' }
+      }
+    ]
   }
 ]
 
