@@ -8,10 +8,10 @@
     <div :class="{hasTags : isTagsView}" class="main-container">
       <!-- 是否固定顶部导航栏 -->
       <div :class="{fixedTop : isFixedView}">
-        <!-- Breadcrumb -->
-        <!-- <tags v-if="isTagsView" /> -->
         <!-- 顶部导航栏 -->
-        <!-- <navbar /> -->
+        <navbar />
+        <!-- Breadcrumb，待做 -->
+        <!-- <tags v-if="isTagsView" /> -->
       </div>
       <!-- 主内容部分 -->
       <!-- <main-content /> -->
@@ -24,6 +24,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import SideMenu from './components/SideMenu'
+import Navbar from './components/Navbar'
 
 export default {
   computed: {
@@ -50,8 +51,8 @@ export default {
   },
   components: {
     SideMenu,
+    Navbar,
     // Tags,
-    // Navbar,
     // MainContent,
     // Setting
   }

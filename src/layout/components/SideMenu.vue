@@ -12,15 +12,13 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>首页</span>
-          </template>
-        </el-submenu>
+        <el-menu-item index="1" class="submenu-title-noDropdown">
+          <i class="el-icon-menu"></i>
+          <span slot="title">首页</span>
+        </el-menu-item>
         <el-submenu index="2">
           <template slot="title">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-user"></i>
             <span>用户管理</span>
           </template>
           <el-menu-item-group>
@@ -30,7 +28,7 @@
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-document"></i>
             <span>文章管理</span>
           </template>
           <el-menu-item-group>
@@ -41,7 +39,7 @@
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-edit-outline"></i>
             <span>打卡管理</span>
           </template>
           <el-menu-item-group>
@@ -51,7 +49,7 @@
         </el-submenu>
         <el-submenu index="5">
           <template slot="title">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-setting"></i>
             <span>其他设置</span>
           </template>
           <el-menu-item-group>

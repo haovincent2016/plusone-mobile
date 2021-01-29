@@ -13,7 +13,7 @@ const state = {
     isAdmin: false,
     //左菜单
     sideMenu: {
-        opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true
+        opened: Cookies.get('sideMenuStatus') ? !!+Cookies.get('sideMenuStatus') : true
     },
     //访问设备
     device: 'desktop',
@@ -21,6 +21,8 @@ const state = {
     isLogoView: true,
     //是否显示Breadcrumb
     isTagsView: true,
+    //浏览过的页面
+    visitedView: [],
     //是否固定上导航栏
     isFixedView: true
 }
@@ -43,6 +45,15 @@ const mutations = {
         state.userInfo = {}
         state.token = ''
         sessionStorage.removeItem("store")
+    },
+    //toggle左菜单
+    toggleSideMenu (state) {
+        state.sideMenu.opened = !state.sideMenu.opened
+        if(state.sideMenu.opened) {
+            Cookies.set('sideMenuStatus', 1)
+        } else {
+            Cookies.set('sideMenuStatus', 0)
+        }
     }
 }
 

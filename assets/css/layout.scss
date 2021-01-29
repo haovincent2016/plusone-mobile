@@ -1,7 +1,5 @@
 @import './variables.scss'; 
 
-
-
     .main-container {
       min-height: 100%;
       transition: margin-left .28s;
@@ -39,7 +37,7 @@
         height: 100%;
       }
   
-      &.has-logo {
+      &.hasLogo {
         .el-scrollbar {
           height: calc(100% - 50px);
         }
@@ -92,8 +90,12 @@
         }
       }
     }
-  
-    .hideSidebar {
+    
+    .el-menu-item-group__title {
+      padding: 0px !important;
+    }
+
+    .hideMenu {
       .sidemenu-container {
         width: 54px !important;
       }
@@ -107,7 +109,7 @@
         position: relative;
   
         .el-tooltip {
-          padding: 0 !important;
+          padding: 0 15px !important;
   
           .svg-icon {
             margin-left: 20px;
@@ -121,6 +123,7 @@
   
       .el-submenu {
         overflow: hidden;
+        text-align: center;
   
         &>.el-submenu__title {
           padding: 0 !important;
@@ -169,7 +172,7 @@
         width: $sideMenuWidth !important;
       }
   
-      &.hideSidebar {
+      &.hideMenu {
         .sidemenu-container {
           pointer-events: none;
           transition-duration: 0.3s;
