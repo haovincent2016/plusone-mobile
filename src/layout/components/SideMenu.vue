@@ -5,10 +5,10 @@
       <el-menu
         :default-active="activeMenu"
         :collapse="!isCollapse"
-        background-color="#304156"
-        text-color="#bfcbd9"
+        :background-color="variables.menuBg"
+        :text-color="variables.menuText"
         :unique-opened="false"
-        active-text-color="#409EFF"
+        :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
       >
@@ -65,6 +65,7 @@
 <script>
 import { mapState } from 'vuex'
 import Logo from './Logo'
+import variables from '../../../assets/css/variables.scss'
 
 export default {
   data() {
@@ -76,7 +77,10 @@ export default {
     ...mapState({
       isLogoView: state => state.isLogoView,
       isCollapse: state => state.sideMenu.opened
-    })
+    }),
+    variables() {
+      return variables
+    }
   },
   components: {
     Logo
