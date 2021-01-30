@@ -9,6 +9,9 @@ const logger = require('koa-logger')
   , koastatic = require('koa-static')
   , convert = require('koa-convert')
 
+// 引入middleware
+const auth = require('./public/auth')
+
 //引入routes
 const users = require('./routes/users')
 const articles = require('./routes/article')
@@ -69,10 +72,6 @@ task.sync()
 onerror(app);
 
 // global middlewares
-app.use(views('views', {
-  root: __dirname + '/views',
-  default: 'jade'
-}));
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
@@ -117,10 +116,15 @@ app.use(async (ctx, next) => {
   })
 })
 
+// 验证token
+app.use(auth)
+
+const secret = 'qweasd789456'
+
 app.use(koajwt({
-  secret: 'qweasd789456'
+  secret: secret
 }).unless({
-  path: [/^\/user\/register/,/^\/user\/login/]
+  path: [/^\/user\/register/,/^\/user\/login/,/^\/admin\/adminLogin/]
 }))
 
 module.exports = app;

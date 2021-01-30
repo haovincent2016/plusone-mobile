@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 //统一设置token有效时间24h
 const expireTime = '24h'
+const secret = 'qweasd789456'
 
 //引入encrypt
 const crypt = require('../public/encrypt')
@@ -33,7 +34,7 @@ class adminController {
                 const token = jwt.sign({
                   username: req.username,
                   password: req.password
-                }, 'iopjklbnm456765', { expiresIn: expireTime })
+                }, secret, { expiresIn: expireTime })
                 return ctx.body = {
                   code: '0',
                   token: token,

@@ -12,8 +12,8 @@ service.interceptors.request.use(function(config) {
     config.data = qs.stringify(config.data)
 
     //将token写入请求头
-    if (window.localStorage.getItem('token')) {
-        config.headers.Authorization = `Bearer ${window.localStorage.getItem('token')}`;
+    if (localStorage.getItem('token')) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
     }
 
     return config;

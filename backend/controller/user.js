@@ -6,6 +6,7 @@ const tools = require('../public/tools')
 
 //统一设置token有效时间24h
 const expireTime = '24h'
+const secret = 'qweasd789456'
 
 //引入encrypt
 const crypt = require('../public/encrypt')
@@ -57,7 +58,7 @@ class userController {
               const token = jwt.sign({
                 username: req.username,
                 password: req.password
-              }, 'qweasd789456', { expiresIn: expireTime })
+              }, secret, { expiresIn: expireTime })
               return ctx.body = {
                 code: '0',
                 token: token,
@@ -143,7 +144,7 @@ class userController {
       const token = ctx.headers.authorization;
       if(token){
         try {
-          const result = await tools.verToken(token);
+          const result = await tools.verifyToken(token);
           if (!req.username) {
             return ctx.body = {
               code: '-1',

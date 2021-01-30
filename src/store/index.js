@@ -41,12 +41,14 @@ const mutations = {
         state.userInfo = JSON.parse(user.userInfo)
         state.token = user.token
         sessionStorage.setItem("store", JSON.stringify(state))
+        localStorage.setItem("token", user.token)
     },
     userLogout (state) {
         state.logined = false
         state.userInfo = {}
         state.token = ''
         sessionStorage.removeItem("store")
+        localStorage.removeItem("token")
     },
 
     // 管理员登录页隐藏菜单
@@ -58,12 +60,14 @@ const mutations = {
         state.adminInfo = JSON.parse(user.adminInfo)
         state.adminToken = user.token
         sessionStorage.setItem("store", JSON.stringify(state))
+        localStorage.setItem("token", user.token)
     },
     adminLogout (state) {
         state.isAdmin = false
         state.adminInfo = {}
         state.adminToken = ''
         sessionStorage.removeItem("store")
+        localStorage.removeItem("token")
     },
     
     //toggle左菜单
