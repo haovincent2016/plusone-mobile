@@ -1,19 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Cookies from 'js-cookie'
-import router from '@/router'
+import { siteRoutes } from '@/router'
 
 Vue.use(Vuex)
 
 const state = {
+    //用户界面
     logined: false,
     token: '',
     userInfo: {},
 
     //后台管理系统
     isAdmin: false,
+    adminToken: '',
+    adminInfo: {},
     //菜单
-    routes: router,
+    routes: siteRoutes,
     //左菜单
     sideMenu: {
         opened: Cookies.get('sideMenuStatus') ? !!+Cookies.get('sideMenuStatus') : true
@@ -46,16 +49,21 @@ const mutations = {
         sessionStorage.removeItem("store")
     },
 
-    setRoutes(state, routes) {
-        //state.addRoutes = routes
-        //state.routes = router.concat(routes)
-    },
-
-    adminLogin (state) {
+    // 管理员登录页隐藏菜单
+    switchState (state) {
         state.isAdmin = true
+    },
+    adminLogin (state, user) {
+        state.isAdmin = true
+        state.adminInfo = JSON.parse(user.adminInfo)
+        state.adminToken = user.token
+        sessionStorage.setItem("store", JSON.stringify(state))
     },
     adminLogout (state) {
         state.isAdmin = false
+        state.adminInfo = {}
+        state.adminToken = ''
+        sessionStorage.removeItem("store")
     },
     
     //toggle左菜单
@@ -74,12 +82,6 @@ const mutations = {
             title: view.meta.title || 'no-name'
           })
         )
-      },
-    addCachedView (state, view) {
-        if (state.cachedView.includes(view.name)) return
-        if (!view.meta.noCache) {
-          state.cachedView.push(view.name)
-        }
     },
     //更新浏览过的tag
     updateVisiedView (state, view) {
@@ -98,32 +100,21 @@ const mutations = {
                 break
             }
         }
-    },
-    //删除缓存的tag
-    delCachedView (state, view) {
-        const index = state.cachedView.indexOf(view.name)
-        index > -1 && state.cachedView.splice(index, 1)
     }
 }
 
 const actions = {
-    addView({ dispatch }, view) {
-        dispatch('addVisitedView', view)
-        dispatch('addCachedView', view)
+    addView({ commit }, view) {
+        commit('addVisitedView', view)
     },
-    addVisitedView({ dispatch }, view) {
-        dispatch('addVisitedView', view)
+    updateView({ commit }, view) {
+        commit('updateVisiedView', view)
     },
-    updateVisitedView({ dispatch }, view) {
-        dispatch('updateVisiedView', view)
-    },
-    delView({ dispatch, state }, view) {
+    delView({ commit, state }, view) {
         return new Promise(resolve => {
-            dispatch('delVisitedView', view)
-            dispatch('delCachedView', view)
+            commit('delVisitedView', view)
             resolve({
-                visitedViews: [...state.visitedViews],
-                cachedViews: [...state.cachedViews]
+                visitedView: [...state.visitedView]
             })
         })
     }

@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import path from 'path'
+
 export default {
   data() {
     return {
@@ -39,11 +41,10 @@ export default {
     }
   },
   watch: {
-    //添加tag
-    //去到当前tag
+    //浏览新页面，添加tag, 高亮tag
     $route() {
-      this.addTags()
-      this.moveToCurrentTag()
+      this.addTag()
+      //this.moveToCurrentTag()
     },
     visible(value) {
       if (value) {
@@ -64,7 +65,7 @@ export default {
   mounted() {
     //初始化tag
     this.initTags()
-    this.addTags()
+    this.addTag()
   },
   methods: {
     filterAffixTags(routes, basePath = '/') {
@@ -88,28 +89,29 @@ export default {
       })
       return tags
     },
+    // 初始化tags，只包含不可关闭tag
     initTags() {
       const affixTags = this.affixTags = this.filterAffixTags(this.routes)
       for (const tag of affixTags) {
         if (tag.name) {
-          this.$store.dispatch('addVisitedView', tag)
+          this.$store.dispatch('addView', tag)
         }
       }
     },
-    addTags() {
+    //浏览新页面，添加tag
+    addTag() {
       const { name } = this.$route
       if (name) {
         this.$store.dispatch('addView', this.$route)
       }
       return false
     },
+    //高亮当前页
     moveToCurrentTag() {
       const tags = this.$refs.tag
       this.$nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
               this.$store.dispatch('updateVisitedView', this.$route)
             }
@@ -129,6 +131,7 @@ export default {
     //关闭tag，去上一个tag页面
     toLastView(visitedView) {
       const latestView = visitedView.slice(-1)[0]
+      console.log(latestView)
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
@@ -178,40 +181,38 @@ export default {
   background: #fff;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
-  .tags-view-wrapper {
-    .tags-view-item {
-      display: inline-block;
-      position: relative;
-      cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
-      color: #495060;
-      background: #fff;
-      padding: 0 8px;
-      font-size: 12px;
-      margin-left: 5px;
-      margin-top: 4px;
-      &:first-of-type {
-        margin-left: 15px;
-      }
-      &:last-of-type {
-        margin-right: 15px;
-      }
-      &.active {
-        background-color: $tagColor;
-        color: #fff;
-        border-color: $tagColor;
-        &::before {
-          content: '';
-          background: #fff;
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          position: relative;
-          margin-right: 2px;
-        }
+  .tags-view-item {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    height: 26px;
+    line-height: 26px;
+    border: 1px solid #d8dce5;
+    color: #495060;
+    background: #fff;
+    padding: 0 8px;
+    font-size: 12px;
+    margin-left: 5px;
+    margin-top: 4px;
+    &:first-of-type {
+      margin-left: 15px;
+    }
+    &:last-of-type {
+      margin-right: 15px;
+    }
+    &.active {
+      background-color: $tagColor;
+      color: #fff;
+      border-color: $tagColor;
+      &::before {
+        content: '';
+        background: #fff;
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        position: relative;
+        margin-right: 2px;
       }
     }
   }
@@ -240,11 +241,11 @@ export default {
 </style>
 
 <style lang="scss">
-.tags-view-wrapper {
+.tags-view-container {
   .tags-view-item {
     .el-icon-close {
-      width: 16px;
-      height: 16px;
+      width: 17px;
+      height: 17px;
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
@@ -256,7 +257,7 @@ export default {
         vertical-align: -3px;
       }
       &:hover {
-        background-color: #b4bccc;
+        background-color: #b7c5e0;
         color: #fff;
       }
     }

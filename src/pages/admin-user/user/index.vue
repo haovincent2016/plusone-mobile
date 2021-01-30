@@ -85,7 +85,7 @@
         width="150">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.status">正常</el-tag>
-          <el-tag type="danger" v-if="scope.row.status">封禁</el-tag>
+          <el-tag type="danger" v-if="!scope.row.status">封禁</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -128,10 +128,10 @@
         label="操作"
         header-align="center"
         align="center"
-        width="250">
+        width="200">
         <template slot-scope="scope">
-          <el-button plain icon="el-icon-edit">编辑</el-button>
-          <el-button type="danger" plain icon="el-icon-delete">删除</el-button>
+          <el-button plain icon="el-icon-edit" size="mini">编辑</el-button>
+          <el-button type="danger" plain icon="el-icon-delete" size="mini">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

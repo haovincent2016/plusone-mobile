@@ -25,33 +25,31 @@ const task = require('./model/task')
 
 //自动创建表，并导入初始数据,导入数据需按顺序
 // (测试数据正式环境需删除)
-user.sync().then(
-  (async () => {
-    await user.create({
-      id: 1,
-      username: 'haovincent',
-      password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
-      points: 233,
-      nickname: '遨游',
-      phone: '18639289962',
-      description: '此人很懒，什么也没写'
+user.sync().then(() => {
+      user.create({
+        id: 1,
+        type: 'admin',
+        username: 'haovincent',
+        password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
+        points: 233,
+        nickname: '遨游',
+        phone: '18639289962',
+        description: '此人很懒，什么也没写'
+      })
     })
-  })()
-)
-collection.sync().then(
-  (async() => {
-    await collection.create({
-      id: 2,
-      title: '我的收藏',
-      description: '主要关于英语学习类文章',
-      public: true,
-      ownerId: 1
+
+collection.sync().then(() => {
+      collection.create({
+        id: 2,
+        title: '我的收藏',
+        description: '主要关于英语学习类文章',
+        public: true,
+        ownerId: 1
+      })
     })
-  })()
-)
-article.sync().then(
-  (async () => {
-    await article.create({
+
+article.sync().then(() => {
+    article.create({
       id: 1,
       authorId: 1,
       colId: 2,
@@ -63,8 +61,8 @@ article.sync().then(
       view: 101,
       like: 3
     })
-  })()
-)
+})
+  
 task.sync()
 
 // error handler

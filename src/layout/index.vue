@@ -44,13 +44,6 @@ export default {
       }
     }
   },
-  created() {
-    // 暂时为这样
-    this.adminLogin()
-  },
-  methods: {
-    ...mapMutations(['adminLogin'])
-  },
   components: {
     SideMenu,
     Navbar,

@@ -55,8 +55,8 @@ class userController {
             if (crypt.decrypt(req.password, data.password)) {
               //生成token，验证登录有效期
               const token = jwt.sign({
-                user: req.username,
-                passWord: req.password
+                username: req.username,
+                password: req.password
               }, 'qweasd789456', { expiresIn: expireTime })
               return ctx.body = {
                 code: '0',

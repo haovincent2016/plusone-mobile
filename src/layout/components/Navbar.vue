@@ -13,6 +13,16 @@
         <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 0 0 0-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0 0 14.4 7z" />
       </svg>
     </div>
+    <!-- Breadcrumb -->
+    <el-breadcrumb class="breadcrumb-container" separator="-">
+      <el-breadcrumb-item v-for="(item,index) in menuList" :key="item.path">
+        <span v-if="item.redirect==='noRedirect'||index==menuList.length-1" class="no-redirect">
+          {{ item.meta.title }}
+        </span>
+        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+      </el-breadcrumb-item>
+    </el-breadcrumb>
+
     <!-- 右侧功能菜单 -->
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
@@ -66,6 +76,14 @@ export default {
       userInfo: state => state.userInfo
     })
   },
+  data() {
+    return {
+      menuList: null
+    }
+  },
+  created() {
+    this.getData()
+  },
   methods: {
     ...mapMutations(['toggleSideMenu', 'adminLogout']),
     toggleClick() {
@@ -73,7 +91,34 @@ export default {
     },
     logout() {
       this.adminLogout()
-      this.$rotuer.push({ name: 'Home' })
+      this.$router.push({ name: 'AdminLogin' })
+    },
+    // breadcrumb内容
+    getData() {
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
+      const first = matched[0]
+
+      if (!this.isDashboard(first)) {
+        matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
+      }
+
+      this.menuList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
+    },
+    isDashboard(route) {
+      const name = route && route.name
+      if (!name) {
+        return false
+      }
+      return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
+    },
+    // breadcrumb点击
+    handleClick(item) {
+      const { redirect, path } = item
+      if (redirect) {
+        this.$router.push(redirect)
+        return
+      }
+      this.$router.push(path)
     }
   },
   components: {
@@ -104,14 +149,16 @@ export default {
       background: rgba(0, 0, 0, .025)
     }
   }
-
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .errLog-container {
+  .breadcrumb-container.el-breadcrumb {
     display: inline-block;
-    vertical-align: top;
+    font-size: 14px;
+    line-height: 50px;
+    margin-left: 8px;
+
+    .no-redirect {
+      color: #97a8be;
+      cursor: text;
+    }
   }
 
   .right-menu {

@@ -18,7 +18,7 @@ import Layout from '@/layout'
 
 Vue.use(Router)
 
-const routes = [
+export const siteRoutes = [
   {
     path: '/',
     component: Home,
@@ -79,7 +79,22 @@ const routes = [
     name: 'Article'
   },
 
-  //后台管理首页,meta带有affix不可去掉tag
+  
+  /*
+  hide: sidemenu隐藏
+  meta: 
+    affix:不可去tag
+    title:breadcrumb和sidemenu名字
+
+  */
+ //后台管理登录
+  {
+    path: '/admin-login',
+    hide: true,
+    name: 'AdminLogin',
+    component: () => import('@/pages/admin-login')
+  },
+ //后台管理首页
   {
     path: '/admin',
     component: Layout,
@@ -89,7 +104,7 @@ const routes = [
         path: 'dashboard',
         component: () => import('@/pages/admin/dashboard'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', affix: true }
+        meta: { title: '主页', affix: true }
       }
     ]
   },
@@ -103,18 +118,18 @@ const routes = [
         path: 'user',
         component: () => import('@/pages/admin-user/user'),
         name: 'User',
-        meta: { title: 'user' }
+        meta: { title: '用户' }
       },
       {
         path: 'operator',
         component: () => import('@/pages/admin-user/operator'),
         name: 'Operator',
-        meta: { title: 'operator' }
+        meta: { title: '管理员' }
       }
     ]
   }
 ]
 
 export default new Router({
-  routes
+  routes: siteRoutes
 })

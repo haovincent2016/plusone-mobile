@@ -10,22 +10,21 @@
         :unique-opened="false"
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
+        :router="true"
         mode="vertical"
       >
-        <el-menu-item index="1" class="submenu-title-noDropdown">
-          <router-link :to="{path: '/admin-user/user'}">
-            <i class="el-icon-menu"></i>
-            <span slot="title">首页</span>
-          </router-link>
+        <el-menu-item index="/admin/dashboard" class="submenu-title-noDropdown">
+          <i class="el-icon-menu"></i>
+          <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="2">
+        <el-submenu index="/admin-user">
           <template slot="title">
             <i class="el-icon-user"></i>
             <span>用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1"><router-link :to="{path: '/admin-user/user'}">普通用户</router-link></el-menu-item>
-            <el-menu-item index="2-2">管理员</el-menu-item>
+            <el-menu-item index="/admin-user/user">普通用户</el-menu-item>
+            <el-menu-item index="/admin-user/operator">管理员</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
