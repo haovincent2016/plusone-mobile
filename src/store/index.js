@@ -51,10 +51,6 @@ const mutations = {
         localStorage.removeItem("token")
     },
 
-    // 管理员登录页隐藏菜单
-    switchState (state) {
-        state.isAdmin = true
-    },
     adminLogin (state, user) {
         state.isAdmin = true
         state.adminInfo = JSON.parse(user.adminInfo)

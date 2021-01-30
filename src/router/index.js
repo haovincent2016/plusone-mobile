@@ -85,16 +85,16 @@ export const siteRoutes = [
   meta: 
     affix:不可去tag
     title:breadcrumb和sidemenu名字
-
+    auth: 需要登陆
   */
- //后台管理登录
+ //后台管理 - 登录
   {
     path: '/admin-login',
     hide: true,
     name: 'AdminLogin',
     component: () => import('@/pages/admin-login')
   },
- //后台管理首页
+ //后台管理 - 首页
   {
     path: '/admin',
     component: Layout,
@@ -104,11 +104,11 @@ export const siteRoutes = [
         path: 'dashboard',
         component: () => import('@/pages/admin/dashboard'),
         name: 'Dashboard',
-        meta: { title: '主页', affix: true }
+        meta: { title: '主页', affix: true, auth: true }
       }
     ]
   },
-  //后台管理用户管理
+  //后台管理 - 用户管理
   {
     path: '/admin-user',
     component: Layout,
@@ -117,8 +117,8 @@ export const siteRoutes = [
       {
         path: 'user',
         component: () => import('@/pages/admin-user/user'),
-        name: 'User',
-        meta: { title: '用户' }
+        name: 'UserB',
+        meta: { title: '用户', auth: true }
       },
       {
         path: 'operator',
@@ -127,9 +127,107 @@ export const siteRoutes = [
         meta: { title: '管理员' }
       }
     ]
+  },
+  //后台管理 - 文章管理
+  {
+    path: '/admin-article',
+    component: Layout,
+    redirect: '/admin-article/article',
+    children: [
+      {
+        path: 'article',
+        component: () => import('@/pages/admin-article/article'),
+        name: 'ArticleB',
+        meta: { title: '文章' }
+      },
+      {
+        path: 'collection',
+        component: () => import('@/pages/admin-article/collection'),
+        name: 'CollectionB',
+        meta: { title: '收藏夹' }
+      },
+      {
+        path: 'write',
+        component: () => import('@/pages/admin-article/write'),
+        name: 'Write',
+        meta: { title: '文章创作' }
+      }
+    ]
+  },
+  //后台管理 - 打卡管理
+  {
+    path: '/admin-task',
+    component: Layout,
+    redirect: '/admin-task/task',
+    children: [
+      {
+        path: 'task',
+        component: () => import('@/pages/admin-task/task'),
+        name: 'TaskB',
+        meta: { title: '打卡列表' }
+      },
+      {
+        path: 'setting',
+        component: () => import('@/pages/admin-task/setting'),
+        name: 'Setting',
+        meta: { title: '打卡设置' }
+      }
+    ]
+  },
+  //后台管理 - 设置
+  {
+    path: '/admin-setting',
+    component: Layout,
+    redirect: '/admin-setting/common',
+    children: [
+      {
+        path: 'common',
+        component: () => import('@/pages/admin-setting/common'),
+        name: 'Common',
+        meta: { title: '常规设置' }
+      },
+      {
+        path: 'special',
+        component: () => import('@/pages/admin-setting/special'),
+        name: 'Special',
+        meta: { title: '特殊设置' }
+      }
+    ]
   }
 ]
 
-export default new Router({
+const customRouter = new Router({
   routes: siteRoutes
 })
+//登录验证
+customRouter.beforeEach(function(to, from, next) {
+  if(to.matched.some(record => record.meta.auth)) {
+    //需验证路径
+    //没有store
+    if(!sessionStorage.getItem('store')) {
+      console.log('a')
+      next({
+        path: '/admin-login',
+        query: { redirect: '/admin/dashboard' }
+      })
+    } else if (sessionStorage.getItem('store') && !sessionStorage.getItem('store').isAdmin) {
+      //未登录
+      console.log('b')
+      next({
+        path: '/admin-login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      //已登录
+      console.log('c')
+      next()
+    }
+  } else {
+    console.log('d')
+    //不需验证路径
+    next()
+  }
+})
+
+export default customRouter
+

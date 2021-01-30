@@ -1,8 +1,7 @@
-const koa = require('koa');
-const app = new koa();
+const koa = require('koa')
+const app = new koa()
 const logger = require('koa-logger')
   , json = require('koa-json')
-  , views = require('koa-views')
   , onerror = require('koa-onerror')
   , koajwt = require('koa-jwt')
   , koacors = require('koa2-cors')
@@ -69,35 +68,35 @@ article.sync().then(() => {
 task.sync()
 
 // error handler
-onerror(app);
+onerror(app)
 
 // global middlewares
-app.use(require('koa-bodyparser')());
-app.use(json());
-app.use(logger());
-app.use(koacors());
+app.use(require('koa-bodyparser')())
+app.use(json())
+app.use(logger())
+app.use(koacors())
 
 app.use(convert(function *(next){
-  const start = new Date;
-  yield next;
-  const ms = new Date - start;
-  console.log(`${this.method} ${this.url} - ${ms}ms`);
-}));
+  const start = new Date
+  yield next
+  const ms = new Date - start
+  console.log(`${this.method} ${this.url} - ${ms}ms`)
+}))
 
-app.use(convert(koastatic(__dirname + '/public')));
+app.use(convert(koastatic(__dirname + '/public')))
 
 // routes definition
-app.use(users.routes(), users.allowedMethods());
-app.use(articles.routes(), articles.allowedMethods());
-app.use(collections.routes(), collections.allowedMethods());
-app.use(tasks.routes(), tasks.allowedMethods());
-app.use(downloads.routes(), downloads.allowedMethods());
-app.use(admins.routes(), admins.allowedMethods());
+app.use(users.routes(), users.allowedMethods())
+app.use(articles.routes(), articles.allowedMethods())
+app.use(collections.routes(), collections.allowedMethods())
+app.use(tasks.routes(), tasks.allowedMethods())
+app.use(downloads.routes(), downloads.allowedMethods())
+app.use(admins.routes(), admins.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
-});
+})
 
 
 
@@ -105,13 +104,13 @@ app.on('error', (err, ctx) => {
 app.use(async (ctx, next) => {
   return next().catch((err) => {
     if(err.status === 401){
-      ctx.status = 401;
+      ctx.status = 401
       ctx.body = {
         code: '-2000',
         desc: '登陆过期，请重新登陆'
-      };
+      }
     }else{
-      throw err;
+      throw err
     }
   })
 })
@@ -127,4 +126,4 @@ app.use(koajwt({
   path: [/^\/user\/register/,/^\/user\/login/,/^\/admin\/adminLogin/]
 }))
 
-module.exports = app;
+module.exports = app

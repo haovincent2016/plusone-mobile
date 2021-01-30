@@ -74,7 +74,7 @@
         width="150">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.type === 'user'">普通用户</el-tag>
-          <el-tag type="success" v-if="scope.row.type === 'operator'">管理员</el-tag>
+          <el-tag type="success" v-if="scope.row.type === 'admin'">管理员</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -135,11 +135,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getTableList" />
 </div>
 </template>
 
 <script>
 import { getUsers } from '@/api/admin'
+import Pagination from '@/components/Common/Pagination'
 
 export default {
   data() {
@@ -148,7 +150,15 @@ export default {
       tableList: null,
       tableListLoading: false,
       //选择的数据
-      selectedData: []
+      selectedData: [],
+      //分页参数
+      listQuery: {
+        page: 1,
+        limit: 20,
+        sort: '+id'
+      },
+      //总数
+      total: 0
     }
   },
   filters: {
@@ -166,10 +176,15 @@ export default {
     //获取表单数据
     getTableList() {
       this.tableListLoading = true
-      getUsers().then(res => {
+      let data = {
+        page: this.listQuery.page,
+        limit: this.listQuery.limit
+      }
+      getUsers(data).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
           this.tableList = JSON.parse(res.data.users)
+          this.total = res.data.count
           this.tableList.forEach(item => {
             item.createdAt = this.convertTime(item.createdAt)
             item.updatedAt = this.convertTime(item.updatedAt)
@@ -191,6 +206,9 @@ export default {
     handleSelectionChange(val) {
       this.selectedData = val
     }
+  },
+  components: {
+    Pagination
   }
 }
 </script>

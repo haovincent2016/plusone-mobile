@@ -27,35 +27,35 @@
             <el-menu-item index="/admin-user/operator">管理员</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="3">
+        <el-submenu index="/admin-article">
           <template slot="title">
             <i class="el-icon-document"></i>
             <span>文章管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="3-1">文章列表</el-menu-item>
-            <el-menu-item index="3-2">收藏夹列表</el-menu-item>
-            <el-menu-item index="3-3">文章创作</el-menu-item>
+            <el-menu-item index="/admin-article/article">文章列表</el-menu-item>
+            <el-menu-item index="/admin-article/collection">收藏夹列表</el-menu-item>
+            <el-menu-item index="/admin-article/write">文章创作</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="4">
+        <el-submenu index="/admin-task">
           <template slot="title">
             <i class="el-icon-edit-outline"></i>
             <span>打卡管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="4-1">打卡列表</el-menu-item>
-            <el-menu-item index="4-2">打卡设置</el-menu-item>
+            <el-menu-item index="/admin-task/task">打卡列表</el-menu-item>
+            <el-menu-item index="/admin-task/setting">打卡设置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="5">
+        <el-submenu index="/admin-setting">
           <template slot="title">
             <i class="el-icon-setting"></i>
             <span>其他设置</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="5-1">设置一</el-menu-item>
-            <el-menu-item index="5-2">设置二</el-menu-item>
+            <el-menu-item index="/admin-setting/common">常规设置</el-menu-item>
+            <el-menu-item index="/admin-setting/special">特殊设置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>

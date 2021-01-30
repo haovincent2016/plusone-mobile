@@ -43,11 +43,8 @@ export default {
       password: ''
     };
   },
-  created() {
-    this.switchState()
-  },
   methods: {
-    ...mapMutations(['switchState', 'adminLogin']),
+    ...mapMutations(['adminLogin']),
     onSubmit(values) {
       console.log('submit', values);
       let data = {
@@ -55,11 +52,20 @@ export default {
         password: values.password
       }
       adminLoginB(data).then(res => {
-        console.log(res)
         if(res.data.code === '0') {
           this.$toast.success(res.data.desc)
           this.adminLogin(res.data)
-          this.$router.replace({ name: 'Dashboard' })
+          if(this.$route.query && this.$route.query.redirect) {
+            this.$nextTick(() => {
+              this.$router.replace({ path: this.$route.query.redirect })
+            })
+            console.log(1)
+          } else {
+            this.$nextTick(() => {
+              this.$router.replace({ name: 'Dashboard' })
+            })
+            console.log(2)
+          }
         } else {
           this.$toast.fail(res.data.desc)
         }

@@ -39,7 +39,7 @@
       <!-- 右侧用户菜单 -->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">
-            <img :src="userInfo.avatar" class="user-avatar">
+            <img :src="adminInfo.avatar" class="user-avatar">
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown">
@@ -73,7 +73,7 @@ export default {
     ...mapState({
       sideMenu: state => state.sideMenu,
       device: state => state.device,
-      userInfo: state => state.userInfo
+      adminInfo: state => state.adminInfo
     })
   },
   data() {
@@ -99,7 +99,7 @@ export default {
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
+        matched = [{ path: '/admin/dashboard', meta: { title: '首页' }}].concat(matched)
       }
 
       this.menuList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
