@@ -59,12 +59,10 @@ export default {
             this.$nextTick(() => {
               this.$router.replace({ path: this.$route.query.redirect })
             })
-            console.log(1)
           } else {
             this.$nextTick(() => {
               this.$router.replace({ name: 'Dashboard' })
             })
-            console.log(2)
           }
         } else {
           this.$toast.fail(res.data.desc)

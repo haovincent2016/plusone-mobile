@@ -204,13 +204,14 @@ customRouter.beforeEach(function(to, from, next) {
   if(to.matched.some(record => record.meta.auth)) {
     //需验证路径
     //没有store
-    if(!sessionStorage.getItem('store')) {
+    let store = JSON.parse(sessionStorage.getItem('store'))
+    if(!store) {
       console.log('a')
       next({
         path: '/admin-login',
         query: { redirect: '/admin/dashboard' }
       })
-    } else if (sessionStorage.getItem('store') && !sessionStorage.getItem('store').isAdmin) {
+    } else if (store && !store.isAdmin) {
       //未登录
       console.log('b')
       next({
