@@ -69,11 +69,17 @@ class adminController {
   static async getUsers(ctx) {
     try {
       const req = ctx.request.body
-      const users = await user.findAll()
+      const offset = parseInt((req.page - 1) * req.limit)
+      const limit = parseInt(req.limit)
+      const users = await user.findAndCountAll({
+        limit,
+        offset
+      })
       return ctx.body = {
         code: '0',
         desc: '获取用户列表成功',
-        users: JSON.stringify(users)
+        users: JSON.stringify(users.rows),
+        count: users.count
       }
     } catch(error) {
       return ctx.body = {
@@ -86,15 +92,20 @@ class adminController {
   static async getAdminUsers(ctx) {
     try {
       const req = ctx.request.body
-      const users = await user.findAll({
+      const offset = parseInt((req.page - 1) * req.limit)
+      const limit = parseInt(req.limit)
+      const users = await user.findAndCountAll({
         where: {
           type: 'admin'
-        }
+        },
+        limit,
+        offset
       })
       return ctx.body = {
         code: '0',
         desc: '获取管理员列表成功',
-        users: JSON.stringify(users)
+        users: JSON.stringify(users.rows),
+        count: users.count
       }
     } catch(error) {
       return ctx.body = {
