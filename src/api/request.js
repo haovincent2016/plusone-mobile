@@ -1,48 +1,79 @@
-import axios from 'axios';
-import qs from 'qs';
-import route from '../router';
+import axios from 'axios'
+import qs from 'qs'
+import route from '../router'
+import { getRefreshToken, resetExpireTime } from '../utils/format'
+import url from '../utils/setting'
+
+//是否已经刷新过token
+window.refreshed = false
 
 const service = axios.create({
-    baseURL: 'http://localhost:3000',
-    timeout: 10000
+  baseURL: url,
+  timeout: 10000
 })
 
-service.interceptors.request.use(function(config) {
+service.interceptors.request.use(
+  config => {
     // 处理请求参数
     config.data = qs.stringify(config.data)
-
-    //将token写入请求头
+    // 将token写入请求头
     if (localStorage.getItem('token')) {
-        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+      config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     }
-
-    return config;
-}, function(error) {
+    return config
+  }, 
+  error => {
     // 对请求错误做些什么
-    return Promise.reject(error);
-});
+    return Promise.reject(error)
+  })
 
 service.interceptors.response.use(
-    response => {
-        return response
-    },
-    error => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    this.$toast.error("登录过期，请重新登录")
-                    window.localStorage.removeItem("token"); //可能是token过期，清除它
-                    route.replace({ //跳转到登录页面
-                        path: '/Login',
-                        query: {
-                            // 将跳转的路由path作为参数，登录成功后跳转到该路由
-                            redirect: route.currentRoute.fullPath
-                        } 
-                    })
+  response => {
+    let refershTime = localStorage.getItem('refreshTime')
+    let token = localStorage.getItem('token')
+    if (token) {
+      if(refershTime < 1200) {
+        if(!window.refreshed) {
+          getRefreshToken().then(res => {
+            if(res.data.code === '0') {
+              window.refreshed = false
+              resetExpireTime(res.data.expire)
+              this.$store.commit('refreshToken', res.data)
             }
+          }).catch(err => {})
         }
-        return Promise.reject(error) // 返回接口返回的错误信息
+      }
+    } else {
+      window.refreshed = false
     }
-);
+    return response
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          this.$toast.error("登录过期，请重新登录")
+          localStorage.removeItem("token")
+          route.replace({ //跳转到登录页面
+            path: '/Login',
+            query: {
+              // 将跳转的路由path作为参数，登录成功后跳转到该路由
+              redirect: route.currentRoute.fullPath
+            } 
+          })
+        case 403:
+          this.$toast.error("您没有访问权限")
+          route.replace({ //跳转到登录页面
+            path: '/Login',
+            query: {
+              // 将跳转的路由path作为参数，登录成功后跳转到该路由
+              redirect: route.currentRoute.fullPath
+            } 
+          })
+      }
+    }
+    return Promise.reject(error.response.data) // 返回接口返回的错误信息
+  }
+)
 
 export default service

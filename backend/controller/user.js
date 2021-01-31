@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken')
 const tools = require('../public/tools')
 
 //统一设置token有效时间24h
-const expireTime = '24h'
+const shortExpire = '2h'
+const longExpire = '24h'
 const secret = 'qweasd789456'
 
 //引入encrypt
@@ -44,24 +45,25 @@ class userController {
   //密码登陆
   static async login(ctx, status) {
     try {
-      const req = ctx.request.body;
+      const req = ctx.request.body
       if (!req.username || !req.password) {
         return ctx.body = {
           code: '-1',
           msg: '用户名或密码不能为空'
         }
       } else {
-        const data = await userModule.getUser(req.username);
+        const data = await userModule.getUser(req.username)
         if (data) {
             if (crypt.decrypt(req.password, data.password)) {
               //生成token，验证登录有效期
               const token = jwt.sign({
                 username: req.username,
                 password: req.password
-              }, secret, { expiresIn: expireTime })
+              }, secret, { expiresIn: shortExpire })
               return ctx.body = {
                 code: '0',
                 token: token,
+                expire: 2,
                 userInfo: JSON.stringify(data),
                 desc: status === 1? '登陆成功，欢迎回来~' : '注册成功，已自动登录~'
               }
@@ -77,7 +79,7 @@ class userController {
               desc: '该用户尚未注册'
             }
           }
-      };
+      }
     } catch(err) {
       return ctx.body = {
         code: '-44',
@@ -88,12 +90,12 @@ class userController {
   //注册用户
   static async create(ctx) {
     try {
-      const req = ctx.request.body;
+      const req = ctx.request.body
       if (req.username && req.password) {
         try {
-          const query = await userModule.getUser(req.username);
+          const query = await userModule.getUser(req.username)
           if (query) {
-            ctx.response.status = 200;
+            ctx.response.status = 200
             ctx.body = {
               code: -1,
               desc: '用户已存在'
@@ -106,9 +108,9 @@ class userController {
               password: req.password,
               username: req.username
             }
-            const data = await userModule.userRegister(param);
+            const data = await userModule.userRegister(param)
 
-            ctx.response.status = 200;
+            ctx.response.status = 200
             ctx.body = {
               code: 0,
               desc: '用户注册成功',
@@ -122,7 +124,7 @@ class userController {
           }
         } catch (error) {
           console.log(error)
-          ctx.response.status = 416;
+          ctx.response.status = 416
           ctx.body = {
             code: -1,
             desc: '注册失败，请重试'
@@ -140,18 +142,18 @@ class userController {
   //获取用户信息(除密码外)
   static async getUserInfo(ctx){
     try {
-      const req = ctx.request.body;
-      const token = ctx.headers.authorization;
+      const req = ctx.request.body
+      const token = ctx.headers.authorization
       if(token){
         try {
-          const result = await tools.verifyToken(token);
+          const result = await tools.verifyToken(token)
           if (!req.username) {
             return ctx.body = {
               code: '-1',
               desc: '参数错误'
             }
           } else {
-            let data = await userModule.getUser(req.username);
+            let data = await userModule.getUser(req.username)
             if (req.username == data.username) {
               return ctx.body = {
                 code: '0',
@@ -161,14 +163,14 @@ class userController {
             }
           }
         } catch (error) {
-          ctx.status = 401;
+          ctx.status = 401
           return ctx.body = {
             code: '-1',
             desc: '登陆过期，请重新登陆'
           }
         }
       }else{
-        ctx.status = 401;
+        ctx.status = 401
         return ctx.body = {
           code: '-1',
           desc: '登陆过期，请重新登陆'
@@ -180,7 +182,29 @@ class userController {
         desc: '请求返回错误'
       }
     }
-  } 
+  }
+  
+  // 刷新token
+  static async refreshToken() {
+    try {
+      let payload = await tools.verifyToken(token)
+      jwt.sign({
+        username: payload.username,
+        password: payload.password
+      }, secret, { expiresIn: longExpire })
+      return ctx.body = {
+        code: '0',
+        token: token,
+        expire: 24,
+        desc: '刷新token成功'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-44',
+        desc: '请求返回错误'
+      }
+    }
+  }
 }
 
 module.exports = userController

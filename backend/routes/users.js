@@ -1,9 +1,9 @@
-const Router = require('koa-router');
+const Router = require('koa-router')
 const userController = require('../controller/user')
 
 const router = new Router({
     prefix: '/user'
-});
+})
 
 //用户注册
 router.post('/register',userController.create)
@@ -14,4 +14,7 @@ router.post('/login',userController.login)
 //获取用户信息
 router.post('/getUserInfo',userController.getUserInfo)
 
-module.exports = router;
+//刷新token
+router.post('/refreshToken',userController.refreshToken)
+
+module.exports = router

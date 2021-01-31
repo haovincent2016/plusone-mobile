@@ -206,25 +206,21 @@ customRouter.beforeEach(function(to, from, next) {
     //没有store
     let store = JSON.parse(sessionStorage.getItem('store'))
     if(!store) {
-      console.log('a')
       next({
         path: '/admin-login',
         query: { redirect: '/admin/dashboard' }
       })
     } else if (store && !store.isAdmin) {
       //未登录
-      console.log('b')
       next({
         path: '/admin-login',
         query: { redirect: to.fullPath }
       })
     } else {
       //已登录
-      console.log('c')
       next()
     }
   } else {
-    console.log('d')
     //不需验证路径
     next()
   }
