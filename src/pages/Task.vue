@@ -2,13 +2,13 @@
 <div class="container">
     <TopPart :isLogin="false" :isFunc="true" />
     <!-- 积分 -->
-    <van-row gutter="20" style="margin-top:76px;">
+    <van-row gutter="20" style="margin-top:46px;padding-top:15px;">
         <van-col span="12" class="number">{{ userInfo.points ? userInfo.points : 0 }} 积分</van-col>
         <van-col span="12"><van-button round type="info" @click="usePoints">使用积分</van-button></van-col>
     </van-row>
-    <!-- 打卡进度 -->
-    <Steps :step="currStep" :list="stepList" />
-    <div class="range">（本周:1/25 - 1/31）</div>
+    <!-- 待做：打卡进度 -->
+    <!-- <Steps :step="currStep" :list="stepList" />
+    <div class="range">（本周:1/25 - 1/31）</div> -->
     <!-- 打卡任务 -->
     <van-form style="margin:15px 10px" >
         <van-field label-width="9em" name="checkbox1" label="是否完成听写任务">
