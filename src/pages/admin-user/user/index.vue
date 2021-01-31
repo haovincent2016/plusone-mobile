@@ -149,6 +149,7 @@
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="userForm.phone" placeholder="电话号码" />
         </el-form-item>
+        <!-- 待做：头像上传 -->
         <el-form-item label="头像" prop="avatar">
           <img class="form-avatar" :src="userForm.avatar" />
         </el-form-item>
@@ -188,7 +189,7 @@
 </template>
 
 <script>
-import { getUsers } from '@/api/admin'
+import { getUsersB, createUserB, editUserB, deleteUserB, batchDeleteUsersB } from '@/api/admin'
 import Pagination from '@/components/Common/Pagination'
 
 export default {
@@ -265,7 +266,7 @@ export default {
         page: this.listQuery.page,
         limit: this.listQuery.limit
       }
-      getUsers(data).then(res => {
+      getUsersB(data).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
           this.tableList = JSON.parse(res.data.users)
@@ -289,23 +290,76 @@ export default {
     },
     //重置dialog表单
     resetForm() {
-
+      this.userForm = {
+        username: '',
+        password: '',
+        avatar: '/static/img/avatar.jpg',
+        type: 'user',
+        status: 1,
+        points: 0,
+        days: 0,
+        nickname: '',
+        phone: '',
+        description: '此人很懒，什么也没写'
+      }
     },
     //添加用户
     createUser(row) {
       this.resetForm()
       this.dialogType = 'create'
       this.dialogVisible = true
+      createUserB(this.userForm).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+          this.getTableList()
+        } else {
+          this.$message.error(res.data.desc)
+        }
+        this.dialogVisible = false
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+        this.dialogVisible = false
+      })
     },
     //编辑用户
     editUser(row) {
       this.resetForm()
       this.dialogType = 'edit'
       this.dialogVisible = true
+      let data = {
+        id: row.id,
+        userForm: this.userForm
+      }
+      editUserB(data).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+          this.getTableList()
+        } else {
+          this.$message.error(res.data.desc)
+        }
+        this.dialogVisible = false
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+        this.dialogVisible = false
+      })
     },
     //删除用户
     deleteUser(row) {
-
+      let data = {
+        id: row.id
+      }
+      deleteUserB(data).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+          this.getTableList()
+        } else {
+          this.$message.error(res.data.desc)
+        }
+        this.dialogVisible = false
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+        this.dialogVisible = false
+      })
     },
     //批量删除用户
     batchDelete() {

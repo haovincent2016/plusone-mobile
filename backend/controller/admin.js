@@ -114,6 +114,63 @@ class adminController {
       }
     }
   }
+  //添加用户
+  static async createUser(ctx) {
+    try {
+      const req = ctx.request.body
+      req.password = crypt.encrypt(req.password)
+      const users = await user.create(req)
+      return ctx.body = {
+        code: '0',
+        desc: '用户添加成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户添加失败'
+      }
+    }
+  }
+  //编辑用户
+  static async editUser(ctx) {
+    try {
+      const req = ctx.request.body
+      const users = await user.update(req.userForm, {
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '用户修改成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户修改失败'
+      }
+    }
+  }
+  //删除用户
+  static async deleteUser(ctx) {
+    try {
+      const req = ctx.request.body
+      const users = await user.destroy({
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '用户删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户删除失败'
+      }
+    }
+  }
 }
 
 module.exports = adminController

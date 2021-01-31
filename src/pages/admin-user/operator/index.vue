@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { getAdminUsers } from '@/api/admin'
+import { getAdminUsersB } from '@/api/admin'
 import Pagination from '@/components/Common/Pagination'
 
 export default {
@@ -181,7 +181,7 @@ export default {
         page: this.listQuery.page,
         limit: this.listQuery.limit
       }
-      getAdminUsers(data).then(res => {
+      getAdminUsersB(data).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
           this.tableList = JSON.parse(res.data.users)
