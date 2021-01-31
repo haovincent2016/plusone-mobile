@@ -1,30 +1,38 @@
 <template>
 <div>
   <TopPart :isLogin="true" />
-  <van-tabs v-model="activeWay" style="margin-top:46px;">
+  <van-tabs v-model="activeWay" style="margin-top:46px">
     <van-tab title="用户名登录" name="username">
       <van-form class="custom-form" @submit="onSubmit" @fail="onFailed">
         <van-field
           v-model="username"
           name="username"
           label="用户名"
-          placeholder="用户名"
           :rules="[{ required: true, message: '请填写用户名' }]"
+          clearable
         />
         <van-field
           v-model="password"
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           name="password"
           label="密码"
-          placeholder="密码"
-          :rules="[{ required: true, message: '请填写密码' }]"
+          :right-icon="showPassword ? 'closed-eye' : 'eye-o'"
+          @click-right-icon="togglePassword"
+          :rules="[{ required: true, validator, message: '请按要求填写密码' }]"
+          clearable
         />
-        <div style="margin:16px;">
+        <div class="strongness-hint">*密码需包含数字和字母，最少为5位</div>
+        <div class="strongness-indicator">
+          <div class="indicator" :class="{'red':strongness===1}">弱</div>
+          <div class="indicator" :class="{'orange':strongness===2}">中</div>
+          <div class="indicator" :class="{'green':strongness>=3}">强</div>
+        </div>
+        <!-- 待做：手机验证码 -->
+        <div style="margin:16px">
           <van-button round block type="info" native-type="submit">登录/注册</van-button>
         </div>
-        <div style="margin:16px;">
-          <div class="hint">*未注册用户将自动注册</div>
-          <div class="hint">*注册后将自动登录</div>
+        <div style="margin:16px">
+          <div class="hint">*自动注册/登录，请妥善保存密码</div>
         </div>
       </van-form>
     </van-tab>
@@ -49,7 +57,7 @@
               native-type="button"
               v-if="!codeSended"
               @click="sendCode" 
-              style="padding:0 20px;" 
+              style="padding:0 20px" 
               plain 
               hairline 
               type="info" 
@@ -65,10 +73,10 @@
             </van-button>
           </template>
         </van-field>
-        <div style="margin:16px;">
+        <div style="margin:16px">
           <van-button round block type="info" native-type="submit">登录/注册</van-button>
         </div>
-        <div style="margin:16px;">
+        <div style="margin:16px">
           <div class="hint">*未注册用户将自动注册</div>
         </div>
       </van-form>
@@ -86,9 +94,12 @@ export default {
   data() {
     return {
       activeWay: 'username',
-      //用户名密码
+      //用户名
       username: '',
       password: '',
+      //强度指数
+      strongness: undefined, 
+      showPassword: false,
       //手机号验证码
       phone: '',
       code: '',
@@ -96,12 +107,54 @@ export default {
       codeSended: false,
       //倒计时
       countDown: ''
-    };
+    }
+  },
+  watch: {
+    password(newVal, oldVal) {
+      this.strongness = this.checkPassword(newVal)
+    }
   },
   methods: {
     ...mapMutations(['userLogin']),
+    //校验密码
+    validator(val) {
+      if(val.length < 5) {
+        return false
+      } else if (this.strongness < 2) {
+        return false
+      } else {
+        return true
+      }
+    },
+    togglePassword() {
+      this.showPassword = !this.showPassword
+    },
+    checkPassword(val) {
+      let modes = 0
+      //至少5位
+      if (val.length < 5) return modes
+      if (/\d/.test(val)) modes++ //数字1
+      if (/[a-z]/.test(val)) modes++ //小写2
+      if (/[A-Z]/.test(val)) modes++ //大写3
+      if (/\W/.test(val)) modes++ //特殊字符4
+
+      //逻辑处理
+      switch (modes) {
+        case 1:
+          return 1
+          break
+        case 2:
+          return 2
+          break
+        case 3:
+        case 4:
+          return val.length < 4 ? 3 : 4
+          break
+      }
+      return modes
+    },
     onSubmit(values) {
-      console.log('submit', values);
+      console.log('submit', values)
       let data = {
         username: values.username,
         password: values.password
@@ -124,14 +177,14 @@ export default {
       })
     },
     onFailed(errors) {
-      console.log('failed', errors);
+      console.log('failed', errors)
     },
     sendCode() {
       this.$toast.success("已发送")
       this.codeSended = true
       this.countDown = 60
       let timer = setInterval(() => {
-        this.countDown--;
+        this.countDown--
         if(this.countDown <= 0) {
           this.countDown = ''
           clearInterval(timer)
@@ -160,4 +213,34 @@ export default {
 .count
   color #a1a1a1 
   font-size 11px
+
+.strongness-hint 
+  color #ee0a24
+  font-size 14px
+  margin 10px 0 10px 15px
+
+.strongness-indicator
+  display flex
+  justify-content flex-start
+  align-items center
+  border 1px solid #f1f1f1
+  width 161px
+  border-radius 20px
+  margin-left 15px 
+  .indicator
+    font-size 14px 
+    padding 2px 20px
+  .red
+    border-top-left-radius 20px
+    border-bottom-left-radius 20px
+    background-color #ff5c33
+    color #fff
+  .orange
+    background-color #ff944d
+    color #fff
+  .green
+    border-top-right-radius 20px
+    border-bottom-right-radius 20px
+    background-color #73e600
+    color #fff
 </style>

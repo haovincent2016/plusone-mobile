@@ -25,6 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
+        <el-button @click="createUser()" type="primary" plain round icon="el-icon-delete">新建</el-button>
         <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -130,12 +131,59 @@
         align="center"
         width="200">
         <template slot-scope="scope">
-          <el-button plain icon="el-icon-edit" size="mini">编辑</el-button>
-          <el-button type="danger" plain icon="el-icon-delete" size="mini">删除</el-button>
+          <el-button plain icon="el-icon-edit" size="mini" @click="editUser(scope.row)">编辑</el-button>
+          <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteUser(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getTableList" />
+    <!-- 用户新建、编辑 -->
+    <el-dialog :title="textMap[dialogType]" :visible.sync="dialogVisible" width="40%">
+      <el-form ref="userForm" :rules="rules" :model="userForm" label-position="right" label-width="70px" style="width: 300px;">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="userForm.username" placeholder="用户名" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="userForm.password" placeholder="电话号码" show-password />
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="userForm.phone" placeholder="电话号码" />
+        </el-form-item>
+        <el-form-item label="头像" prop="avatar">
+          <img class="form-avatar" :src="userForm.avatar" />
+        </el-form-item>
+        <el-form-item label="账号类型" prop="type">
+          <el-select v-model="userForm.type" placeholder="账号类型">
+            <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="账号状态" prop="status">
+          <el-select v-model="userForm.status" placeholder="账号状态">
+            <el-option v-for="item in statusOptions" :key="item.id" :label="item.name" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="打卡积分" prop="points">
+          <el-input-number v-model="userForm.points" controls-position="right" :min="0"></el-input-number>
+        </el-form-item>
+        <el-form-item label="打卡天数" prop="days">
+          <el-input-number v-model="userForm.days" controls-position="right" :min="0"></el-input-number>
+        </el-form-item>
+        <el-form-item label="电话号码" prop="phone">
+          <el-input v-model="userForm.phone" placeholder="电话号码" />
+        </el-form-item>
+        <el-form-item label="个人描述" prop="description">
+          <el-input v-model="userForm.description" placeholder="个人描述" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogType === 'create' ? createUser() : editUser()">
+          提交
+        </el-button>
+      </div>
+    </el-dialog>
 </div>
 </template>
 
@@ -158,7 +206,44 @@ export default {
         sort: '+id'
       },
       //总数
-      total: 0
+      total: 0,
+      //dialog
+      dialogVisible: false,
+      //dialog标题
+      textMap: {
+        edit: '编辑用户',
+        create: '新建用户'
+      },
+      //dialog类型
+      dialogType: '',
+      //表单
+      userForm: {
+        username: '',
+        password: '',
+        avatar: '/static/img/avatar.jpg',
+        type: 'user',
+        status: 1,
+        points: 0,
+        days: 0,
+        nickname: '',
+        phone: '',
+        description: '此人很懒，什么也没写'
+      },
+      //用户类型
+      typeOptions: [
+        { name: '普通用户', value: 'user' },
+        { name: '管理员', value: 'admin' }
+      ],
+      //用户状态
+      statusOptions: [
+        { name: '正常', value: 1 },
+        { name: '封禁', value: 0 }
+      ],
+      //表单验证
+      rules: {
+        username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
+        password: [{ required: true, message: '密码为必填项', trigger: 'blur' }]
+      },
     }
   },
   filters: {
@@ -198,13 +283,33 @@ export default {
         this.tableListLoading = false
       })
     },
-    //批量删除数据
-    batchDelete() {
-
-    },
     //数据多选
     handleSelectionChange(val) {
       this.selectedData = val
+    },
+    //重置dialog表单
+    resetForm() {
+
+    },
+    //添加用户
+    createUser(row) {
+      this.resetForm()
+      this.dialogType = 'create'
+      this.dialogVisible = true
+    },
+    //编辑用户
+    editUser(row) {
+      this.resetForm()
+      this.dialogType = 'edit'
+      this.dialogVisible = true
+    },
+    //删除用户
+    deleteUser(row) {
+
+    },
+    //批量删除用户
+    batchDelete() {
+
     }
   },
   components: {
@@ -221,5 +326,11 @@ export default {
   width: 45px;
   height: 45px;
   border-radius: 4px;
+}
+.form-avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 4px;
+  border: 1px solid #a3a3a3
 }
 </style>
