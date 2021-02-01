@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
-        <el-button @click="createUser()" type="primary" plain round icon="el-icon-delete">新建</el-button>
+        <el-button @click="createUserDialog()" type="primary" plain round icon="el-icon-delete">新建</el-button>
         <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -131,7 +131,7 @@
         align="center"
         width="200">
         <template slot-scope="scope">
-          <el-button plain icon="el-icon-edit" size="mini" @click="editUser(scope.row)">编辑</el-button>
+          <el-button plain icon="el-icon-edit" size="mini" @click="editUserDialog(scope.row)">编辑</el-button>
           <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteUser(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -141,13 +141,13 @@
     <el-dialog :title="textMap[dialogType]" :visible.sync="dialogVisible" width="40%">
       <el-form ref="userForm" :rules="rules" :model="userForm" label-position="right" label-width="70px" style="width: 300px;">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="userForm.username" placeholder="用户名" />
+          <el-input clearable v-model="userForm.username" placeholder="用户名" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="userForm.password" placeholder="电话号码" show-password />
+          <el-input clearable :disabled="dialogType === 'edit'" v-model="userForm.password" placeholder="密码包含字母数字，至少5位" show-password />
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="userForm.phone" placeholder="电话号码" />
+          <el-input clearable v-model="userForm.nickname" placeholder="昵称" />
         </el-form-item>
         <!-- 待做：头像上传 -->
         <el-form-item label="头像" prop="avatar">
@@ -170,10 +170,10 @@
           <el-input-number v-model="userForm.days" controls-position="right" :min="0"></el-input-number>
         </el-form-item>
         <el-form-item label="电话号码" prop="phone">
-          <el-input v-model="userForm.phone" placeholder="电话号码" />
+          <el-input clearable v-model="userForm.phone" placeholder="电话号码" />
         </el-form-item>
         <el-form-item label="个人描述" prop="description">
-          <el-input v-model="userForm.description" placeholder="个人描述" />
+          <el-input clearable v-model="userForm.description" placeholder="个人描述" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -223,7 +223,7 @@ export default {
         password: '',
         avatar: '/static/img/avatar.jpg',
         type: 'user',
-        status: 1,
+        status: true,
         points: 0,
         days: 0,
         nickname: '',
@@ -237,8 +237,8 @@ export default {
       ],
       //用户状态
       statusOptions: [
-        { name: '正常', value: 1 },
-        { name: '封禁', value: 0 }
+        { name: '正常', value: true },
+        { name: '封禁', value: false }
       ],
       //表单验证
       rules: {
@@ -296,7 +296,7 @@ export default {
         password: '',
         avatar: '/static/img/avatar.jpg',
         type: 'user',
-        status: 1,
+        status: true,
         points: 0,
         days: 0,
         nickname: '',
@@ -304,11 +304,18 @@ export default {
         description: '此人很懒，什么也没写'
       }
     },
-    //添加用户
-    createUser(row) {
-      this.resetForm()
+    //关闭dialog
+    closeForm() {
+      this.$refs.userForm.resetFields()
+      this.dialogVisible = false
+    },
+    createUserDialog() {
       this.dialogType = 'create'
       this.dialogVisible = true
+      this.resetForm()
+    },
+    //添加用户
+    createUser() {
       createUserB(this.userForm).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
@@ -316,19 +323,22 @@ export default {
         } else {
           this.$message.error(res.data.desc)
         }
-        this.dialogVisible = false
+        this.closeForm()
       }).catch(err => {
         this.$message.error(res.data.desc)
-        this.dialogVisible = false
+        this.closeForm()
       })
     },
-    //编辑用户
-    editUser(row) {
-      this.resetForm()
+    editUserDialog(row) {
       this.dialogType = 'edit'
       this.dialogVisible = true
+      this.resetForm()
+      this.userForm = row
+    },
+    //编辑用户
+    editUser() {
       let data = {
-        id: row.id,
+        id: this.userForm.id,
         userForm: this.userForm
       }
       editUserB(data).then(res => {
@@ -338,10 +348,10 @@ export default {
         } else {
           this.$message.error(res.data.desc)
         }
-        this.dialogVisible = false
+        this.closeForm()
       }).catch(err => {
         this.$message.error(res.data.desc)
-        this.dialogVisible = false
+        this.closeForm()
       })
     },
     //删除用户

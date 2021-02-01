@@ -96,7 +96,7 @@ class adminController {
       const offset = parseInt((req.page - 1) * req.limit)
       const limit = parseInt(req.limit)
       const users = await user.findAndCountAll({
-        attributes: { exclude: ['password'] },
+        // attributes: { exclude: ['password'] },
         limit,
         offset
       })

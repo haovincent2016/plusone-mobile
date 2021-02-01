@@ -34,6 +34,7 @@ const usersData = [
   {
     id: 1,
     type: 'admin',
+    status: true,
     username: 'haovincent',
     password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
     points: 233,
@@ -44,6 +45,7 @@ const usersData = [
   {
     id: 2,
     type: 'user',
+    status: false,
     username: 'hao',
     password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
     points: 211,
