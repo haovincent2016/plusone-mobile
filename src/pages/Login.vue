@@ -223,7 +223,7 @@ export default {
   display flex
   justify-content flex-start
   align-items center
-  border 1px solid #f1f1f1
+  border 0.5px solid #f1f1f1
   width 161px
   border-radius 20px
   margin-left 15px 

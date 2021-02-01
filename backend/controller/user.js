@@ -30,6 +30,7 @@ class userModule {
   static async getUser(username) {
     try {
       return await user.findOne({
+        attributes: { exclude: ['password'] },
         where: {
           username
         }
@@ -185,7 +186,7 @@ class userController {
   }
   
   // 刷新token
-  static async refreshToken() {
+  static async refreshToken(ctx) {
     try {
       let payload = await tools.verifyToken(token)
       jwt.sign({

@@ -9,6 +9,9 @@ router.post('/adminLogin', adminController.adminLogin)
 
 router.post('/adminLogout', adminController.adminLogout)
 
+//刷新token
+router.post('/refreshToken',adminController.refreshToken)
+
 //获取所有用户
 router.post('/getUsers', adminController.getUsers)
 

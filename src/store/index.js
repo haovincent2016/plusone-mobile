@@ -56,6 +56,7 @@ const mutations = {
     state.token = ''
     sessionStorage.removeItem("store")
     localStorage.removeItem("token")
+    localStorage.removeItem("refreshTime")
   },
 
   adminLogin (state, user) {
@@ -64,6 +65,8 @@ const mutations = {
     state.adminToken = user.token
     sessionStorage.setItem("store", JSON.stringify(state))
     localStorage.setItem("token", user.token)
+    let refreshTime = user.expire * 3600
+    localStorage.setItem("refreshTime", refreshTime)
   },
   adminLogout (state) {
     state.isAdmin = false
@@ -71,6 +74,7 @@ const mutations = {
     state.adminToken = ''
     sessionStorage.removeItem("store")
     localStorage.removeItem("token")
+    localStorage.removeItem("refreshTime")
   },
   
   //toggle左菜单

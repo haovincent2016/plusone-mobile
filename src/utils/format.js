@@ -12,6 +12,6 @@ export function resetExpireTime(timestamp) {
   clearInterval(window.interval)
   window.interval = setInterval(()=>{
     timestamp=timestamp-1
-    sessionStorage.setItem('refreshTime', timestamp)
+    localStorage.setItem('refreshTime', timestamp)
   }, 1000)
 }

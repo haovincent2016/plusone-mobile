@@ -287,6 +287,7 @@ export default {
     //数据多选
     handleSelectionChange(val) {
       this.selectedData = val
+      console.log(this.selectedData)
     },
     //重置dialog表单
     resetForm() {
@@ -345,25 +346,56 @@ export default {
     },
     //删除用户
     deleteUser(row) {
-      let data = {
-        id: row.id
-      }
-      deleteUserB(data).then(res => {
-        if(res.data.code === '0') {
-          this.$message.success(res.data.desc)
-          this.getTableList()
-        } else {
-          this.$message.error(res.data.desc)
-        }
-        this.dialogVisible = false
-      }).catch(err => {
-        this.$message.error(res.data.desc)
-        this.dialogVisible = false
-      })
+      this.$confirm('此操作将永久删除用户'+`[${row.username}]`+', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            id: row.id
+          }
+          deleteUserB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.getTableList()
+            } else {
+              this.$message.error(res.data.desc)
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      
     },
     //批量删除用户
     batchDelete() {
-
+      this.$confirm('此操作将永久删除选择的用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let ids = []
+          this.selectedData.forEach(item => {
+            ids.push(item.id)
+          })
+          let data = {
+            ids: ids
+          }
+          batchDeleteUsersB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.getTableList()
+            } else {
+              this.$message.error(res.data.desc)
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
     }
   },
   components: {

@@ -136,12 +136,12 @@ export default {
       current: 0,
       activeNames: [],
       images: [
-        require('../../static/img/ad1.png'),
-        require('../../static/img/ad2.png'),
-        require('../../static/img/ad3.png')
+        require('static/img/ad1.png'),
+        require('static/img/ad2.png'),
+        require('static/img/ad3.png')
       ],
-      videoUrl: require('../../static/video/intro1.mp4'),
-      qrUrl: require('../../static/img/wechatcode.jpg'),
+      videoUrl: require('static/video/intro1.mp4'),
+      qrUrl: require('static/img/wechatcode.jpg'),
       show: false,
       showCode: false,
 
@@ -151,7 +151,7 @@ export default {
   },
   created() {
     //暂时这样
-    this.adminLogout()
+    //this.adminLogout()
   },
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)

@@ -10,7 +10,30 @@ const crypt = require('../public/encrypt')
 
 const user = require('../model/user')
 
+const { Op } = require("sequelize")
+
 class adminController {
+  // 刷新token
+  static async refreshToken(ctx) {
+    try {
+      let payload = await tools.verifyToken(token)
+      jwt.sign({
+        username: payload.username,
+        password: payload.password
+      }, secret, { expiresIn: longExpire })
+      return ctx.body = {
+        code: '0',
+        token: token,
+        expire: 24,
+        desc: '刷新token成功'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-44',
+        desc: '请求返回错误'
+      }
+    }
+  }
   // 管理员登录
   static async adminLogin(ctx) {
     try {
@@ -38,6 +61,7 @@ class adminController {
                 return ctx.body = {
                   code: '0',
                   token: token,
+                  expire: 2,
                   adminInfo: JSON.stringify(data),
                   desc: '登陆成功，欢迎回来~'
                 }
@@ -72,6 +96,7 @@ class adminController {
       const offset = parseInt((req.page - 1) * req.limit)
       const limit = parseInt(req.limit)
       const users = await user.findAndCountAll({
+        attributes: { exclude: ['password'] },
         limit,
         offset
       })
@@ -95,6 +120,7 @@ class adminController {
       const offset = parseInt((req.page - 1) * req.limit)
       const limit = parseInt(req.limit)
       const users = await user.findAndCountAll({
+        attributes: { exclude: ['password'] },
         where: {
           type: 'admin'
         },
@@ -168,6 +194,28 @@ class adminController {
       return ctx.body = {
         code: '-1',
         desc: '用户删除失败'
+      }
+    }
+  }
+  //批量删除用户
+  static async batchDeleteUsers(ctx) {
+    try {
+      const req = ctx.request.body
+      const users = await user.destroy({
+        where: {
+          id: {
+            [Op.in]: req.ids
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '用户批量删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户批量删除失败'
       }
     }
   }

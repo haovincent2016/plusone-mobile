@@ -29,10 +29,10 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   response => {
-    let refershTime = localStorage.getItem('refreshTime')
+    let refreshTime = localStorage.getItem('refreshTime')
     let token = localStorage.getItem('token')
-    if (token) {
-      if(refershTime < 1200) {
+    if (token && refreshTime) {
+      if(refreshTime < 1200) {
         if(!window.refreshed) {
           getRefreshToken().then(res => {
             if(res.data.code === '0') {
