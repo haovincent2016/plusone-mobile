@@ -1,9 +1,34 @@
-const Router = require('koa-router');
+const Router = require('koa-router')
 const adminController = require('../controller/admin')
+const multer = require('koa-multer')
+const path = require('path')
 
 const router = new Router({
     prefix: '/admin'
 })
+
+//文件上传配置
+const storage = multer.diskStorage({
+    //文件保存路径
+    destination: function (req, file, cb) {
+        cb(null, 'public/articles/')
+    },
+    //修改文件名称
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+})
+//加载配置
+const upload = multer({ storage: storage })
+//文章顶部单图上传
+router.post('/uploadSingle', upload.single('image'), async(ctx, next) => {
+    return ctx.body = {
+        code: '0',
+        filename: ctx.req.file.filename,
+        desc: '文章图片上传成功~'
+    } 
+})
+
 
 router.post('/adminLogin', adminController.adminLogin)
 

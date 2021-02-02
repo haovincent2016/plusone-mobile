@@ -13,7 +13,7 @@
     <el-form ref="articleForm" :model="articleForm" :rules="rules" class="form-wrapper">
       <!-- 文章顶部图片 -->
       <el-form-item>
-        
+        <single-upload v-model="articleForm.imageUrl" />
       </el-form-item>
       <!-- 标题 -->
       <el-form-item prop="title" style="padding:0 10px">
@@ -21,7 +21,6 @@
           文章标题
         </MDinput>
       </el-form-item>
-
       <!-- 内容 -->
       <el-form-item prop="content">
         <tinymce v-model="articleForm.content" :height="350" />
@@ -37,6 +36,7 @@
 import Tinymce from '@/components/Editor'
 import Sticky from '@/components/Fixed'
 import MDinput from '@/components/MD'
+import SingleUpload from '@/components/Upload/single'
 
 export default {
   data() {
@@ -65,6 +65,7 @@ export default {
       loading: false,
       //表单
       articleForm: {
+        imageUrl: '',
         title: '',
         content: `<h3>这是一段示例文字</h3>`
       },
@@ -85,7 +86,8 @@ export default {
   components: {
     Tinymce,
     Sticky,
-    MDinput
+    MDinput,
+    SingleUpload
   }
 }
 </script>

@@ -62,4 +62,4 @@ dist
 
 package-lock.json
 
-backend/public/uploads
+backend/public
