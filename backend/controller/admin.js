@@ -8,8 +8,12 @@ const secret = 'qweasd789456'
 //引入encrypt
 const crypt = require('../public/encrypt')
 
+//引入model
 const user = require('../model/user')
+const collection = require('../model/collection')
+const article = require('../model/article')
 
+//引入Op
 const { Op } = require("sequelize")
 
 class adminController {
@@ -89,6 +93,7 @@ class adminController {
   // 管理员登出
   static async adminLogout(ctx) {
   }
+
   // 获取所有用户
   static async getUsers(ctx) {
     try {
@@ -240,6 +245,131 @@ class adminController {
       return ctx.body = {
         code: '-1',
         desc: '用户批量删除失败'
+      }
+    }
+  }
+
+  // 获取所有文章
+  static async getArticles(ctx) {
+    try {
+      const req = ctx.request.body
+      //构造搜索条件
+      let conditions = {}
+      if(req.searchForm) {
+        if(!!req.searchForm.title) {
+          conditions.title = {[Op.startsWith]: req.searchForm.title}
+        } 
+        if(!!req.searchForm.status) {
+          conditions.status = req.searchForm.status
+        }
+      } else {
+        conditions = {}
+      }
+      const offset = parseInt((req.page - 1) * req.limit)
+      const limit = parseInt(req.limit)
+      
+      const articles = await article.findAndCountAll({
+        // attributes: { exclude: ['password'] },
+        include:[{
+          model: user,
+          attributes:['username','avatar']
+        }, {
+          model: collection,
+          attributes:['title']
+        }],
+        where: conditions,
+        limit,
+        offset
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '获取文章列表成功',
+        articles: JSON.stringify(articles.rows),
+        count: articles.count
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '获取文章列表失败'
+      }
+    }
+  }
+  //添加文章
+  static async createArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      const article = await article.create(req)
+      return ctx.body = {
+        code: '0',
+        desc: '文章提交成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '文章提交失败'
+      }
+    }
+  }
+  //编辑文章
+  static async editArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      // 待做：需更新updatedAt
+      const users = await article.update(req.userForm, {
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '文章修改成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '文章修改失败'
+      }
+    }
+  }
+  //删除文章
+  static async deleteArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      const article = await article.destroy({
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '用户删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户删除失败'
+      }
+    }
+  }
+  //批量删除文章
+  static async batchDeleteArticles(ctx) {
+    try {
+      const req = ctx.request.body
+      const article = await article.destroy({
+        where: {
+          id: {
+            [Op.in]: req.ids
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '文章批量删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '文章批量删除失败'
       }
     }
   }

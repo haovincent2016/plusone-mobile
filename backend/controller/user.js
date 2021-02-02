@@ -29,11 +29,12 @@ class userModule {
 
   static async getUser(username) {
     try {
-      return await user.findOne({
+      return await user.findAll({
         attributes: { exclude: ['password'] },
         where: {
           username
-        }
+        },
+        limit: 1
       })
     } catch(err) {
       console.log(err)
@@ -42,7 +43,36 @@ class userModule {
 }
 
 class userController {
-  
+  //校验用户名
+  static async testName(ctx) {
+    try {
+      const req = ctx.request.body
+      const data = await user.findAll({
+        attributes: ['username'],
+        where: {
+          username: req.username
+        },
+      })
+      if(data.length === 0) {
+        return ctx.body = {
+          code: '0',
+          desc: '该用户名可用~',
+          user: data
+        }
+      } else {
+        return ctx.body = {
+          code: '-1',
+          desc: '该用户名不可用，请换一个名字~',
+          user: data
+        }
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-44',
+        desc: '检测失败，请重试'
+      }
+    }
+  }
   //密码登陆
   static async login(ctx, status) {
     try {
@@ -71,7 +101,7 @@ class userController {
             } else {
               return ctx.body = {
                 code: '-1',
-                desc: status === 1? '登陆失败，密码错误' : '数据错误'
+                desc: status === 1? '用户已存在，密码错误' : '数据错误'
               }
             }
           } else {
@@ -84,7 +114,7 @@ class userController {
     } catch(err) {
       return ctx.body = {
         code: '-44',
-        desc: '请求返回错误'
+        desc: '请求登录返回错误'
       }
     }
   }
@@ -135,7 +165,8 @@ class userController {
     } catch(err) {
       return ctx.body = {
         code: '-44',
-        desc: '请求返回错误'
+        desc: '请求注册返回错误',
+        err: err
       }
     }
   }
@@ -180,7 +211,7 @@ class userController {
     } catch(err) {
       return ctx.body = {
         code: '-44',
-        desc: '请求返回错误'
+        desc: '请求用户信息返回错误'
       }
     }
   }
@@ -202,7 +233,7 @@ class userController {
     } catch(err) {
       return ctx.body = {
         code: '-44',
-        desc: '请求返回错误'
+        desc: '请求刷新token返回错误'
       }
     }
   }

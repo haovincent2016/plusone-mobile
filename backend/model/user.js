@@ -18,9 +18,11 @@ const user = User.init({
     allowNull: true,
     autoIncrement: true
   },
+  //用户名不可重复
   username:{
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   password:{
     type: DataTypes.STRING,

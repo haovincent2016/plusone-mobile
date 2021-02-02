@@ -23,7 +23,7 @@ export default {
 
 <style lang="scss" scoped>
 .content-wrapper {
-  /* 50= navbar  50  */
+  /* 50 = navbar  50  */
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
@@ -36,12 +36,12 @@ export default {
 
 .hasTags {
   .content-wrapper {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
+    /* 84 = navbar + tags-view = 50 + 35 */
+    min-height: calc(100vh - 85px);
   }
 
   .fixedTop+.content-wrapper {
-    padding-top: 84px;
+    padding-top: 85px;
   }
 }
 </style>

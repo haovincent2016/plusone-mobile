@@ -77,3 +77,53 @@ export function batchDeleteUsersB (data) {
         data: data
     })
 }
+
+
+/**
+ * 文章管理部分
+ * @param {*} data 
+ */
+/* 获取所有文章 */
+export function getArticlesB (data) {
+    return request({ 
+        url: '/admin/getArticles', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 添加文章 */
+export function createArticleB (data) {
+    return request({ 
+        url: '/admin/createArticle', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 编辑文章 */
+export function editArticleB (data) {
+    return request({ 
+        url: '/admin/editArticle', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 删除文章 */
+export function deleteArticleB (data) {
+    return request({ 
+        url: '/admin/deleteArticle', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 批量删除文章 */
+export function batchDeleteArticlesB (data) {
+    return request({ 
+        url: '/admin/batchDeleteArticles', 
+        method: 'post',
+        data: data
+    })
+}

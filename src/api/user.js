@@ -1,5 +1,15 @@
 import request from './request';
 
+//检测用户名
+export function testNameB (data) {
+    return request({ 
+        url: '/user/testName', 
+        method: 'post',
+        data: data
+    })
+}
+
+
 //注册
 export function register (data) {
     return request({ 

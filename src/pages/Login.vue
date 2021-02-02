@@ -9,8 +9,12 @@
           name="username"
           label="用户名"
           :rules="[{ required: true, message: '请填写用户名' }]"
-          clearable
-        />
+          clearable>
+          <template #button>
+            <van-button size="small" type="primary" @click="testName">检测</van-button>
+          </template>
+        </van-field>
+        <van-notice-bar mode="closeable">*用户名不可重复，注册请先检测</van-notice-bar>
         <van-field
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
@@ -21,7 +25,7 @@
           :rules="[{ required: true, validator, message: '请按要求填写密码' }]"
           clearable
         />
-        <div class="strongness-hint">*密码需包含数字和字母，最少为5位</div>
+        <van-notice-bar mode="closeable">*密码需包含数字和字母，最少为5位</van-notice-bar>
         <div class="strongness-indicator">
           <div class="indicator" :class="{'red':strongness===1}">弱</div>
           <div class="indicator" :class="{'orange':strongness===2}">中</div>
@@ -32,7 +36,7 @@
           <van-button round block type="info" native-type="submit">登录/注册</van-button>
         </div>
         <div style="margin:16px">
-          <div class="hint">*自动注册/登录，请妥善保存密码</div>
+          <van-notice-bar mode="closeable">*自动注册/登录，请妥善保存密码</van-notice-bar>
         </div>
       </van-form>
     </van-tab>
@@ -87,7 +91,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
-import { register } from '../api/user'
+import { register, testNameB } from '../api/user'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -116,6 +120,19 @@ export default {
   },
   methods: {
     ...mapMutations(['userLogin']),
+    //校验用户名
+    testName() {
+      testNameB({ username: this.username }).then(res => {
+        if(res.data.code === '0') {
+            this.$toast.success(res.data.desc)
+          } else {
+            this.$toast.fail(res.data.desc)
+            this.username = ''
+          }
+        }).catch(err => {
+          this.$toast.fail(res.data.desc)
+        })
+    },
     //校验密码
     validator(val) {
       if(val.length < 5) {
@@ -155,22 +172,32 @@ export default {
     },
     onSubmit(values) {
       console.log('submit', values)
-      let data = {
-        username: values.username,
-        password: values.password
-      }
-      register(data).then(res => {
-        console.log(res)
+      testNameB({ username: values.username }).then(res => {
         if(res.data.code === '0') {
-          this.$toast.success(res.data.desc)
-          this.userLogin(res.data)
-          if(this.$route.query && this.$route.query.redirect) {
-            this.$router.replace({ path: this.$route.query.redirect })
-          } else {
-            this.$router.replace({ name: 'User' })
+          let data = {
+            username: values.username,
+            password: values.password
           }
+          register(data).then(res => {
+            //console.log(res)
+            if(res.data.code === '0') {
+              this.$toast.success(res.data.desc)
+              this.userLogin(res.data)
+              if(this.$route.query && this.$route.query.redirect) {
+                this.$router.replace({ path: this.$route.query.redirect })
+              } else {
+                this.$router.replace({ name: 'User' })
+              }
+            } else {
+              this.$toast.fail(res.data.desc)
+            }
+          }).catch(err => {
+            this.$toast.fail(res.data.desc)
+          })
         } else {
           this.$toast.fail(res.data.desc)
+          this.username = ''
+          this.password = ''
         }
       }).catch(err => {
         this.$toast.fail(res.data.desc)
@@ -243,4 +270,9 @@ export default {
     border-bottom-right-radius 20px
     background-color #73e600
     color #fff
+</style>
+<style lang="scss">
+.van-cell {
+  align-items: center!important;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>待开发页面</p>
+    <p>暂时不需要</p>
   </div>
 </template>
 

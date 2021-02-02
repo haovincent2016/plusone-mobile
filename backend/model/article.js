@@ -27,11 +27,11 @@ const article = Article.init({
     type: DataTypes.STRING,
     allowNull: true
   },
-  // 是否审核通过，默认没有，审核不过不显示
+  // 是否审核通过，1待审核，2审核中，3审核通过，4审核不通过，审核不过前端不显示
   status: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: false
+    defaultValue: 1
   },
   // 浏览数
   view: {

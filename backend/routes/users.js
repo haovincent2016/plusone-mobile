@@ -5,6 +5,9 @@ const router = new Router({
     prefix: '/user'
 })
 
+//检测用户名
+router.post('/testName',userController.testName)
+
 //用户注册
 router.post('/register',userController.create)
 

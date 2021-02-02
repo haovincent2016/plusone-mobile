@@ -25,8 +25,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
-        <el-button @click="resetSearch()" plain round icon="el-icon-search">重置</el-button>
-        <el-button @click="createUserDialog()" plain round icon="el-icon-delete">新建</el-button>
+        <el-button @click="resetSearch()" plain round icon="el-icon-refresh-right">重置</el-button>
+        <el-button @click="createUserDialog()" plain round icon="el-icon-plus">新建</el-button>
         <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
       </el-form-item>
     </el-form>
