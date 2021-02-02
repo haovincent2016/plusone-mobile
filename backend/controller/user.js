@@ -29,12 +29,10 @@ class userModule {
 
   static async getUser(username) {
     try {
-      return await user.findAll({
-        attributes: { exclude: ['password'] },
+      return await user.findOne({
         where: {
           username
-        },
-        limit: 1
+        }
       })
     } catch(err) {
       console.log(err)

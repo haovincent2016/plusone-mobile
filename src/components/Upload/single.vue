@@ -61,13 +61,13 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res, file) {
-      console.log(res)
       if(res.code === '0') {
         this.$message({
             message: res.desc,
             type: 'success'
         })
-        this.emitInput(res.filename)
+        let url = 'http://localhost:3000/articles/'+res.filename
+        this.emitInput(url)
       } else {
           this.$message({
             message: '上传失败，请重试~',
