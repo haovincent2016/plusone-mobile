@@ -3,29 +3,30 @@
     <!-- 搜索栏 -->
     <el-form :inline="true" :model="searchForm" class="search-container" label-width="80px">
       <el-form-item label="用户名称">
-        <el-input v-model="searchForm.username"></el-input>
+        <el-input v-model="searchForm.username" clearable></el-input>
       </el-form-item>
       <el-form-item label="用户昵称">
-        <el-input v-model="searchForm.nickname"></el-input>
+        <el-input v-model="searchForm.nickname" clearable></el-input>
       </el-form-item>
       <el-form-item label="用户电话">
-        <el-input v-model="searchForm.phone"></el-input>
+        <el-input v-model="searchForm.phone" clearable></el-input>
       </el-form-item>
       <el-form-item label="用户类型">
-        <el-select v-model="searchForm.type" placeholder="请选择用户类型">
+        <el-select v-model="searchForm.type" placeholder="请选择用户类型" clearable>
           <el-option label="普通用户" value="user"></el-option>
           <el-option label="管理员" value="admin"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="帐号状态">
-        <el-select v-model="searchForm.type" placeholder="请选择帐号状态">
+        <el-select v-model="searchForm.status" placeholder="请选择帐号状态" clearable>
           <el-option label="正常" :value="true"></el-option>
           <el-option label="封禁" :value="false"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
-        <el-button @click="createUserDialog()" type="primary" plain round icon="el-icon-delete">新建</el-button>
+        <el-button @click="resetSearch()" plain round icon="el-icon-search">重置</el-button>
+        <el-button @click="createUserDialog()" plain round icon="el-icon-delete">新建</el-button>
         <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -88,6 +89,13 @@
           <el-tag type="success" v-if="scope.row.status">正常</el-tag>
           <el-tag type="danger" v-if="!scope.row.status">封禁</el-tag>
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="phone"
+        label="电话号码"
+        header-align="center"
+        align="center"
+        width="150">
       </el-table-column>
       <el-table-column
         prop="points"
@@ -195,7 +203,13 @@ import Pagination from '@/components/Common/Pagination'
 export default {
   data() {
     return {
-      searchForm: {},
+      searchForm: {
+        username: undefined,
+        nickname: undefined,
+        phone: undefined,
+        type: undefined,
+        status: undefined,
+      },
       tableList: null,
       tableListLoading: false,
       //选择的数据
@@ -263,6 +277,7 @@ export default {
     getTableList() {
       this.tableListLoading = true
       let data = {
+        searchForm: this.searchForm,
         page: this.listQuery.page,
         limit: this.listQuery.limit
       }
@@ -288,6 +303,17 @@ export default {
     handleSelectionChange(val) {
       this.selectedData = val
       console.log(this.selectedData)
+    },
+    //重置搜索表单
+    resetSearch() {
+      this.searchForm = {
+        username: undefined,
+        nickname: undefined,
+        phone: undefined,
+        type: undefined,
+        status: undefined
+      }
+      this.getTableList()
     },
     //重置dialog表单
     resetForm() {

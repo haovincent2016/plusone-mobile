@@ -93,10 +93,34 @@ class adminController {
   static async getUsers(ctx) {
     try {
       const req = ctx.request.body
+      //构造搜索条件
+      let conditions = {}
+      if(req.searchForm) {
+        if(!!req.searchForm.username) {
+          conditions.username = {[Op.startsWith]: req.searchForm.username}
+        } 
+        if(!!req.searchForm.nickname) {
+          conditions.nickname = {[Op.startsWith]: req.searchForm.nickname}
+        }
+        if(!!req.searchForm.type) {
+          conditions.type = req.searchForm.type
+        } 
+        if(!!req.searchForm.phone) {
+          conditions.phone = req.searchForm.phone
+        }
+        //status只有"true"、"false"、undefined，注意字符串
+        if(!!req.searchForm.status) {
+          conditions.status = req.searchForm.status === 'true' ? 1 : 0
+        }
+      } else {
+        conditions = {}
+      }
       const offset = parseInt((req.page - 1) * req.limit)
       const limit = parseInt(req.limit)
+      
       const users = await user.findAndCountAll({
         // attributes: { exclude: ['password'] },
+        where: conditions,
         limit,
         offset
       })

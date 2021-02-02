@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <RouterView />
     <van-tabbar v-if="!isAdmin" route>
       <van-tabbar-item replace to="/" icon="home-o">首页</van-tabbar-item>
@@ -27,6 +27,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.app-container
-  font-family 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 </style>
