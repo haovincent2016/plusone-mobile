@@ -11,6 +11,7 @@
 <script>
 export default {
   computed: {
+    // 待做
     cachedView() {
       return this.$store.state.cachedView
     },

@@ -193,7 +193,27 @@ export const siteRoutes = [
         meta: { title: '特殊设置' }
       }
     ]
-  }
+  },
+  //后台管理 - 资源管理
+  {
+    path: '/admin-assets',
+    component: Layout,
+    redirect: '/admin-assets/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/pages/admin-assets/list'),
+        name: 'List',
+        meta: { title: '资源管理' }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/pages/admin-assets/upload'),
+        name: 'Upload',
+        meta: { title: '资源上传' }
+      }
+    ]
+  },
 ]
 
 const customRouter = new Router({

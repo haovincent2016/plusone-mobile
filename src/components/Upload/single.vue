@@ -8,7 +8,7 @@
       name="image"
       class="image-uploader"
       drag
-      action="http://localhost:3000/admin/uploadSingle"
+      :action="`${uploadUrl}`+'/admin/uploadSingle'"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import baseUrl from '@/utils/setting'
+
 export default {
   props: {
     value: {
@@ -45,10 +47,15 @@ export default {
   data() {
     return {
       tempUrl: '',
+      serverUrl: '',
       dataObj: { token: '', key: '' }
     }
   },
   computed: {
+    uploadUrl() {
+      this.serverUrl = baseUrl
+      return this.serverUrl
+    },
     imageUrl() {
       return this.value
     }

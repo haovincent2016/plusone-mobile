@@ -122,16 +122,20 @@ export default {
     ...mapMutations(['userLogin']),
     //校验用户名
     testName() {
-      testNameB({ username: this.username }).then(res => {
-        if(res.data.code === '0') {
-            this.$toast.success(res.data.desc)
-          } else {
+      if(!!this.username) {
+        testNameB({ username: this.username }).then(res => {
+          if(res.data.code === '0') {
+              this.$toast.success(res.data.desc)
+            } else {
+              this.$toast.fail(res.data.desc)
+              this.username = ''
+            }
+          }).catch(err => {
             this.$toast.fail(res.data.desc)
-            this.username = ''
-          }
-        }).catch(err => {
-          this.$toast.fail(res.data.desc)
-        })
+          })
+      } else {
+        return
+      }
     },
     //校验密码
     validator(val) {
