@@ -17,6 +17,7 @@
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
+
         <el-submenu index="/admin-user">
           <template slot="title">
             <i class="el-icon-user"></i>
@@ -27,6 +28,7 @@
             <el-menu-item index="/admin-user/operator">管理员</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
         <el-submenu index="/admin-article">
           <template slot="title">
             <i class="el-icon-document"></i>
@@ -34,10 +36,11 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/admin-article/article">文章列表</el-menu-item>
+            <!-- <el-menu-item index="/admin-article/write">文章创作</el-menu-item> -->
             <el-menu-item index="/admin-article/collection">收藏夹列表</el-menu-item>
-            <el-menu-item index="/admin-article/write">文章创作</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
         <el-submenu index="/admin-task">
           <template slot="title">
             <i class="el-icon-edit-outline"></i>
@@ -48,14 +51,47 @@
             <el-menu-item index="/admin-task/setting">打卡设置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
+        <el-submenu index="/admin-assets">
+          <template slot="title">
+            <i class="el-icon-picture-outline"></i>
+            <span>资源管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/admin-assets/list">资源管理</el-menu-item>
+            <el-menu-item index="/admin-assets/upload">资源上传</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="/admin-tests">
+          <template slot="title">
+            <i class="el-icon-trophy"></i>
+            <span>测试管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/admin-tests/grade">成绩管理</el-menu-item>
+            <el-menu-item index="/admin-tests/list">测试管理</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
         <el-submenu index="/admin-setting">
           <template slot="title">
             <i class="el-icon-setting"></i>
-            <span>其他设置</span>
+            <span>网站设置</span>
           </template>
           <el-menu-item-group>
             <el-menu-item index="/admin-setting/common">常规设置</el-menu-item>
             <el-menu-item index="/admin-setting/special">特殊设置</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="/admin-messages">
+          <template slot="title">
+            <i class="el-icon-chat-dot-square"></i>
+            <span>消息管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/admin-messages/list">消息列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>

@@ -60,6 +60,9 @@ router.post('/batchDeleteUsers', adminController.batchDeleteUsers)
 //获取所有文章
 router.post('/getArticles', adminController.getArticles)
 
+//获得指定文章
+router.post('/getArticle', adminController.getArticle)
+
 //添加文章
 router.post('/createArticle', adminController.createArticle)
 

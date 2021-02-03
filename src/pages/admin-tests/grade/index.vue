@@ -1,6 +1,4 @@
 <template>
-  <!-- 主页布局拖拽式设置 -->
-  <!-- https://github.com/wsydxiangwang/Visualization-Page -->
   <div>
     <p>待开发页面</p>
   </div>

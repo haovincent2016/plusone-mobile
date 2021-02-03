@@ -40,7 +40,6 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">
             <img :src="adminInfo.avatar" class="user-avatar">
-            <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/">
@@ -180,10 +179,10 @@ export default {
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background .4s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.25)
         }
       }
     }

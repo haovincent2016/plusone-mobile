@@ -73,6 +73,7 @@ export const siteRoutes = [
     component: Files,
     name: 'Files'
   },
+  //文章详情页
   {
     path: '/articles/:id',
     component: Article,
@@ -151,6 +152,12 @@ export const siteRoutes = [
         component: () => import('@/pages/admin-article/write'),
         name: 'Write',
         meta: { title: '文章创作' }
+      },
+      {
+        path: 'edit/:id',
+        component: () => import('@/pages/admin-article/write'),
+        name: 'Edit',
+        meta: { title: '文章编辑' }
       }
     ]
   },
@@ -203,7 +210,7 @@ export const siteRoutes = [
       {
         path: 'list',
         component: () => import('@/pages/admin-assets/list'),
-        name: 'List',
+        name: 'AssetsList',
         meta: { title: '资源管理' }
       },
       {
@@ -211,6 +218,46 @@ export const siteRoutes = [
         component: () => import('@/pages/admin-assets/upload'),
         name: 'Upload',
         meta: { title: '资源上传' }
+      }
+    ]
+  },
+  //后台管理 - 测试管理
+  {
+    path: '/admin-tests',
+    component: Layout,
+    redirect: '/admin-tests/grade',
+    children: [
+      {
+        path: 'grade',
+        component: () => import('@/pages/admin-tests/grade'),
+        name: 'Grade',
+        meta: { title: '成绩管理' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/pages/admin-tests/list'),
+        name: 'TestList',
+        meta: { title: '测试列表' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/pages/admin-tests/detail'),
+        name: 'TestDetail',
+        meta: { title: '测试详情' }
+      }
+    ]
+  },
+  //后台管理 - 消息推送
+  {
+    path: '/admin-messages',
+    component: Layout,
+    redirect: '/admin-messages/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/pages/admin-messages/list'),
+        name: 'MessageList',
+        meta: { title: '消息列表' }
       }
     ]
   },

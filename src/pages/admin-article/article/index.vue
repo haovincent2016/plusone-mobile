@@ -24,7 +24,8 @@
       <el-form-item>
         <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
         <el-button @click="resetSearch()" plain round icon="el-icon-refresh-right">重置</el-button>
-        <el-button @click="createArticleDialog()" plain round icon="el-icon-plus">新建</el-button>
+        <!-- 跳转文章页 -->
+        <el-button @click="createArticlePage()" plain round icon="el-icon-plus">新建</el-button>
         <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -76,7 +77,13 @@
         align="center"
         width="150">
         <template slot-scope="scope">
-          <img :src="scope.row.picture" class="bg-img" />
+          <el-popover
+            placement="right"
+            title=""
+            trigger="click">
+            <img :src="scope.row.picture" style="width:500px">
+            <img slot="reference" :src="scope.row.picture" class="bg-img">
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column
@@ -127,12 +134,14 @@
         align="center"
         width="200">
         <template slot-scope="scope">
-          <el-button plain icon="el-icon-edit" size="mini" @click="editArticleDialog(scope.row)">编辑</el-button>
+          <!-- 跳转文章页 -->
+          <el-button plain icon="el-icon-edit" size="mini" @click="editArticlePage(scope.row.id)">编辑</el-button>
           <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteArticle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getTableList" />
+    <!-- 待做：审核功能 -->
   </div>
 </template>
 
@@ -242,44 +251,12 @@ export default {
       this.resetForm()
     },
     //添加文章
-    createArticle() {
-      createArticleB(this.userForm).then(res => {
-        if(res.data.code === '0') {
-          this.$message.success(res.data.desc)
-          this.getTableList()
-        } else {
-          this.$message.error(res.data.desc)
-        }
-        this.closeForm()
-      }).catch(err => {
-        this.$message.error(res.data.desc)
-        this.closeForm()
-      })
-    },
-    editArticleDialog(row) {
-      this.dialogType = 'edit'
-      this.dialogVisible = true
-      this.resetForm()
-      this.userForm = row
+    createArticlePage() {
+      this.$router.push({ name: 'Write' })
     },
     //编辑文章
-    editArticle() {
-      let data = {
-        id: this.userForm.id,
-        userForm: this.userForm
-      }
-      editArticleB(data).then(res => {
-        if(res.data.code === '0') {
-          this.$message.success(res.data.desc)
-          this.getTableList()
-        } else {
-          this.$message.error(res.data.desc)
-        }
-        this.closeForm()
-      }).catch(err => {
-        this.$message.error(res.data.desc)
-        this.closeForm()
-      })
+    editArticlePage(id) {
+      this.$router.push({ path: '/admin-article/edit/'+id })
     },
     //删除用户
     deleteArticle(row) {
@@ -351,8 +328,8 @@ export default {
   border-radius: 4px;
 }
 .bg-img {
-  width: 95px;
-  height: 55px;
+  width: 105px;
+  height: 65px;
   border-radius: 4px;
 }
 .form-avatar {

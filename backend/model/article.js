@@ -33,6 +33,12 @@ const article = Article.init({
     allowNull: false,
     defaultValue: 1
   },
+  // 文章类型，1草稿（不需进行审核），2发布（需进行审核）
+  category: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1
+  },
   // 浏览数
   view: {
     type: DataTypes.INTEGER,

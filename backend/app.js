@@ -1,4 +1,4 @@
-//待实现：token过期和刷新
+//待完善：token过期和刷新
 //https://www.jianshu.com/p/d1a3fb71eb99
 
 const koa = require('koa')

@@ -294,11 +294,38 @@ class adminController {
       }
     }
   }
+  //获取指定文章
+  static async getArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      const id = req.id
+      const detail = await article.findByPk(id)
+      return ctx.body = {
+        code: '0',
+        desc: '获取文章成功',
+        detail: JSON.stringify(detail)
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '获取文章失败'
+      }
+    }
+  }
   //添加文章
   static async createArticle(ctx) {
     try {
       const req = ctx.request.body
-      const article = await article.create(req)
+      const title = req.articleForm.title
+      const content = req.articleForm.content
+      const picture = req.articleForm.imageUrl
+      const category = req.category
+      const article = await article.create({
+        title,
+        content,
+        picture,
+        category
+      })
       return ctx.body = {
         code: '0',
         desc: '文章提交成功'

@@ -92,6 +92,15 @@ export function getArticlesB (data) {
     })
 }
 
+/* 获取指定id文章 */
+export function getArticleB (data) {
+    return request({ 
+        url: '/admin/getArticle', 
+        method: 'post',
+        data: data
+    })
+}
+
 /* 添加文章 */
 export function createArticleB (data) {
     return request({ 

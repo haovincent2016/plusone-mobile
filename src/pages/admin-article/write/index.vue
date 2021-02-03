@@ -37,6 +37,8 @@ import Tinymce from '@/components/Editor'
 import Sticky from '@/components/Fixed'
 import MDinput from '@/components/MD'
 import SingleUpload from '@/components/Upload/single'
+import { createArticleB, getArticleB } from '@/api/admin'
+import { getArticleById } from '@/api/article'
 
 export default {
   data() {
@@ -75,12 +77,59 @@ export default {
       },
     }
   },
+  mounted() {
+    if(this.$route.params.id) {
+      this.getArticle()
+    }
+  },
   methods: {
-    saveDraft() {
-
+    //编辑页获取文章
+    getArticle() {
+      getArticleB({ id: this.$route.params.id }).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+          let article = JSON.parse(res.data.detail)
+          this.articleForm.title = article.title
+          this.articleForm.content = article.content
+          this.articleForm.imageUrl = article.picture
+        } else {
+          this.$message.error(res.data.desc)
+        }
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+      })
     },
+    //保存草稿
+    saveDraft() {
+      let data = {
+        articleForm: this.articleForm,
+        category: 1
+      }
+      createArticleB(data).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+        } else {
+          this.$message.error(res.data.desc)
+        }
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+      })
+    },
+    //提交审核
     submitArticle() {
-
+      let data = {
+        articleForm: this.articleForm,
+        category: 2
+      }
+      createArticleB(data).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+        } else {
+          this.$message.error(res.data.desc)
+        }
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+      })
     }
   },
   components: {

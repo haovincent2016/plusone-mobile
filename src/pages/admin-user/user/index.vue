@@ -65,7 +65,13 @@
         align="center"
         width="150">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar" class="avatar" />
+          <el-popover
+            placement="right"
+            title=""
+            trigger="click">
+            <img :src="scope.row.avatar" style="width:150px">
+            <img slot="reference" :src="scope.row.avatar" class="avatar">
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column

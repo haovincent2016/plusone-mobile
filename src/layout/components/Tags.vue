@@ -206,14 +206,12 @@ export default {
       color: #fff;
       border-color: $tagColor;
       &::before {
-        content: '';
-        background: #fff;
+        content: '=';
         display: inline-block;
         width: 8px;
         height: 8px;
-        border-radius: 50%;
         position: relative;
-        margin-right: 2px;
+        margin-right: 3px;
       }
     }
   }
@@ -258,7 +256,7 @@ export default {
         vertical-align: -3px;
       }
       &:hover {
-        background-color: #b7c5e0;
+        background-color: #bbb;
         color: #fff;
       }
     }
