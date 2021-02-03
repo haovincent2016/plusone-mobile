@@ -176,32 +176,24 @@ export default {
     },
     onSubmit(values) {
       console.log('submit', values)
-      testNameB({ username: values.username }).then(res => {
+      // testNameB({ username: values.username }).then(res => {
+      //   if(res.data.code === '0') {
+      let data = {
+        username: values.username,
+        password: values.password
+      }
+      register(data).then(res => {
+        //console.log(res)
         if(res.data.code === '0') {
-          let data = {
-            username: values.username,
-            password: values.password
+          this.$toast.success(res.data.desc)
+          this.userLogin(res.data)
+          if(this.$route.query && this.$route.query.redirect) {
+            this.$router.replace({ path: this.$route.query.redirect })
+          } else {
+            this.$router.replace({ name: 'User' })
           }
-          register(data).then(res => {
-            //console.log(res)
-            if(res.data.code === '0') {
-              this.$toast.success(res.data.desc)
-              this.userLogin(res.data)
-              if(this.$route.query && this.$route.query.redirect) {
-                this.$router.replace({ path: this.$route.query.redirect })
-              } else {
-                this.$router.replace({ name: 'User' })
-              }
-            } else {
-              this.$toast.fail(res.data.desc)
-            }
-          }).catch(err => {
-            this.$toast.fail(res.data.desc)
-          })
         } else {
           this.$toast.fail(res.data.desc)
-          this.username = ''
-          this.password = ''
         }
       }).catch(err => {
         this.$toast.fail(res.data.desc)
