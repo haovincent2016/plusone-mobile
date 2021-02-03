@@ -1,7 +1,7 @@
 <template>
 <div class="wrapper">
     <!-- 搜索栏 -->
-    <el-form :inline="true" :model="searchForm" class="search-container" label-width="80px">
+    <el-form v-show="showSearch" :inline="true" :model="searchForm" class="search-container" label-width="80px">
       <el-form-item label="用户名称">
         <el-input v-model="searchForm.username" clearable></el-input>
       </el-form-item>
@@ -24,12 +24,42 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
-        <el-button @click="resetSearch()" plain round icon="el-icon-refresh-right">重置</el-button>
-        <el-button @click="createUserDialog()" plain round icon="el-icon-plus">新建</el-button>
-        <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
+        <el-button 
+          @click="getTableList()" 
+          type="primary" 
+          round 
+          icon="el-icon-search"
+        >查询</el-button>
+        <el-button 
+          @click="resetSearch()" 
+          round 
+          icon="el-icon-refresh-right"
+        >重置</el-button>
       </el-form-item>
     </el-form>
+    <!-- 操作区 -->
+    <el-row :gutter="10" class="operation-row">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="createUserDialog()"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="selectedData.length === 0"
+          @click="batchDelete()"
+        >批量删除</el-button>
+      </el-col>
+      <table-toolbar :showSearch.sync="showSearch" @queryTable="getTableList" :columns="columns"></table-toolbar>
+    </el-row>
     <!-- 表单区 -->
     <el-table
       :data="tableList"
@@ -49,21 +79,24 @@
         label="用户名"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[0].visible">
       </el-table-column>
       <el-table-column
         prop="nickname"
         label="用户昵称"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[1].visible">
       </el-table-column>
       <el-table-column
         prop="avatar"
         label="用户头像"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[2].visible">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -79,7 +112,8 @@
         label="用户类型"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[3].visible">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.type === 'user'">普通用户</el-tag>
           <el-tag type="success" v-if="scope.row.type === 'admin'">管理员</el-tag>
@@ -90,7 +124,8 @@
         label="帐号状态"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[4].visible">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.status">正常</el-tag>
           <el-tag type="danger" v-if="!scope.row.status">封禁</el-tag>
@@ -101,42 +136,48 @@
         label="电话号码"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[5].visible">
       </el-table-column>
       <el-table-column
         prop="points"
         label="打卡积分"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[6].visible">
       </el-table-column>
       <el-table-column
         prop="days"
         label="签到天数"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[7].visible">
       </el-table-column>
       <el-table-column
         prop="description"
         label="用户描述"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[8].visible">
       </el-table-column>
       <el-table-column
         prop="createdAt"
         label="创建日期"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[9].visible">
       </el-table-column>
       <el-table-column
         prop="updatedAt"
         label="更新日期"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[10].visible">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -265,6 +306,22 @@ export default {
         username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
         password: [{ required: true, message: '密码为必填项', trigger: 'blur' }]
       },
+      // 显示搜索条件
+      showSearch: true,
+      // 列信息
+      columns: [
+        { key: 0, label: `用户名`, visible: true },
+        { key: 1, label: `用户昵称`, visible: true },
+        { key: 2, label: `用户头像`, visible: true },
+        { key: 3, label: `用户类型`, visible: true },
+        { key: 4, label: `帐号状态`, visible: true },
+        { key: 5, label: `电话号码`, visible: true },
+        { key: 6, label: `打卡积分`, visible: true },
+        { key: 7, label: `签到天数`, visible: true },
+        { key: 8, label: `用户描述`, visible: true },
+        { key: 9, label: `创建日期`, visible: true },
+        { key: 10, label: `更新日期`, visible: true }
+      ],
     }
   },
   filters: {
@@ -460,5 +517,8 @@ export default {
   height: 65px;
   border-radius: 4px;
   border: 1px solid #a3a3a3
+}
+.operation-row {
+  margin-bottom: 25px;
 }
 </style>
