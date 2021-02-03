@@ -45,7 +45,8 @@
 import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
 import Steps from "components/Common/Steps"
-import { saveTask } from '../api/task'
+import { saveTask } from '@/api/task'
+import baseUrl from '@/utils/setting'
 
 export default {
     data() {
@@ -68,7 +69,7 @@ export default {
             let formData = new FormData()
             formData.append('file', file.file)
             //上传接口
-            this.$axios.post('http://localhost:3000/task/uploadTask', formData, {
+            this.$axios.post(baseUrl+'/task/uploadTask', formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 }
@@ -116,7 +117,7 @@ export default {
                 taskImages: this.imagePath.join(','),
                 userId: this.userInfo.id
             }
-            saveTask(data).then(res => {
+            saveTaskB(data).then(res => {
                 if(res.data.code === '0') {
                     this.$toast.success(res.data.desc)
                 } else {

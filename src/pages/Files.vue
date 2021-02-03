@@ -39,6 +39,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
+import baseUrl from '@/utils/setting'
 
 export default {
     data() {
@@ -48,7 +49,7 @@ export default {
     },
     methods: {
       downloadFile(name) {
-        window.open('http://localhost:3000/download/' + name, 'myIframe')
+        window.open(baseUrl + '/download/' + name, 'myIframe')
       }
     },
     components: {

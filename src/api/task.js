@@ -1,6 +1,6 @@
 import request from './request';
 
-export function saveTask (data) {
+export function saveTaskB (data) {
     return request({ 
         url: '/task/saveTask', 
         method: 'post',

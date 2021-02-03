@@ -73,7 +73,7 @@ export default {
             message: res.desc,
             type: 'success'
         })
-        let url = 'http://localhost:3000/articles/'+res.filename
+        let url = this.serverUrl + '/articles/' + res.filename
         this.emitInput(url)
       } else {
           this.$message({
