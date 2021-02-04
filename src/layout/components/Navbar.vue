@@ -16,10 +16,10 @@
     <!-- Breadcrumb -->
     <el-breadcrumb class="breadcrumb-container" separator="-">
       <el-breadcrumb-item v-for="(item,index) in menuList" :key="item.path">
-        <span v-if="item.redirect==='noRedirect'||index==menuList.length-1" class="no-redirect">
+        <span v-if="index == menuList.length - 1" class="no-redirect">
           {{ item.meta.title }}
         </span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+        <a v-else @click.prevent="handleClick(item)">{{ item.meta.title }}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -75,6 +75,11 @@ export default {
       adminInfo: state => state.adminInfo
     })
   },
+  watch: {
+    $route() {
+      this.getData()
+    }
+  },
   data() {
     return {
       menuList: null
@@ -95,6 +100,7 @@ export default {
     // breadcrumb内容
     getData() {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
+      console.log(this.$route.matched)
       const first = matched[0]
 
       if (!this.isDashboard(first)) {

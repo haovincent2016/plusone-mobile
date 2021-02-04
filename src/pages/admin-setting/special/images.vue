@@ -1,7 +1,7 @@
 <template>
   <!-- Banner & Image 通用组件 -->
   <div class="image-content">
-    <p class="desc">添加图片 (最多{{ len }}张，可拖动排序）</p>
+    <p class="desc">添加图片 (最多{{ len }}张，下方图片可拖动排序）</p>
     <vuedraggable
       v-model="list.data"
       tag="ul"
@@ -12,18 +12,15 @@
     >
       <li v-for="(item, index) in list.data" :key="index">
         <div class="l-info">
-          <p><span class="sort">排序{{ index + 1 }}</span></p>
-          <p>
-            <span>名称：</span>
-            <span class="text">{{ item && item.name }}</span>
-          </p>
-          <p>
-            <span>链接：</span>
-            <el-tooltip effect="dark" :content="item.link" placement="top" v-if="item.link">
-                <span class="text" @click="urlPopup(index, item.link)">{{ item.link }}</span>
+          <div class="sort row">排序{{ index + 1 }}</div>
+          <div class="text row">名称：{{ item && item.name }}</div>
+        
+          <div class="row">链接：
+            <el-tooltip effect="dark" content="点击修改链接" placement="top" v-if="item.link">
+              <span class="text" @click="urlPopup(index, item.link)">{{ item.link }}</span>
             </el-tooltip>
-            <span v-else @click="urlPopup(index)" class="link">请输入跳转链接</span>
-          </p>
+            <span v-else @click="urlPopup(index, '')" class="link">请输入跳转链接</span>
+          </div>
         </div>
         <div class="r-image">
           <span @click="removeImage(index)" class="el-icon-close"></span>
@@ -45,6 +42,7 @@
       </el-button>
       <p class="size">（建议尺寸：{{ size }}）</p>
     </template>
+    <!-- 图片上传组件 -->
     <el-upload
       ref="upload"
       :http-request="upload"
@@ -54,13 +52,15 @@
       style="display:none"
     >
     </el-upload>
+    <!-- 链接输入dialog -->
     <el-dialog title="请填写图片跳转链接" :visible.sync="show" @close="close">
-      <el-form label-width="100px">
+      <el-form label-width="70px">
         <el-form-item label="跳转链接">
           <el-input v-model="url"></el-input>
         </el-form-item>
-        <el-form-item label="">
+        <el-form-item style="text-align:center;">
           <el-button type="primary" @click="confirm">确定</el-button>
+          <el-button type="" @click="close">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -98,15 +98,29 @@ export default {
     this.list = this.data
   },
   methods: {
+    //验证链接合法性
+    testUrl(url) {
+      var urlRegExp = /^((https|http)?:\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
+      if(urlRegExp.test(url)) {
+        return true
+      } else {
+        return false
+      }
+    },
     close() {
       this.show = false
       this.url = ''
     },
     confirm() {
-      this.list['data'][this.index]['link'] = this.url
-      this.close()
+      if(this.testUrl(this.url)) {
+        this.list['data'][this.index]['link'] = this.url
+        this.$message.success('链接添加成功')
+        this.close()
+      } else {
+        this.$message.error('链接不合法，请修改')
+      }
     },
-    urlPopup(index) {
+    urlPopup(index, link) {
       this.show = true
       this.index = index
       this.url = link
@@ -134,8 +148,8 @@ export default {
           result: fileType.indexOf('image') != -1
         },
         {
-          text: "只能上传大小小于5M",
-          result: file.size / 1024 / 1024 < 5
+          text: "只能上传大小小于10M",
+          result: file.size / 1024 / 1024 < 10
         }
       ]
 
@@ -231,11 +245,12 @@ export default {
         font-size: 12px;
         padding-top: 8px;
         width: calc(100% - 70px);
-        p{
-          margin: 12px 0 0;
+        .row {
           white-space: nowrap;
           overflow: hidden;
           display: flex;
+          align-items: center;
+          margin-top: 10px;
           .link{
             color: #1b8bff;
             cursor: pointer;
@@ -245,7 +260,17 @@ export default {
             text-align: -webkit-auto;
             text-overflow: ellipsis;
             overflow: hidden;
+            &:hover {
+              color: #1b8bff;
+              cursor: pointer;
+            }
           }
+        }
+        .text{
+          white-space: nowrap;
+          text-align: -webkit-auto;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
       }
       .r-image{

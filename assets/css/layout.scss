@@ -71,9 +71,8 @@
       // menu hover
       .submenu-title-noDropdown,
       .el-submenu__title {
-        color: #fff!important;
         i {
-          color: #fff!important;
+          color: #f4f4f5;
         }
         &:hover {
           background-color: $menuHover !important;
@@ -88,7 +87,7 @@
       & .el-submenu .el-menu-item {
         min-width: $sideMenuWidth !important;
         background-color: $subMenuBg !important;
-        color: #fff!important;
+        //color: #fff!important;
   
         &:hover {
           background-color: $subMenuHover !important;
@@ -116,9 +115,9 @@
         .el-tooltip {
           padding: 0 15px !important;
   
-          i {
-            color: #fff;
-          }
+          // i {
+          //   color: #fff;
+          // }
   
           .sub-el-icon {
             margin-left: 19px;
@@ -133,9 +132,9 @@
         &>.el-submenu__title {
           padding: 0 !important;
   
-          i {
-            color: #fff;
-          }
+          // i {
+          //   color: #fff;
+          // }
   
           .sub-el-icon {
             margin-left: 19px;
@@ -209,7 +208,6 @@
   
     .nest-menu .el-submenu>.el-submenu__title,
     .el-menu-item {
-      color: #fff!important;
       &:hover {
         // you can use $subMenuHover
         background-color: $menuHover !important;

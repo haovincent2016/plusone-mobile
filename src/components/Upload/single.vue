@@ -1,36 +1,37 @@
 <template>
   <div class="upload-container">
     <el-upload
-      :data="dataObj"
+      :action="`${uploadUrl}`+'/admin/uploadSingle'"
       :multiple="false"
-      :show-file-list="false"
+      :limit="allowedNumber"
+      :show-file-list="allowedNumber > 1 ? true : false"
+      list-type="text"
+      :before-upload="beforeImageUpload"
       :on-success="handleImageSuccess"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
       name="image"
       class="image-uploader"
       drag
-      :action="`${uploadUrl}`+'/admin/uploadSingle'"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
         将文件拖拽至此处，或<em>点击上传</em>
       </div>
     </el-upload>
-    <div class="image-preview image-app-preview">
-      <div v-show="imageUrl.length>1" class="image-preview-wrapper">
-        <img :src="imageUrl">
-        <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
-        </div>
-      </div>
+    <div class="image-preview">
+      <span class="demonstration">点击进行预览</span>
+      <el-popover
+        placement="left"
+        trigger="click">
+        <img :src="imageUrl" style="">
+        <el-image slot="reference" :src="imageUrl" fit="scare-down" class="preview">
+          <div slot="error" class="error-slot">
+            <i class="el-icon-picture-outline"></i>
+          </div>
+        </el-image>
+      </el-popover>
     </div>
-    <!-- <div class="image-preview">
-      <div v-show="imageUrl.length>1" class="image-preview-wrapper">
-        <img :src="imageUrl">
-        <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -39,57 +40,128 @@ import baseUrl from '@/utils/setting'
 
 export default {
   props: {
-    value: {
-      type: String,
-      default: ''
-    }
+    //允许上传个数
+    allowedNumber: {
+      type: Number,
+      default: 1
+    },
   },
   data() {
     return {
       tempUrl: '',
       serverUrl: '',
-      dataObj: { token: '', key: '' }
+      //是否打开预览
+      showPreview: false,
+      imageUrl: '',
+      //上传成功文件列表
+      tempList: []
     }
   },
   computed: {
     uploadUrl() {
       this.serverUrl = baseUrl
       return this.serverUrl
-    },
-    imageUrl() {
-      return this.value
     }
   },
   methods: {
-    rmImage() {
-      this.emitInput('')
+    //上传前检测
+    beforeImageUpload(file) {
+      const len = this.tempList.length
+      if (len > this.allowedNumber) {
+        this.$message.error(`最多添加${this.allowedNumber}张图片!`)
+        return
+      }
+      const fileType = file.type
+
+      const verifyList = [
+        {
+          text: "上传图片格式需为png、jpg、gif!",
+          result: fileType.indexOf('image') != -1
+        },
+        {
+          text: "上传图片大小需小于10MB",
+          result: file.size / 1024 / 1024 < 10
+        }
+      ]
+
+      for (let item of verifyList) {
+        if (!item.result) {
+          this.$message.error(item.text)
+          return
+        }
+      }
     },
-    emitInput(val) {
-      this.$emit('input', val)
-    },
+    //上传成功
     handleImageSuccess(res, file) {
       if(res.code === '0') {
         this.$message({
             message: res.desc,
             type: 'success'
         })
-        let url = this.serverUrl + '/articles/' + res.filename
-        this.emitInput(url)
+        this.imageUrl = this.serverUrl + '/articles/' + res.filename
+        this.tempList.push(this.imageUrl)
       } else {
-          this.$message({
-            message: '上传失败，请重试~',
-            type: 'error'
+        this.$message({
+          message: '上传失败，请重试~',
+          type: 'error'
         })
       }
     },
-    beforeUpload() {
-      
+    //预览图片
+    handlePreview(file) {
+      console.log(file)
+      this.imageUrl = this.serverUrl + '/articles/' + file.response.filename
+      this.showPreview = true
+    },
+    //删掉图片
+    handleRemove(file) {
+      this.showPreview = false
+      //预览删除完的上一个图片
+      if(this.tempList.length > 0) {
+        this.tempList.pop()
+        let index = this.tempList.length - 1
+        if(index >= 0) {
+          this.imageUrl = this.tempList[index]
+        } else {
+          this.imageUrl = ''
+        }
+      }
+      this.$message({
+        message: '图片已删掉',
+        type: 'success'
+      })
     }
   }
 }
 </script>
 
+<style lang="scss">
+.el-upload-list__item {
+  width: 360px;
+}
+.el-upload-list {
+  margin-left: 405px;
+}
+.error-slot {
+  height: 140px;
+  width: 348px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  i {
+    font-size: 40px;
+    color: #d1d1d1;
+  }
+}
+</style>
 <style lang="scss" scoped>
+.demonstration {
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  background-color: #f2f2f2;
+}
+
 .upload-container {
   margin-top: 20px;
   width: 100%;
@@ -102,65 +174,18 @@ export default {
     clear: both;
   }
   .image-uploader {
-    width: 35%;
-    float: left;
+    width: 360px;
   }
   .image-preview {
-    width: 200px;
-    height: 200px;
     position: relative;
     border: 1px dashed #d9d9d9;
-    float: left;
     margin-left: 50px;
-    .image-preview-wrapper {
-      position: relative;
+    height: 178px;
+    width: 348px;
+    .preview {
+      height: 138px;
       width: 100%;
-      height: 100%;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .image-preview-action {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      cursor: default;
-      text-align: center;
-      color: #fff;
-      opacity: 0;
-      font-size: 20px;
-      background-color: rgba(0, 0, 0, .5);
-      transition: opacity .3s;
       cursor: pointer;
-      text-align: center;
-      line-height: 200px;
-      .el-icon-delete {
-        font-size: 36px;
-      }
-    }
-    &:hover {
-      .image-preview-action {
-        opacity: 1;
-      }
-    }
-  }
-  .image-app-preview {
-    width: 320px;
-    height: 180px;
-    position: relative;
-    border: 1px dashed #d9d9d9;
-    float: left;
-    margin-left: 50px;
-    .app-fake-conver {
-      height: 44px;
-      position: absolute;
-      width: 100%; // background: rgba(0, 0, 0, .1);
-      text-align: center;
-      line-height: 64px;
-      color: #fff;
     }
   }
 }

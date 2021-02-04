@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'hasLogo' : 'isLogoView'}">
+  <div :class="{'hasLogo' : isLogoView}">
     <logo v-if="isLogoView" :collapse="!isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -105,11 +105,6 @@ import Logo from './Logo'
 import variables from '../../../assets/css/variables.scss'
 
 export default {
-  data() {
-    return {
-      activeMenu: '1'
-    }
-  },
   computed: {
     ...mapState({
       isLogoView: state => state.isLogoView,
@@ -117,6 +112,11 @@ export default {
     }),
     variables() {
       return variables
+    },
+    activeMenu() {
+      const route = this.$route
+      const { path } = route
+      return path
     }
   },
   components: {

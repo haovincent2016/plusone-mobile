@@ -13,7 +13,7 @@
     <el-form ref="articleForm" :model="articleForm" :rules="rules" class="form-wrapper">
       <!-- 文章顶部图片 -->
       <el-form-item>
-        <single-upload v-model="articleForm.imageUrl" />
+        <single-upload :allowedNumber="5" />
       </el-form-item>
       <!-- 标题 -->
       <el-form-item prop="title" style="padding:0 10px">
