@@ -2,19 +2,23 @@ const { sequelize } = require('../config/db')
 const task = require('../model/task')
 const user = require('../model/user')
 
+//引入Op
+const { Op } = require("sequelize")
+
 class taskController {
   //获取用户当日打卡
   static async getTask(ctx) {
     try {
       const req = ctx.request.body
+      const START = new Date().setHours(0,0,0,0)
+      const END = new Date().setHours(23,59,59,59)
       const detail = await task.findAll({
         where: {
-          [Op.and]: [
-            { userId: req.userId },
-            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')),{
-              [Op.eq]: new Date()
-            })
-          ]
+          userId: req.userId,
+          createdAt: {
+            [Op.gt]: START,
+            [Op.lt]: END
+          }
         }
       })
       return ctx.body = {

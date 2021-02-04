@@ -102,9 +102,12 @@ sequelize.drop().then(() => {
   article.sync().then(() => {
     article.create(articleData)
   })
-  task.sync().then(() => {
-    task.bulkCreate(tasksData)
-  })
+  setTimeout(() => {
+    task.sync().then(() => {
+      task.bulkCreate(tasksData)
+    })
+  }, 1000)
+  
 })
 
 // error handler

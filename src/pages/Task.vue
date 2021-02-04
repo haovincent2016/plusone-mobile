@@ -123,7 +123,11 @@ export default {
             }
             getTaskB(data).then(res => {
                 if(res.data.code === '0') {
-                    this.$toast.success(res.data.desc)
+                    if(res.data.detail && res.data.detail.length > 0) {
+                        //已打卡
+                        this.finishTask = true
+                    }
+                    //this.$toast.success(res.data.desc)
                 } else {
                     this.$toast.fail(res.data.desc)
                 }
