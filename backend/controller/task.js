@@ -1,6 +1,7 @@
 const { sequelize } = require('../config/db')
 const task = require('../model/task')
 const user = require('../model/user')
+const moment = require('moment')
 
 //引入Op
 const { Op } = require("sequelize")
@@ -16,8 +17,31 @@ class taskController {
         where: {
           userId: req.userId,
           createdAt: {
-            [Op.gt]: START,
-            [Op.lt]: END
+            [Op.gte]: START,
+            [Op.lte]: END
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        detail: detail,
+        desc: '打卡数据查询成功'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡数据查询失败'
+      }
+    }
+  }
+  //获取用户过去七天打卡情况
+  static async getWeekTasks(ctx) {
+    try {
+      const req = ctx.request.body
+      const detail = await task.findAll({
+        where: {
+          createdAt: {
+            [Op.gte]: moment().subtract(7, 'days').toDate()
           }
         }
       })

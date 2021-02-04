@@ -6,9 +6,10 @@
         <van-col span="12" class="number">{{ userInfo.points ? userInfo.points : 0 }} 积分</van-col>
         <van-col span="12"><van-button round type="info" @click="usePoints">使用积分</van-button></van-col>
     </van-row>
-    <!-- 待做：打卡进度 -->
-    <!-- <Steps :step="currStep" :list="stepList" />
-    <div class="range">（本周:1/25 - 1/31）</div> -->
+    <!-- 待做：过去七天打卡 -->
+    <div class="task-title">过去七天打卡情况（成功打卡{{currStep+1}}天)</div>
+    <Steps :step="currStep" :list="stepList" />
+    <div class="range">（当前周:{{this.dateList[0]}} - {{this.dateList[6]}}）</div>
     <!-- 未打卡，一天只能打卡一次 -->
     <div v-if="!finishTask">
         <van-form style="margin:15px 10px" >
@@ -56,7 +57,7 @@
 import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
 import Steps from "components/Common/Steps"
-import { saveTaskB, getTaskB } from '@/api/task'
+import { saveTaskB, getTaskB, getWeekTasksB } from '@/api/task'
 import baseUrl from '@/utils/setting'
 
 export default {
@@ -64,19 +65,42 @@ export default {
         return {
             task1: true,
             task2: true,
-            currStep: 1,
+            currStep: undefined,
             stepList: ['1天', '2天', '3天', '4天', '5天', '6天', '7天'],
             imageList: [],
             // 上传的图片路径
             imagePath: [],
-            finishTask: false
+            finishTask: false,
+            // 一周的日期
+            dateList: []
         }
     },
     computed: mapState([ 'userInfo' ]),
     created() {
         this.checkTask()
+        this.calculateWeek()
+        this.getWeekTasks()
     },
     methods: {
+        // 计算当周周一到周日日期
+        calculateWeek() {
+            // 一天里一共的毫秒数
+            let oneDayTime = 1000 * 60 * 60 * 24 
+            let today = new Date()
+            // 周日时，则强制赋值为7，否则为0
+            let todayDay = today.getDay() || 7 
+            let startDate = new Date(
+                today.getTime() - oneDayTime * (todayDay - 1)
+            )
+            for(let i = 0; i < 7; i++){
+                let temp = new Date(startDate.getTime() + i * oneDayTime)
+                let year = temp.getFullYear()
+                let month = temp.getMonth() + 1
+                let day = temp.getDate()
+                this.dateList[i] = `${month}`+'月'+`${day}`+'日' 
+            }
+            console.log(this.dateList)
+        },
         afterRead(file) {
             //正在上传
             file.status = 'uploading'
@@ -114,6 +138,25 @@ export default {
             this.$toast({
                 message: '点击任意位置关闭',
                 icon: 'like-o'
+            })
+        },
+        //
+        getWeekTasks() {
+            let data = {
+                userId: this.userInfo.id 
+            }
+            getWeekTasksB(data).then(res => {
+                if(res.data.code === '0') {
+                    if(res.data.detail && res.data.detail.length > 0) {
+                        //已打卡
+                        this.currStep = res.data.detail.length - 1
+                    }
+                    //this.$toast.success(res.data.desc)
+                } else {
+                    this.$toast.fail(res.data.desc)
+                }
+            }).catch(error => {
+                this.$toast.fail(res.data.desc)
             })
         },
         // 检查今日是否已打卡
@@ -184,6 +227,8 @@ export default {
     text-align center
     background-color #f5f5f5
     height: 100vh
+.task-title  
+    margin-top 15px
 .topbar
     margin 46px 10px 0px 10px
     padding 10px
@@ -195,7 +240,7 @@ export default {
     font-weight 300
 .range
     display flex
-    font-size 13px
+    font-size 14px
     color #a3a3a3
     justify-content center
 .notice-container
