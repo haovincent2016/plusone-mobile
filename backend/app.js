@@ -27,6 +27,7 @@ const task = require('./model/task')
 
 // 引入middleware
 const auth = require('./public/auth')
+const { sequelize } = require('./config/db')
 
 //自动创建表，并导入初始数据,导入数据需按顺序
 //正式环境需删除
@@ -76,49 +77,35 @@ const collectionData = {
   ownerId: 1
 }
 
-const taskData = [
-  {
-    id: 1,
-    finishWrite: true,
-    finishVideo: false,
-    taskImages: '/static/img/bg2.png',
-    userId: 1
-  }, {
-    id: 1,
-    finishWrite: true,
-    finishVideo: false, 
-    taskImages: '/static/img/bg2.png',
-    userId: 2
-  }
-]
+const tasksData = [{
+  id: 1,
+  finishWrite: true,
+  finishVideo: false,
+  taskImages: 'file-1611795545829.png',
+  userId: 1
+},{
+  id: 2,
+  finishWrite: false,
+  finishVideo: false,
+  taskImages: 'file-1611795545829.png',
+  userId: 1
+}]
 
-user.sync().then(() => {
-  user.destroy({
-    truncate: { cascade: true } 
-  }).then(() => {
+//先删除所有table再按序添加
+sequelize.drop().then(() => {
+  user.sync().then(() => {
     user.bulkCreate(usersData)
-    //collection
-    collection.sync().then(() => {
-      collection.destroy({
-        truncate: { cascade: true } 
-      }).then(() => {
-        collection.create(collectionData)
-        //article
-        article.sync().then(() => {
-          article.destroy({
-            truncate: { cascade: true } 
-          }).then(() => {
-            article.create(articleData)
-          })
-        })
-      })
-    })
   })
-}).catch(err => {
-  console.log(err)
+  collection.sync().then(() => {
+    collection.create(collectionData)
+  })
+  article.sync().then(() => {
+    article.create(articleData)
+  })
+  task.sync().then(() => {
+    task.bulkCreate(tasksData)
+  })
 })
-
-task.sync()
 
 // error handler
 onerror(app)
