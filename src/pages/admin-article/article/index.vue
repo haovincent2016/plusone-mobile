@@ -22,13 +22,32 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getTableList()" type="primary" plain round icon="el-icon-search">查询</el-button>
-        <el-button @click="resetSearch()" plain round icon="el-icon-refresh-right">重置</el-button>
-        <!-- 跳转文章页 -->
-        <el-button @click="createArticlePage()" plain round icon="el-icon-plus">新建</el-button>
-        <el-button @click="batchDelete()" type="danger" plain round icon="el-icon-delete">批量删除</el-button>
+        <el-button @click="getTableList()" type="primary" round icon="el-icon-search">查询</el-button>
+        <el-button @click="resetSearch()" round icon="el-icon-refresh-right">重置</el-button>
       </el-form-item>
     </el-form>
+    <!-- 操作区 -->
+    <el-row :gutter="10" class="operation-row">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="createArticlePage()"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="selectedData.length === 0"
+          @click="batchDelete()"
+        >批量删除</el-button>
+      </el-col>
+    </el-row>
     <el-table
       :data="tableList"
       border
@@ -337,5 +356,8 @@ export default {
   height: 65px;
   border-radius: 4px;
   border: 1px solid #a3a3a3
+}
+.operation-row {
+  margin-bottom: 25px;
 }
 </style>
