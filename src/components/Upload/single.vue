@@ -1,4 +1,5 @@
 <template>
+<!-- 一次上传一张图片，有总上传图片数量限制 -->
   <div class="upload-container">
     <el-upload
       :action="`${uploadUrl}`+'/admin/uploadSingle'"

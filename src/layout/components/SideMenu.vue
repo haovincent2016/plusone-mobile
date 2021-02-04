@@ -25,7 +25,7 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/admin-user/user">普通用户</el-menu-item>
-            <el-menu-item index="/admin-user/operator">管理员</el-menu-item>
+            <!-- <el-menu-item index="/admin-user/operator">管理员</el-menu-item> -->
           </el-menu-item-group>
         </el-submenu>
 

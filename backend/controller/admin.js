@@ -12,6 +12,7 @@ const crypt = require('../public/encrypt')
 const user = require('../model/user')
 const collection = require('../model/collection')
 const article = require('../model/article')
+const task = require('../model/task')
 
 //引入Op
 const { Op } = require("sequelize")
@@ -399,6 +400,51 @@ class adminController {
         desc: '文章批量删除失败'
       }
     }
+  }
+
+  //获取所有打卡
+  static async getTasks(ctx) {
+    try {
+      const req = ctx.request.body
+      //构造搜索条件
+      let conditions = {}
+      if(req.searchForm) {
+        if(!!req.searchForm.username) {
+          conditions.username = {[Op.startsWith]: req.searchForm.username}
+        } 
+        if(!!req.searchForm.finishWrite) {
+          conditions.finishWrite = req.searchForm.finishWrite === 'true' ? 1 : 0
+        } 
+        if(!!req.searchForm.finishVideo) {
+          conditions.finishVideo = req.searchForm.finishVideo === 'true' ? 1 : 0
+        }
+      } else {
+        conditions = {}
+      }
+      const offset = parseInt((req.page - 1) * req.limit)
+      const limit = parseInt(req.limit)
+      
+      const tasks = await task.findAndCountAll({
+        include:[{
+          model: user,
+          attributes:['username','avatar']
+        }],
+        where: conditions,
+        limit,
+        offset
+      })
+      return ctx.body = {
+        code: '0',
+        tasks: JSON.stringify(tasks.rows),
+        count: tasks.count,
+        desc: '打卡数据获取成功'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡数据获取失败'
+      }
+    } 
   }
 }
 

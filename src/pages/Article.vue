@@ -100,7 +100,7 @@ export default {
       border-radius 50%
   .article-body
     margin 25px 0
-    border 1px solid #f1f1f1
+    border 1px solid #f5f5f5
     padding 15px
   .article-footer
     display flex

@@ -120,12 +120,6 @@ export const siteRoutes = [
         component: () => import('@/pages/admin-user/user'),
         name: 'UserB',
         meta: { title: '用户', auth: true }
-      },
-      {
-        path: 'operator',
-        component: () => import('@/pages/admin-user/operator'),
-        name: 'Operator',
-        meta: { title: '管理员' }
       }
     ]
   },

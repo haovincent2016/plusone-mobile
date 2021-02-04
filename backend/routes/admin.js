@@ -75,4 +75,8 @@ router.post('/deleteArticle', adminController.deleteArticle)
 //删除文章
 router.post('/batchDeleteArticles', adminController.batchDeleteArticles)
 
+//打卡管理
+//获取所有打卡
+router.post('/getTasks', adminController.getTasks)
+
 module.exports = router

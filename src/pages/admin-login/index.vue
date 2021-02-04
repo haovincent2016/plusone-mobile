@@ -85,7 +85,7 @@ export default {
 .admin-container
   padding: 15px;
   margin: 15px
-  border 1px solid #f2f2f2
+  border 1px solid #f5f5f5
   box-shadow 0 1px 4px rgba(0,21,41,.08)
 .custom-form
   margin-top 26px

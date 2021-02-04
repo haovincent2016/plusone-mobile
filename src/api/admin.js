@@ -33,14 +33,6 @@ export function getUsersB (data) {
         data: data
     })
 }
-/* 获取所有管理员 */
-export function getAdminUsersB (data) {
-    return request({ 
-        url: '/admin/getAdminUsers', 
-        method: 'post',
-        data: data
-    })
-}
 
 /* 添加用户 */
 export function createUserB (data) {
@@ -132,6 +124,19 @@ export function deleteArticleB (data) {
 export function batchDeleteArticlesB (data) {
     return request({ 
         url: '/admin/batchDeleteArticles', 
+        method: 'post',
+        data: data
+    })
+}
+
+/**
+ * 打卡管理部分
+ * @param {*} data 
+ */
+/* 获取所有task */
+export function getTasksB (data) {
+    return request({ 
+        url: '/admin/getTasks', 
         method: 'post',
         data: data
     })

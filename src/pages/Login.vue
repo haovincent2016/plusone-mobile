@@ -246,7 +246,7 @@ export default {
   display flex
   justify-content flex-start
   align-items center
-  border 0.5px solid #f1f1f1
+  border 0.5px solid #f5f5f5
   width 161px
   border-radius 20px
   margin-left 15px 

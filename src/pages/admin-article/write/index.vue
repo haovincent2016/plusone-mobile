@@ -146,7 +146,7 @@ export default {
   margin: 10px;
 }
 .preview {
-  border: 1px solid #f1f1f1;
+  border: 1px solid #f5f5f5;
   margin: 10px;
   padding: 10px;
 }

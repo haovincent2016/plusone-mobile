@@ -76,6 +76,22 @@ const collectionData = {
   ownerId: 1
 }
 
+const taskData = [
+  {
+    id: 1,
+    finishWrite: true,
+    finishVideo: false,
+    taskImages: '/static/img/bg2.png',
+    userId: 1
+  }, {
+    id: 1,
+    finishWrite: true,
+    finishVideo: false, 
+    taskImages: '/static/img/bg2.png',
+    userId: 2
+  }
+]
+
 user.sync().then(() => {
   user.destroy({
     truncate: { cascade: true } 
@@ -102,46 +118,6 @@ user.sync().then(() => {
   console.log(err)
 })
 
-
-
-
-// collection.sync().then(() => {
-//   collection.destroy({
-//     truncate: { cascade: true } 
-//   }).then(() => {
-//     collection.create({
-//       id: 2,
-//       title: '我的收藏',
-//       description: '主要关于英语学习类文章',
-//       public: true,
-//       ownerId: 1
-//     })
-//   })
-// }).catch(err => {
-//   console.log('collection insert: ' + err)
-// })
-
-// article.sync().then(() => {
-//   article.destroy({
-//     truncate: { cascade: true } 
-//   }).then(() => {
-//     article.create({
-//       id: 1,
-//       authorId: 1,
-//       colId: 2,
-//       title: '三千字说废就废',
-//       userId: 1,
-//       content: '我最近在靠写历史稿吃饭，昨天写了一篇三千字的，其实稿费只有三十五元，不过因我文笔一般，愣是写了一个多小时。当我把它发给老板之后，很快就被打回来了',
-//       picture: '/static/img/bg2.png',
-//       status: 3,
-//       view: 101,
-//       like: 3
-//     })
-//   })
-// }).catch(err => {
-//   console.log('article insert: ' + err)
-// })
-  
 task.sync()
 
 // error handler

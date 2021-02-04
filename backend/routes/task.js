@@ -28,6 +28,8 @@ router.post('/uploadTask', upload.single('file'), async(ctx, next) => {
     } 
 })
 
+router.post('/getTask', taskController.getTask)
+
 router.post('/saveTask', taskController.saveTask)
 
 module.exports = router
