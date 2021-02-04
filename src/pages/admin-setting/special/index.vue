@@ -1,6 +1,7 @@
 <template>
   <!-- 主页布局拖拽式设置 -->
   <!-- https://github.com/wsydxiangwang/Visualization-Page -->
+  <!-- 中间view, 右侧传入view，右侧修改view，双向绑定-->
   <div class="special-wrapper">
     <div class="left-content">
       <div 
@@ -120,14 +121,17 @@ export default {
     uploadData() {
       console.log(this.view)
     },
+    //开始拖拽
     dragStart(e) {
       this.type = e.target.dataset.type
     },
+    //结束拖拽
     dragEnd(e) {
       this.$delete(this.view[this.index], 'status')
       this.isAdded = false
       this.type = null
     },
+    //放到指定位置
     drop(e) {
       if (!this.type) {
         return
@@ -136,6 +140,7 @@ export default {
       e.stopPropagation()
       this.dragEnd(e)
     },
+    //到达指定位置
     dragOver(e) {
       if (!this.type) { 
         return
@@ -151,20 +156,21 @@ export default {
         data: [],           // 数据
         options: {}         // 选项操作
       }
-
       if (name == 'view-content') {
+        //父组件容器
         if (!this.isAdded) {
           this.index = this.view.length
           this.isAdded = true
           this.view.push(defaultData)
         }
       } else if (name == 'item') {
+        //子组件
         let target = e.target
         let [ y, h, curIndex ] = [ e.offsetY, target.offsetHeight, target.dataset.index ]
         let direction = y < (h / 2)
 
         if (!this.isAdded) {
-          // Push to Top or Bottom
+          //放到子组件上部还是下部
           if (direction) {
             if (curIndex == 0) {
                 this.view.unshift(defaultData)
@@ -176,7 +182,7 @@ export default {
             this.view.splice(curIndex, 0, defaultData)
           }
         } else {
-          // Moving
+          //移动
           if (direction) {
             var i = curIndex == 0 ? 0 : curIndex - 1
             var result = this.view[i]['status'] == 2
