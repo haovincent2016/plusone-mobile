@@ -1,5 +1,5 @@
 <template>
-  <!-- Banner & Image 通用组件 -->
+  <!-- 轮播图组件编辑器 -->
   <div class="image-content">
     <p class="desc">添加图片 (最多{{ len }}张，下方图片可拖动排序）</p>
     <vuedraggable
@@ -96,6 +96,7 @@ export default {
   },
   mounted() {
     this.list = this.data
+    console.log(this.list)
   },
   methods: {
     //验证链接合法性

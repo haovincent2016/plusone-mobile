@@ -1,4 +1,5 @@
 <template>
+<!-- 头部组件编辑器 -->
   <div class="info-content">
     <el-form label-width="80px">
       <el-form-item label="页面标题">

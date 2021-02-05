@@ -20,8 +20,11 @@
 </template>
 
 <script>
-import Images from "./images"
-import Nav from "./nav"
+import Images from "./settings/images"
+import Nav from "./settings/nav"
+import Links from './settings/links'
+import Contents from './settings/contents'
+
 export default {
   name: 'Editor',
   props: {
@@ -41,6 +44,14 @@ export default {
         'banner': {
             tit: '轮播图',
             com: 'Images'
+        },
+        'video': {
+            tit: '视频设置',
+            com: 'Links'
+        },
+        'course': {
+            tit: '内容设置',
+            com: 'Contents'
         }
       },
       tabType: {
@@ -52,7 +63,7 @@ export default {
   },
   mounted() {
     this.type = this.data.type
-    console.log(this.type)
+    //console.log(this.type)
     //console.log(this.list[this.type]['com'])
     if (this.data.tabType) {
       this.tab(this.data.tabType)
@@ -72,7 +83,9 @@ export default {
   },
   components: {
     Nav,
-    Images
+    Images,
+    Links,
+    Contents
   }
 }
 </script>
