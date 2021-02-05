@@ -1,11 +1,11 @@
 <template>
   <ul class="steps">
-    <li
-      v-for="(item,index) in list"
-      :key="index"
-      :class="{ 'active' : step === index }">
-      {{ item }}
-    </li>
+      <li
+        v-for="(item,index) in list"
+        :key="index"
+        :class="{ 'active' : step === index }">
+        {{ item }}
+      </li>
   </ul>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default {
   props: {
     step: {
       type: Number,
-      default: 0
+      default: -1
     },
     list: {
       type: Array
@@ -50,7 +50,7 @@ export default {
   counter-increment: step; /*计数器值递增*/
   width: 32px;
   height: 32px;
-  background-color: #019875;
+  background-color: #1989fa;
   line-height: 32px;
   border-radius: 32px;
   font-size: 16px;
@@ -65,7 +65,7 @@ export default {
   content: "";
   width: 100%;
   height: 2px;
-  background-color: #019875;
+  background-color: #1989fa;
   position: absolute;
   left: -50%;
   top: 15px;
@@ -75,12 +75,12 @@ export default {
 /*将当前/完成步骤之前的数字及连接线变绿*/
 .steps li.active:before,
 .steps li.active:after {
-  background-color: #019875;
+  background-color: #1989fa;
 }
 
 /*将当前/完成步骤之后的数字及连接线变灰*/
 .steps li.active ~ li:before,
 .steps li.active ~ li:after {
-  background-color: #777;
+  background-color: #ddd;
 }
 </style>

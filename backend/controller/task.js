@@ -78,6 +78,29 @@ class taskController {
       }
     }
   }
+  //增加积分
+  static async addPoints(ctx) {
+    try {
+      const req = ctx.request.body
+      const points = req.points
+      await user.update({
+        points: req.points
+      }, {
+        where: {
+          id: req.userId
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '积分增加成功~'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-1',
+        desc: '积分增加失败，请重试'
+      }
+    }
+  }
 }
 
 module.exports = taskController

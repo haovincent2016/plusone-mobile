@@ -23,3 +23,11 @@ export function saveTaskB (data) {
         data: data
     })
 }
+
+export function addPointsB (data) {
+    return request({ 
+        url: '/task/addPoints', 
+        method: 'post',
+        data: data
+    })
+}

@@ -106,7 +106,7 @@ sequelize.drop().then(() => {
     task.sync().then(() => {
       task.bulkCreate(tasksData)
     })
-  }, 1000)
+  }, 1500)
   
 })
 

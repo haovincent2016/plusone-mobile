@@ -3,11 +3,21 @@
     <TopPart :isLogin="false" :isFunc="true" />
     <!-- 积分 -->
     <van-row gutter="20" class="topbar">
-        <van-col span="12" class="number">{{ userInfo.points ? userInfo.points : 0 }} 积分</van-col>
-        <van-col span="12"><van-button round type="info" @click="usePoints">使用积分</van-button></van-col>
+        <van-col span="12" class="number">
+            {{ userInfo.points ? userInfo.points : 0 }} 积分
+        </van-col>
+        <!-- 待做：积分使用商城 -->
+        <van-col span="12">
+            <el-popover
+                placement="left"
+                trigger="hover">
+                <div>该功能暂不开放，敬请期待~</div>
+                <van-button slot="reference" round type="info" @click="usePoints" >使用积分</van-button>
+            </el-popover>
+        </van-col>
     </van-row>
-    <!-- 待做：过去七天打卡 -->
-    <div class="task-title">过去七天打卡情况（成功打卡{{currStep+1}}天)</div>
+    <!-- 过去七天打卡 -->
+    <div class="task-title">过去七天打卡情况{{currStep > 0 ? '（成功打卡'+(currStep+1)+'天）' : '（暂无）'}}</div>
     <Steps :step="currStep" :list="stepList" />
     <div class="range">（当前周:{{this.dateList[0]}} - {{this.dateList[6]}}）</div>
     <!-- 未打卡，一天只能打卡一次 -->
@@ -38,7 +48,11 @@
         />
 
         <div style="margin:15px 0;">
-            <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" @click="saveTask">一键打卡</van-button>
+            <van-badge content="+1分">
+                <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" @click="saveTask">
+                    一键打卡
+                </van-button>
+            </van-badge>
         </div>
     </div>
     <!-- 已打卡 -->
@@ -57,7 +71,7 @@
 import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
 import Steps from "components/Common/Steps"
-import { saveTaskB, getTaskB, getWeekTasksB } from '@/api/task'
+import { saveTaskB, getTaskB, getWeekTasksB, addPointsB } from '@/api/task'
 import baseUrl from '@/utils/setting'
 
 export default {
@@ -65,7 +79,7 @@ export default {
         return {
             task1: true,
             task2: true,
-            currStep: undefined,
+            currStep: -1,
             stepList: ['1天', '2天', '3天', '4天', '5天', '6天', '7天'],
             imageList: [],
             // 上传的图片路径
@@ -140,7 +154,7 @@ export default {
                 icon: 'like-o'
             })
         },
-        //
+        // 查询过去七天打卡次数
         getWeekTasks() {
             let data = {
                 userId: this.userInfo.id 
@@ -150,6 +164,8 @@ export default {
                     if(res.data.detail && res.data.detail.length > 0) {
                         //已打卡
                         this.currStep = res.data.detail.length - 1
+                    } else {
+                        this.currStep = -1
                     }
                     //this.$toast.success(res.data.desc)
                 } else {
@@ -196,6 +212,10 @@ export default {
             saveTaskB(data).then(res => {
                 if(res.data.code === '0') {
                     this.$toast.success(res.data.desc)
+                    //打卡成功后操作
+                    this.addPoints()
+                    this.checkTask()
+                    this.getWeekTasks()
                 } else {
                     this.$toast.fail(res.data.desc)
                 }
@@ -203,13 +223,28 @@ export default {
                 this.$toast.fail(res.data.desc)
             })
         },
+        // 增加积分
+        addPoints() {
+            let data = {
+                userId: this.userInfo.id,
+                points: this.userInfo.points + 1
+            }
+            addPointsB(data).then(res => {
+                if(res.data.code === '0') {
+                    //this.$toast.success(res.data.desc)
+                    this.userInfo.points += 1
+                } else {
+                    //this.$toast.fail(res.data.desc)
+                }
+            }).catch(error => {
+                //this.$toast.fail(res.data.desc)
+            })
+        },
         // 返回用户页
         goBack() {
             this.$router.push({ name: 'User' })
         },
-        // 查询一周打卡次数
-
-        // 使用积分页
+        // 待做：使用积分页
         usePoints() {
 
         }

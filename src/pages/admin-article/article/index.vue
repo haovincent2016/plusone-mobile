@@ -166,7 +166,6 @@
 
 <script>
 import { getArticlesB, createArticleB, editArticleB, deleteArticleB, batchDeleteArticlesB } from '@/api/admin'
-import Pagination from '@/components/Common/Pagination'
 
 export default {
   data() {
@@ -330,9 +329,6 @@ export default {
           console.log(err)
         })
     }
-  },
-  components: {
-    Pagination
   }
 }
 </script>

@@ -133,10 +133,55 @@ export function batchDeleteArticlesB (data) {
  * 打卡管理部分
  * @param {*} data 
  */
+/* 用户名 --> 信息 */
+export function getUserInfoB (data) {
+    return request({ 
+        url: '/admin/getUserInfo', 
+        method: 'post',
+        data: data
+    })
+}
+
 /* 获取所有task */
 export function getTasksB (data) {
     return request({ 
         url: '/admin/getTasks', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 添加打卡 */
+export function createTaskB (data) {
+    return request({ 
+        url: '/admin/createTask', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 编辑打卡 */
+export function editTaskB (data) {
+    return request({ 
+        url: '/admin/editTask', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 删除打卡 */
+export function deleteTaskB (data) {
+    return request({ 
+        url: '/admin/deleteTask', 
+        method: 'post',
+        data: data
+    })
+}
+
+/* 批量删除打卡 */
+export function batchDeleteTasksB (data) {
+    return request({ 
+        url: '/admin/batchDeleteTasks', 
         method: 'post',
         data: data
     })

@@ -143,7 +143,7 @@ class adminController {
       }
     }
   }
-  // 获取所有管理员
+  // 根据用户名获取用户信息
   static async getAdminUsers(ctx) {
     try {
       const req = ctx.request.body
@@ -402,6 +402,30 @@ class adminController {
     }
   }
 
+  //用户名 --> 用户信息
+  static async getUserInfo(ctx) {
+    try {
+      const req = ctx.request.body
+      const detail = await user.findAll({
+        attributes:['username', 'id', 'avatar'],
+        where: {
+          username: {
+            [Op.startsWith]: req.username
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        detail: JSON.stringify(detail),
+        desc: '用户数据获取成功'
+      }
+    } catch(err) {
+      return ctx.body = {
+        code: '-1',
+        desc: '用户数据获取失败'
+      }
+    }
+  }
   //获取所有打卡
   static async getTasks(ctx) {
     try {
@@ -409,18 +433,19 @@ class adminController {
       //构造搜索条件
       let conditions = {}
       if(req.searchForm) {
-        if(!!req.searchForm.username) {
-          conditions.username = {[Op.startsWith]: req.searchForm.username}
-        } 
         if(!!req.searchForm.finishWrite) {
           conditions.finishWrite = req.searchForm.finishWrite === 'true' ? 1 : 0
         } 
         if(!!req.searchForm.finishVideo) {
           conditions.finishVideo = req.searchForm.finishVideo === 'true' ? 1 : 0
         }
+        if(!!req.searchForm.username) {
+          conditions.userId = parseInt(req.searchForm.username)
+        }
       } else {
         conditions = {}
       }
+      
       const offset = parseInt((req.page - 1) * req.limit)
       const limit = parseInt(req.limit)
       
@@ -445,6 +470,85 @@ class adminController {
         desc: '打卡数据获取失败'
       }
     } 
+  }
+  //添加打卡
+  static async createTask(ctx) {
+    try {
+      const req = ctx.request.body
+      await task.create(req)
+      return ctx.body = {
+        code: '0',
+        desc: '打卡创建成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡创建失败'
+      }
+    }
+  }
+  //编辑打卡（暂不支持图片）
+  static async editTask(ctx) {
+    try {
+      const req = ctx.request.body
+      // 待做：需更新updatedAt
+      await task.update(req, {
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '打卡信息修改成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡信息修改失败'
+      }
+    }
+  }
+  //删除打卡
+  static async deleteTask(ctx) {
+    try {
+      const req = ctx.request.body
+      await task.destroy({
+        where: {
+          id: req.id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '打卡删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡删除失败'
+      }
+    }
+  }
+  //批量删除打卡
+  static async batchDeleteTasks(ctx) {
+    try {
+      const req = ctx.request.body
+      await task.destroy({
+        where: {
+          id: {
+            [Op.in]: req.ids
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '打卡批量删除成功'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '打卡批量删除失败'
+      }
+    }
   }
 }
 

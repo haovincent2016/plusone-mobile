@@ -3,7 +3,26 @@
     <!-- 搜索栏 -->
     <el-form v-show="showSearch" :inline="true" :model="searchForm" class="search-container" label-width="80px">
       <el-form-item label="用户名">
-        <el-input v-model="searchForm.username" clearable></el-input>
+        <!-- 需确定是否有该用户 -->
+        <el-select
+          v-model="searchForm.username"
+          filterable
+          reserve-keyword
+          remote
+          :remote-method="querySearchUser"
+          :loading="userLoading"
+          placeholder="用户名" 
+          clearable>
+          <el-option
+            v-for="item in userList"
+            :key="item.id"
+            :label="item.username"
+            :value="item.id"
+            class="search-item">
+            <img :src="item.avatar" class="search-avatar" />
+            <div>用户名：{{item.username}}</div>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="完成听写">
         <el-select v-model="searchForm.finishWrite" placeholder="是否完成听写" clearable>
@@ -105,7 +124,7 @@
         v-if="columns[2].visible">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.finishWrite">已完成</el-tag>
-          <el-tag type="success" v-else>未完成</el-tag>
+          <el-tag type="danger" v-else>未完成</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -117,7 +136,7 @@
         v-if="columns[3].visible">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.finishVideo">已完成</el-tag>
-          <el-tag type="success" v-else>未完成</el-tag>
+          <el-tag type="danger" v-else>未完成</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -140,8 +159,7 @@
         fixed="right"
         label="操作"
         header-align="center"
-        align="center"
-        width="200">
+        align="center">
         <template slot-scope="scope">
           <el-button plain icon="el-icon-edit" size="mini" @click="editTaskDialog(scope.row)">编辑</el-button>
           <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteTask(scope.row)">删除</el-button>
@@ -153,18 +171,36 @@
     <el-dialog :title="textMap[dialogType]" :visible.sync="dialogVisible" width="40%">
       <el-form ref="taskForm" :rules="rules" :model="taskForm" label-position="right" label-width="80px" style="width: 300px;">
         <el-form-item label="打卡用户" prop="username">
-          <el-input clearable v-model="taskForm.username" placeholder="用户名" />
+          <el-select
+            v-model="taskForm.user.username"
+            filterable
+            reserve-keyword
+            remote
+            :remote-method="queryTaskUser"
+            :loading="taskLoading"
+            placeholder="用户名" 
+            clearable>
+            <el-option
+              v-for="item in taskList"
+              :key="item.id"
+              :label="item.username"
+              :value="item.id"
+              class="search-item">
+              <img :src="item.avatar" class="search-avatar" />
+              <div>用户名：{{item.username}}</div>
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="打卡图片" prop="avatar">
-          <img class="form-avatar" :src="taskForm.avatar" />
+        <el-form-item label="打卡图片" prop="images">
+          <img class="task-image" :src="`${imageUrl}`+'/uploads/'+taskForm.taskImages" />
         </el-form-item>
         <el-form-item label="完成听写" prop="write">
-          <el-select v-model="taskForm.write" placeholder="听写情况">
+          <el-select v-model="taskForm.finishWrite" placeholder="听写情况">
             <el-option v-for="item in taskOptions" :key="item.id" :label="item.name" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="完成视频" prop="video">
-          <el-select v-model="taskForm.video" placeholder="视频情况">
+          <el-select v-model="taskForm.finishVideo" placeholder="视频情况">
             <el-option v-for="item in taskOptions" :key="item.id" :label="item.name" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -182,8 +218,7 @@
 </template>
 
 <script>
-import { getTasksB } from '@/api/admin'
-import Pagination from '@/components/Common/Pagination'
+import { getTasksB, createTaskB, editTaskB, deleteTaskB, batchDeleteTasksB, getUserInfoB } from '@/api/admin'
 import baseUrl from '@/utils/setting'
 
 export default {
@@ -196,6 +231,11 @@ export default {
       },
       tableList: null,
       tableListLoading: false,
+      //根据用户名搜索用户
+      userList: [],
+      taskList: [],
+      userLoading: false,
+      taskLoading: false,
       //选择的数据
       selectedData: [],
       //分页参数
@@ -208,7 +248,8 @@ export default {
       total: 0,
       //dialog
       dialogVisible: false,
-      //dialog标题
+      //dialog标题y
+      
       textMap: {
         edit: '编辑打卡',
         create: '新建打卡'
@@ -217,7 +258,10 @@ export default {
       dialogType: '',
       //表单
       taskForm: {
-        username: '',
+        user: {
+          username: ''
+        },
+        taskImages: 'file-1611795545829.png',
         finishWrite: true,
         finishVideo: true
       },
@@ -229,7 +273,8 @@ export default {
       //表单验证
       rules: {
         username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
-        password: [{ required: true, message: '密码为必填项', trigger: 'blur' }]
+        write: [{ required: true, message: '必填项', trigger: 'blur' }],
+        video: [{ required: true, message: '必填项', trigger: 'blur' }]
       },
       // 显示搜索条件
       showSearch: true,
@@ -260,6 +305,55 @@ export default {
   methods: {
     convertTime(val) {
       return new Date(val).toLocaleDateString()
+    },
+    getUserInfo(query, type) {
+      setTimeout(() => {
+          let data = {
+            username: query
+          }
+          getUserInfoB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              if(type === 'search') {
+                this.userList = JSON.parse(res.data.detail)
+              } else {
+                this.taskList = JSON.parse(res.data.detail)
+              }
+            } else {
+              this.$message.error(res.data.desc)
+            }
+            if(type === 'search') {
+              this.userLoading = false
+            } else {
+              this.taskLoading = false
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+            if(type === 'search') {
+              this.userLoading = false
+            } else {
+              this.taskLoading = false
+            }
+          })
+        }, 1500)
+    },
+    //根据用户名搜索用户(query为搜索数据)
+    queryTaskUser(query) {
+      if (query !== '') {
+        this.taskLoading = true
+        this.getUserInfo(query, 'task')
+      } else {
+        this.taskList = []
+      }
+    },
+    //根据用户名搜索用户(query为搜索数据)
+    querySearchUser(query) {
+      if (query !== '') {
+        this.userLoading = true
+        this.getUserInfo(query, 'search')
+      } else {
+        this.userList = []
+      }
     },
     //获取表单数据
     getTableList() {
@@ -304,7 +398,10 @@ export default {
     //重置dialog表单
     resetForm() {
       this.taskForm = {
-        username: '',
+        user: {
+          username: ''
+        },
+        taskImages: 'file-1611795545829.png',
         finishWrite: true,
         finishVideo: true
       }
@@ -321,6 +418,7 @@ export default {
     },
     //添加打卡
     createTask() {
+      this.taskForm.userId = this.taskForm.user.username
       createTaskB(this.taskForm).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
@@ -342,11 +440,8 @@ export default {
     },
     //编辑打卡
     editTask() {
-      let data = {
-        id: this.taskForm.id,
-        taskForm: this.taskForm
-      }
-      editTaskB(data).then(res => {
+      this.taskForm.userId = this.taskForm.user.username
+      editTaskB(this.taskForm).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
           this.getTableList()
@@ -412,9 +507,6 @@ export default {
           console.log(err)
         })
     }
-  },
-  components: {
-    Pagination
   }
 }
 </script>
@@ -423,20 +515,32 @@ export default {
 .wrapper {
   padding: 10px;
 }
+.search-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5px;
+}
+.search-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
 .task-image {
   width: 85px;
   height: 55px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 .avatar {
   width: 45px;
   height: 45px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 .form-avatar {
   width: 65px;
   height: 65px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid #a3a3a3
 }
 .operation-row {

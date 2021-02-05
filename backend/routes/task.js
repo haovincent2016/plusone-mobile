@@ -34,4 +34,6 @@ router.post('/getWeekTasks', taskController.getWeekTasks)
 
 router.post('/saveTask', taskController.saveTask)
 
+router.post('/addPoints', taskController.addPoints)
+
 module.exports = router

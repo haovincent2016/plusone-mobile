@@ -245,7 +245,6 @@
 
 <script>
 import { getUsersB, createUserB, editUserB, deleteUserB, batchDeleteUsersB } from '@/api/admin'
-import Pagination from '@/components/Common/Pagination'
 
 export default {
   data() {
@@ -496,9 +495,6 @@ export default {
           console.log(err)
         })
     }
-  },
-  components: {
-    Pagination
   }
 }
 </script>

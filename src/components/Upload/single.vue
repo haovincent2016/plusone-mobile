@@ -19,12 +19,21 @@
       <div class="el-upload__text">
         将文件拖拽至此处，或<em>点击上传</em>
       </div>
+      <div>
+        <span v-if="fileSize" class="upload-tip">
+          上传大小不超过<b style="color:#f56c6c">{{ fileSize }}MB</b>
+        </span>
+        <span v-if="fileType" class="upload-tip">
+          ，格式需为<b style="color:#f56c6c">{{ fileType.join("/") }}</b>
+        </span>
+      </div>
     </el-upload>
     <div class="image-preview">
       <span class="demonstration">点击进行预览</span>
       <el-popover
         placement="left"
-        trigger="click">
+        trigger="hover"
+        :disabled="!imageUrl">
         <img :src="imageUrl" style="">
         <el-image slot="reference" :src="imageUrl" fit="scare-down" class="preview">
           <div slot="error" class="error-slot">
@@ -46,11 +55,18 @@ export default {
       type: Number,
       default: 1
     },
+    fileSize: {
+      type: Number,
+      default: 5
+    },
+    fileType: {
+      type: Array,
+      default: () => ['jpg', 'jpeg', 'png', 'gif']
+    }
   },
   data() {
     return {
       tempUrl: '',
-      serverUrl: '',
       //是否打开预览
       showPreview: false,
       imageUrl: '',
@@ -60,8 +76,7 @@ export default {
   },
   computed: {
     uploadUrl() {
-      this.serverUrl = baseUrl
-      return this.serverUrl
+      return baseUrl
     }
   },
   methods: {
@@ -110,7 +125,6 @@ export default {
     },
     //预览图片
     handlePreview(file) {
-      console.log(file)
       this.imageUrl = this.serverUrl + '/articles/' + file.response.filename
       this.showPreview = true
     },
@@ -156,6 +170,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.upload-tip {
+  color: #606266;
+  font-size: 14px;
+}
+
 .demonstration {
   font-size: 15px;
   display: flex;

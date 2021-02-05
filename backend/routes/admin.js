@@ -76,7 +76,23 @@ router.post('/deleteArticle', adminController.deleteArticle)
 router.post('/batchDeleteArticles', adminController.batchDeleteArticles)
 
 //打卡管理
+//用户 --> 信息
+router.post('/getUserInfo', adminController.getUserInfo)
+
 //获取所有打卡
 router.post('/getTasks', adminController.getTasks)
+
+//添加打卡
+router.post('/createTask', adminController.createTask)
+
+//编辑打卡
+router.post('/editTask', adminController.editTask)
+
+//删除打卡
+router.post('/deleteTask', adminController.deleteTask)
+
+//删除打卡
+router.post('/batchDeleteTasks', adminController.batchDeleteTasks)
+
 
 module.exports = router

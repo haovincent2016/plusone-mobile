@@ -2,7 +2,7 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import App from './App'
-import { Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
+import { Badge, Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
 import 'font-awesome/css/font-awesome.min.css'
 import 'assets/css/app.styl'
 import 'assets/css/index.scss'
@@ -12,6 +12,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 //自定义表格操作
 import TableToolbar from "@/components/TableToolbar"
+import Pagination from "@/components/Pagination"
 
 Vue.prototype.$axios = axios
 
@@ -19,7 +20,9 @@ Vue.config.productionTip = false
 
 // 全局组件挂载
 Vue.component('TableToolbar', TableToolbar)
+Vue.component('Pagination', Pagination)
 
+Vue.use(Badge)
 Vue.use(Step)
 Vue.use(Steps)
 Vue.use(Checkbox)
