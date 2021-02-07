@@ -33,7 +33,7 @@
             <el-input v-model="subitem.subtitle" placeholder="二级标题" clearable></el-input>
           </el-form-item>
           <el-form-item label="二级内容">
-            <el-input v-model="subitem.content" type="textarea" placeholder="二级内容" clearable></el-input>
+            <el-input v-model="subitem.content" type="textarea" placeholder="二级内容" :rows="4" clearable></el-input>
           </el-form-item>
         </div>
       </el-form>

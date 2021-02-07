@@ -8,14 +8,15 @@ import 'assets/css/app.styl'
 import 'assets/css/index.scss'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import Cookies from 'js-cookie'
+//import Cookies from 'js-cookie'
 import axios from 'axios'
+import * as echarts from 'echarts'
 //自定义表格操作
 import TableToolbar from "@/components/TableToolbar"
 import Pagination from "@/components/Pagination"
 
 Vue.prototype.$axios = axios
-
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 
 // 全局组件挂载

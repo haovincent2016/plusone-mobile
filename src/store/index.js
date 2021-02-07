@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Cookies from 'js-cookie'
 import { siteRoutes } from '@/router'
 
 Vue.use(Vuex)
@@ -20,7 +19,7 @@ const state = {
   routes: siteRoutes,
   //页面结构 - 左菜单
   sideMenu: {
-      opened: Cookies.get('sideMenuStatus') ? !!+Cookies.get('sideMenuStatus') : true
+      opened: sessionStorage.getItem('sideMenuStatus') ? !!+sessionStorage.getItem('sideMenuStatus') : true
   },
   //页面结构 - 访问设备
   device: 'desktop',
@@ -40,6 +39,7 @@ const state = {
 }
 
 const mutations = {
+  //localStorage储存token和refreshTime，数据永久保存，除非用户手动清理客户端缓存。
   refreshToken (state, data) {
     localStorage.setItem("token", data.token)
     let refreshTime = data.expire * 3600
@@ -85,9 +85,9 @@ const mutations = {
   toggleSideMenu (state) {
     state.sideMenu.opened = !state.sideMenu.opened
     if(state.sideMenu.opened) {
-      Cookies.set('sideMenuStatus', 1)
+      sessionStorage.setItem('sideMenuStatus', 1)
     } else {
-      Cookies.set('sideMenuStatus', 0)
+      sessionStorage.setItem('sideMenuStatus', 0)
     }
   },
   addVisitedView (state, view) {

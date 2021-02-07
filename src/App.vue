@@ -16,6 +16,7 @@ import { mapState } from 'vuex'
 export default {
   computed: mapState([ 'isAdmin' ]),
   created() {
+    // 保存vuex信息，数据保存在当前会话，刷新页面数据不会被清除，结束会话（关闭浏览器、关闭页面、跳转页面）数据失效。
     if (sessionStorage.getItem("store")) {
       this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
     }

@@ -93,7 +93,7 @@ export default {
 <style scoped lang="scss">
 .form-wrapper {
     padding: 0 5px;
-    height: 770px;
+    height: 740px;
     background: #fff;
     overflow-y: auto;
     display: flex;
