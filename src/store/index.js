@@ -15,24 +15,28 @@ const state = {
   isAdmin: false,
   adminToken: '',
   adminInfo: {},
-  //菜单
+
+  //页面结构 - 菜单
   routes: siteRoutes,
-  //左菜单
+  //页面结构 - 左菜单
   sideMenu: {
       opened: Cookies.get('sideMenuStatus') ? !!+Cookies.get('sideMenuStatus') : true
   },
-  //访问设备
+  //页面结构 - 访问设备
   device: 'desktop',
-  //是否显示logo
+  //页面结构 - 是否显示logo
   isLogoView: true,
-  //是否显示Breadcrumb
+  //页面结构 - 是否显示Breadcrumb
   isTagsView: true,
-  //浏览过的页面
+  //页面结构 - 浏览过的页面
   visitedView: [],
-  //缓存的页面
+  //页面结构 - 缓存的页面
   cachedView: [],
-  //是否固定上导航栏
-  isFixedView: true
+  //页面结构 - 是否固定上导航栏
+  isFixedView: true,
+
+  //特殊设置 - 已添加的组件
+  componentsList: []
 }
 
 const mutations = {
@@ -111,6 +115,11 @@ const mutations = {
         break
       }
     }
+  },
+
+  //添加特殊设置中的组件
+  addComponents(state, item) {
+    state.componentsList.push(item)
   }
 }
 
@@ -128,6 +137,10 @@ const actions = {
         visitedView: [...state.visitedView]
       })
     })
+  },
+
+  addComp({ commit }, item) {
+    commit('addComponents', item)
   }
 }
 

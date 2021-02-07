@@ -78,6 +78,7 @@
 
 <script>
 import Draggable from 'vuedraggable'
+import { mapState } from 'vuex'
 import Banner from './views/banner'
 import Video from './views/video'
 import Course from './views/course'
@@ -88,14 +89,111 @@ export default {
   data() {
     return {
       index: null,
-      //轮播图
-      //视频
-      videoData: {
-        link: 'https://v.qq.com/txp/iframe/player.html?vid=k3223ziv8nq',
-        videoStyle: 'width:100%;height:310px;'
+      view: [
+        //头部
+        {
+          type: 'nav',
+          title: '标题'
+        }
+      ],
+      //类型（左侧）
+      typeList: {
+        //首页轮播图
+        banner: {
+          name: '轮播图',
+          icon: 'el-icon-picture',
+          com: 'Banner'
+        },
+        //首页视频链接
+        video: {
+          name: '视频设置',
+          icon: 'el-icon-video-play',
+          com: 'Video'
+        },
+        //首页课程介绍
+        course: {
+          name: '内容设置',
+          icon: 'el-icon-edit-outline',
+          com: 'Course'
+        }
       },
+      //向表单传值（右侧）
+      props: {},
+      //显示右侧组件
+      showRight: false,
+      //拖拽的组件类型（左侧）
+      type: null,
+      //组件是否已添加到（中间）
+      isAdded: false,
+      className: {
+        1: 'one',
+        2: 'two',
+        3: 'three'
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      componentsList: state => state.componentsList
+    }),
+    //头部信息
+    info() {
+      return this.view[0]
+    }
+  },
+  methods: {
+    uploadData() {
+      //console.log(this.view)
+    },
+    //开始拖拽
+    dragStart(e) {
+      this.type = e.target.dataset.type    
+      let list = this.view.filter(i => i.type === 'banner')
+      if(list.length >= 1){
+        this.$message.error('相同组件只能添加一次')
+        this.dragEnd(e)
+        return
+      }
+    },
+    //结束拖拽
+    dragEnd(e) {
+      this.$delete(this.view[this.index], 'status')
+      this.isAdded = false
+      this.type = null
+    },
+    //放到指定位置
+    drop(e) {
+      if (!this.type) {
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+      this.dragEnd(e)
+    },
+    //到达指定位置
+    dragOver(e) {
+      if (!this.type) { 
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+
+      let className = e.target.className
+      let name = className !== 'view-content' ? 'item' : 'view-content'
+      //默认数据
+      const defaultData = {
+        type: this.type,    // 组件类型
+        status: 2,          // 默认状态
+        data: []            // 默认数据
+      }
+      //视频
+      const videoData = {
+        //link: 'https://v.qq.com/txp/iframe/player.html?vid=k3223ziv8nq',
+        link: 'https://player.youku.com/embed/XNTA5NzE0MDUzNg==',
+        videoStyle: 'width:100%;height:310px;'
+      }
       //内容
-      courseData: {
+      const courseData = {
         contents: [
           {
             title: '英语入门', 
@@ -209,106 +307,17 @@ export default {
             ]
           }
         ]
-      },
-      view: [
-        //头部
-        {
-          type: 'nav',
-          title: '标题'
-        }
-      ],
-      //类型（左侧）
-      typeList: {
-        //首页轮播图
-        banner: {
-          name: '轮播图',
-          icon: 'el-icon-picture',
-          com: 'Banner'
-        },
-        //首页视频链接
-        video: {
-          name: '视频设置',
-          icon: 'el-icon-video-play',
-          com: 'Video'
-        },
-        //首页课程介绍
-        course: {
-          name: '内容设置',
-          icon: 'el-icon-edit-outline',
-          com: 'Course'
-        }
-      },
-      //向表单传值（右侧）
-      props: {},
-      //显示右侧组件
-      showRight: false,
-      //拖拽的组件类型（左侧）
-      type: null,
-      //组件是否已添加到（中间）
-      isAdded: false,
-      className: {
-        1: 'one',
-        2: 'two',
-        3: 'three'
-      }
-    }
-  },
-  computed: {
-    //头部信息
-    info() {
-      return this.view[0]
-    }
-  },
-  methods: {
-    uploadData() {
-      //console.log(this.view)
-    },
-    //开始拖拽
-    dragStart(e) {
-      this.type = e.target.dataset.type
-    },
-    //结束拖拽
-    dragEnd(e) {
-      this.$delete(this.view[this.index], 'status')
-      this.isAdded = false
-      this.type = null
-    },
-    //放到指定位置
-    drop(e) {
-      if (!this.type) {
-        return
-      }
-      e.preventDefault()
-      e.stopPropagation()
-      this.dragEnd(e)
-    },
-    //到达指定位置
-    dragOver(e) {
-      if (!this.type) { 
-        return
-      }
-      e.preventDefault()
-      e.stopPropagation()
-
-      let className = e.target.className
-      let name = className !== 'view-content' ? 'item' : 'view-content'
-      //默认数据
-      const defaultData = {
-        type: this.type,    // 组件类型
-        status: 2,          // 默认状态
-        data: []            // 默认数据
       }
       //加入组件特殊数据
       let data = {}
       if(this.type === 'video') {
-        data = Object.assign(this.videoData, defaultData)
+        data = Object.assign(videoData, defaultData)
       } else if (this.type === 'course') {
-        data = Object.assign(this.courseData, defaultData)
+        data = Object.assign(courseData, defaultData)
       } else {
         data = defaultData
       }
       if (name == 'view-content') {
-        
         //父组件容器
         if (!this.isAdded) {
           this.index = this.view.length
@@ -320,7 +329,6 @@ export default {
         let target = e.target
         let [ y, h, curIndex ] = [ e.offsetY, target.offsetHeight, target.dataset.index ]
         let direction = y < (h / 2)
-
         if (!this.isAdded) {
           //放到子组件上部还是下部
           if (direction) {
@@ -351,12 +359,9 @@ export default {
         this.index = curIndex
         this.isAdded = true
       }
-
     },
     //切换视图（右侧）
     selectType(index, item) {
-      //console.log(item)
-      //console.log(index)
       this.showRight = false
       //根据类型不同，选择不同的view组件，头部组件index恒为1
       if (index === 0) {

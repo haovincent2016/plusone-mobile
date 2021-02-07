@@ -2,7 +2,7 @@
   <div class="form-wrapper">
     <div class="tab-content">
       <h2>{{ type && list[type]['tit'] }}</h2>
-      <div class="tab" v-if="type != 'nav'">
+      <div class="tab" v-if="type === 'banner'">
         <span
           v-for="(val, key, index) in tabType"
           :key="index"
