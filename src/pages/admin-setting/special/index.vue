@@ -271,7 +271,7 @@ export default {
           },
           {
             title: '留学申请培训', 
-            name: 4, 
+            name: 5, 
             icon: 'shop-o', 
             color: '#1989fa', 
             text: [
@@ -291,7 +291,7 @@ export default {
           },
           {
             title: '文章精批', 
-            name: 4, 
+            name: 6, 
             icon: 'shop-o', 
             color: '#1989fa', 
             text: [
@@ -410,17 +410,18 @@ export default {
 <style lang="scss" scoped>
 .special-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 15px;
   background: #f7f8f9;
   position: relative;
   .left-content, .right-content {
-    width: 300px;
+    width: 350px;
     padding: 15px 0;
     background: #fff;
     margin: 0 5px;
   }
   .left-content {
+    height: 750px;
     .content-wrapper {
       .content-item {
         width: 80px;
@@ -459,6 +460,7 @@ export default {
     width: auto;
     max-width: 400px;
     position: relative;
+    margin: 0 15px;
     .center-header {
       position: absolute;
       top: 0;

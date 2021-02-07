@@ -92,11 +92,22 @@ export default {
 
 <style scoped lang="scss">
 .form-wrapper {
-    height: 100%;
-    overflow: hidden;
+    padding: 0 5px;
+    height: 770px;
+    background: #fff;
+    overflow-y: auto;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
+    &::-webkit-scrollbar{
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb{
+      background: #dbdbdb;
+    }
+    &::-webkit-scrollbar-track{
+      background: #f6f6f6;
+    }
 }
 .tab-content{
     padding: 0 15px;

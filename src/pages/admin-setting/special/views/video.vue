@@ -1,7 +1,7 @@
 <template>
   <div class="video">
     <div style="text-align:center">
-    <iframe v-if="link" frameborder="0" :style="videoStyle" :src="link" allowFullScreen="true"></iframe>
+    <iframe frameborder="0" :style="videoStyle" :src="link" allowFullScreen="true"></iframe>
     </div>
   </div>
 </template>
@@ -22,16 +22,20 @@ export default {
         console.log(val)
         this.reload()
       },
-      immediate: true,
       deep: true
     }
   },
-  mounted() {
+  created() {
+    this.link = this.data.link
+    this.videoStyle = this.data.videoStyle
+  },
+  updated() {
     this.link = this.data.link
     this.videoStyle = this.data.videoStyle
   },
   methods: {
     reload() {
+      //console.log('改变了')
       this.$forceUpdate()
     }
   }

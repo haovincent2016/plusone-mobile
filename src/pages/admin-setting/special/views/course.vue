@@ -4,12 +4,12 @@
       <van-collapse-item 
         v-for="item in list" 
         :key="item.id" 
-        :title="item.title" 
         :name="item.name" 
-        :icon="item.icon" 
-        :color="item.color" 
         value="更多"
         >
+        <template #title>
+          <div class="fix"><van-icon :name="item.icon" :color="item.color" />{{ item.title }}</div>
+        </template>
         <div v-for="subitem in item.text" :key="subitem.id">
           <div class="subtitle">{{ subitem.subtitle }}</div>
           <div class="subcontent">{{ subitem.content }}</div>
@@ -36,6 +36,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fix {
+  display: flex;
+  align-items: center;
+}
 .subtitle {
   font-size: 14px;
   font-weight: 600;
