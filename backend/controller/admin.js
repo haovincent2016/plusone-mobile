@@ -6,7 +6,7 @@ const expireTime = '24h'
 const secret = 'qweasd789456'
 
 //引入encrypt
-const crypt = require('../public/encrypt')
+const crypt = require('../utils/encrypt')
 
 //引入model
 const user = require('../model/user')

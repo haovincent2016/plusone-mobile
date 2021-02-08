@@ -9,28 +9,27 @@
       :show-file-list="allowedNumber > 1 ? true : false"
       list-type="text"
       :before-upload="beforeImageUpload"
+      :on-exceed="handleExceed"
       :on-success="handleImageSuccess"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       name="image"
-      class="image-uploader"
+      class="upload-image"
       drag
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
         将文件拖拽至此处，或<em>点击上传</em>
       </div>
-      <div>
-        <span v-if="fileSize" class="upload-tip">
-          上传大小不超过<b style="color:#f56c6c">{{ fileSize }}MB</b>
-        </span>
-        <span v-if="fileType" class="upload-tip">
-          ，格式需为<b style="color:#f56c6c">{{ fileType.join("/") }}</b>
-        </span>
+      <div v-if="fileSize" class="upload-tip">
+        上传大小不超过<b style="color:#f56c6c">{{ fileSize }}MB</b>
+      </div>
+      <div v-if="fileType" class="upload-tip">
+        格式需为<b style="color:#f56c6c">{{ fileType.join("/") }}</b>
       </div>
     </el-upload>
     <div class="image-preview">
-      <span class="demonstration">点击进行预览</span>
+      <span class="demonstration">鼠标移入预览</span>
       <el-popover
         placement="left"
         trigger="hover"
@@ -108,6 +107,10 @@ export default {
         }
       }
     },
+    //上传超过限制
+    handleExceed() {
+      this.$message.error('最多只能上传'+this.allowedNumber+'张图片')
+    },
     //上传成功
     handleImageSuccess(res, file) {
       if(res.code === '0') {
@@ -115,7 +118,7 @@ export default {
             message: res.desc,
             type: 'success'
         })
-        this.imageUrl = this.serverUrl + '/articles/' + res.filename
+        this.imageUrl = this.uploadUrl + '/articles/' + res.filename
         this.tempList.push(this.imageUrl)
       } else {
         this.$message({
@@ -126,7 +129,7 @@ export default {
     },
     //预览图片
     handlePreview(file) {
-      this.imageUrl = this.serverUrl + '/articles/' + file.response.filename
+      this.imageUrl = this.uploadUrl + '/articles/' + file.response.filename
       this.showPreview = true
     },
     //删掉图片
@@ -152,15 +155,19 @@ export default {
 </script>
 
 <style lang="scss">
+.el-upload-dragger {
+  width: 250px;
+  height: 225px;
+}
 .el-upload-list__item {
-  width: 360px;
+  width: 250px;
 }
 .el-upload-list {
-  margin-left: 405px;
+  margin-left: 265px;
 }
 .error-slot {
-  height: 140px;
-  width: 348px;
+  height: 185px;
+  width: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,7 +187,7 @@ export default {
   font-size: 15px;
   display: flex;
   justify-content: center;
-  background-color: #f2f2f2;
+  background-color: #f4f4f4;
 }
 
 .upload-container {
@@ -194,15 +201,15 @@ export default {
     display: table;
     clear: both;
   }
-  .image-uploader {
-    width: 360px;
+  .upload-image {
+    width: 250px;
   }
   .image-preview {
     position: relative;
     border: 1px dashed #d9d9d9;
-    margin-left: 50px;
-    height: 178px;
-    width: 348px;
+    margin-left: 20px;
+    height: 223px;
+    width: 250px;
     .preview {
       height: 138px;
       width: 100%;

@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken')
 
 //解析token
-const tools = require('../public/tools')
+const tools = require('../utils/tools')
 
 //统一设置token有效时间24h
 const shortExpire = '2h'
@@ -10,7 +10,7 @@ const longExpire = '24h'
 const secret = 'qweasd789456'
 
 //引入encrypt
-const crypt = require('../public/encrypt')
+const crypt = require('../utils/encrypt')
 
 const user = require('../model/user')
 

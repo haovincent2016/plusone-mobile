@@ -1,4 +1,4 @@
-const Router = require('koa-router');
+const Router = require('koa-router')
 const taskController = require('../controller/task')
 const multer = require('koa-multer')
 const path = require('path')
@@ -11,11 +11,11 @@ const storage = multer.diskStorage({
     },
     //修改文件名称
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
 //加载配置
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage })
 const router = new Router({
     prefix: '/task'
 })

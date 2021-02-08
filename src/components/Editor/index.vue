@@ -1,11 +1,16 @@
 <template>
   <div class="tinymce-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
+    <div class="upload-container">
+      <el-button type="primary" plain icon="el-icon-upload2" size="mini">上传图片</el-button>
+      <el-button type="primary" plain icon="el-icon-folder-opened" size="mini" @click="selectResource">选择资源</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import load from './dynamicLoad'
+import resource from '@/components/Upload/resource'
 
 const plugins = ['advlist anchor autolink autosave code codesample colorpicker colorpicker contextmenu directionality emoticons fullscreen hr image imagetools insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount']
 const toolbar = ['searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample', 'hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen']
@@ -139,7 +144,14 @@ export default {
     },
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
+    },
+    //打开资源管理
+    selectResource() {
+      this.$emit('openresource')
     }
+  },
+  components: {
+    resource
   }
 }
 </script>
@@ -147,5 +159,10 @@ export default {
 <style lang="scss" scoped>
 .tinymce-container {
   padding: 20px 10px;
+  .upload-container {
+    position: absolute;
+    right: 12px;
+    top: 17px;
+  }
 }
 </style>

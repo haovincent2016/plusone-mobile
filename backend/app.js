@@ -18,6 +18,7 @@ const collections = require('./routes/collection')
 const tasks = require('./routes/task')
 const downloads = require('./routes/download')
 const admins = require('./routes/admin')
+const files = require('./routes/files')
 
 //引入数据表模型
 const user = require('./model/user')
@@ -26,7 +27,7 @@ const article = require('./model/article')
 const task = require('./model/task')
 
 // 引入middleware
-const auth = require('./public/auth')
+const auth = require('./utils/auth')
 const { sequelize } = require('./config/db')
 
 //自动创建表，并导入初始数据,导入数据需按顺序
@@ -91,24 +92,30 @@ const tasksData = [{
   userId: 1
 }]
 
-//先删除所有table再按序添加
-sequelize.drop().then(() => {
-  user.sync().then(() => {
-    user.bulkCreate(usersData)
-  })
-  collection.sync().then(() => {
-    collection.create(collectionData)
-  })
-  article.sync().then(() => {
-    article.create(articleData)
-  })
-  setTimeout(() => {
-    task.sync().then(() => {
-      task.bulkCreate(tasksData)
-    })
-  }, 1500)
+//load data
+// sequelize.drop().then(() => {
+//   user.sync().then(() => {
+//     user.bulkCreate(usersData)
+//   })
+//   collection.sync().then(() => {
+//     collection.create(collectionData)
+//   })
+//   article.sync().then(() => {
+//     article.create(articleData)
+//   })
+//   setTimeout(() => {
+//     task.sync().then(() => {
+//       task.bulkCreate(tasksData)
+//     })
+//   }, 2000)
   
-})
+// })
+
+//simple
+user.sync()
+collection.sync()
+article.sync()
+task.sync()
 
 // error handler
 onerror(app)
@@ -135,6 +142,7 @@ app.use(collections.routes(), collections.allowedMethods())
 app.use(tasks.routes(), tasks.allowedMethods())
 app.use(downloads.routes(), downloads.allowedMethods())
 app.use(admins.routes(), admins.allowedMethods())
+app.use(files.routes(), files.allowedMethods())
 
 // 验证token
 app.use(auth)
