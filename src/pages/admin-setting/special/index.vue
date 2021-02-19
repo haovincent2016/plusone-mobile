@@ -148,7 +148,7 @@ export default {
     //开始拖拽
     dragStart(e) {
       this.type = e.target.dataset.type    
-      let list = this.view.filter(i => i.type === 'banner')
+      let list = this.view.filter(i => i.type === this.type)
       if(list.length >= 1){
         this.$message.error('相同组件只能添加一次')
         this.dragEnd(e)
