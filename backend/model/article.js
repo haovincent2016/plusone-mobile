@@ -19,7 +19,7 @@ const article = Article.init({
     allowNull: false
   },
   content: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   // 文章顶部图片

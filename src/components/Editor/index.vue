@@ -171,7 +171,7 @@ export default {
       data.forEach(v => {
         //只插入图片类型
         if(v.type === 0) {
-          window.tinymce.get(this.tinymceId).insertContent(`<img alt="Smiley face" src="${v.link}" >`)
+          window.tinymce.get(this.tinymceId).insertContent(`<img alt="Smiley face" class="content-img" src="${v.link}" >`)
         } else {
           count++
         }

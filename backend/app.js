@@ -60,7 +60,6 @@ const usersData = [
 const articleData = {
   id: 1,
   authorId: 1,
-  colId: 2,
   title: '三千字说废就废',
   userId: 1,
   content: '我最近在靠写历史稿吃饭，昨天写了一篇三千字的，其实稿费只有三十五元，不过因我文笔一般，愣是写了一个多小时。当我把它发给老板之后，很快就被打回来了',
@@ -92,30 +91,29 @@ const tasksData = [{
   userId: 1
 }]
 
-//load data
-// sequelize.drop().then(() => {
-//   user.sync().then(() => {
-//     user.bulkCreate(usersData)
-//   })
-//   collection.sync().then(() => {
-//     collection.create(collectionData)
-//   })
-//   article.sync().then(() => {
-//     article.create(articleData)
-//   })
-//   setTimeout(() => {
-//     task.sync().then(() => {
-//       task.bulkCreate(tasksData)
-//     })
-//   }, 2000)
-  
-// })
+// load data
+sequelize.drop().then(() => {
+  user.sync().then(() => {
+    user.bulkCreate(usersData)
+  })
+  collection.sync().then(() => {
+    collection.create(collectionData)
+  })
+  article.sync().then(() => {
+    article.create(articleData)
+  })
+  setTimeout(() => {
+    task.sync().then(() => {
+      task.bulkCreate(tasksData)
+    })
+  }, 2000)
+})
 
-//simple
-user.sync()
-collection.sync()
-article.sync()
-task.sync()
+// simple
+// user.sync()
+// collection.sync()
+// article.sync()
+// task.sync()
 
 // error handler
 onerror(app)

@@ -8,7 +8,7 @@
       <div class="author">{{ article.user.username }}</div>
       <img class="avatar" :src="article.user.avatar" />
     </div>
-    <div class="article-body">{{ article.content }}</div>
+    <div class="article-body" v-html="article.content"></div>
     <div class="article-footer">
       <van-button 
         icon="good-job-o" 
@@ -27,6 +27,31 @@
         收藏
       </van-button>
       <div class="view">浏览量 {{ article.view}}</div>
+      <van-popup 
+        v-model="show" 
+        position="bottom" 
+        :style="{ height: '30%' }" 
+        closeable
+        close-icon="close"
+        round>
+        <van-cell title="默认收藏夹" size="large" label="暂无描述信息~" style="margin-top:35px;">
+          <template #default>
+            <van-button 
+              plain 
+              hairline 
+              type="info" 
+              size="small"
+              @click="addCollection">添加</van-button>
+          </template>
+        </van-cell>
+        <div class="add-btn">
+          <van-button
+            icon="plus"
+            type="primary" 
+            round 
+            @click="createCollection">新建收藏夹</van-button>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -38,15 +63,15 @@ import { getArticleById } from '../api/article'
 export default {
   data() {
     return {
+      show: false,
       article: {}
     }
   },
-  created() {
+  mounted() {
     this.getData()
   },
   methods: {
     getData() {
-      console.log(this.$route.params.id)
       let data = { id: this.$route.params.id }
       getArticleById(data).then(res => {
         if(res.data.code === '0') {
@@ -63,8 +88,16 @@ export default {
     likeArticle() {
 
     },
-    //收藏
+    //打开收藏
     addArticle() {
+      this.show = true
+    },
+    //加入收藏夹
+    addCollection() {
+
+    },
+    //新建收藏夹
+    createCollection() {
 
     }
   },
@@ -73,8 +106,17 @@ export default {
   }
 }
 </script>
-
+<style lang="stylus">
+.img
+  width 100%
+  height auto
+</style>
 <style lang="stylus" scoped>
+.add-btn 
+  position absolute
+  text-align center
+  width 100%
+  bottom 15px
 .container 
   margin-top 66px
   font-weight 300
@@ -88,7 +130,7 @@ export default {
     display flex
     justify-content flex-start
     align-items flex-end
-    margin 10px 0
+    margin-top 15px
     .author 
       margin-right 6px
       font-size 18px
@@ -99,7 +141,7 @@ export default {
       height 22px
       border-radius 50%
   .article-body
-    margin 25px 0
+    margin 15px 0
     border 1px solid #f5f5f5
     padding 15px
   .article-footer

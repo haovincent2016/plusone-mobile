@@ -32,7 +32,7 @@
 import Tinymce from '@/components/Editor'
 import Sticky from '@/components/Fixed'
 import MDinput from '@/components/MD'
-import { createArticleB, getArticleB } from '@/api/admin'
+import { createArticleB, editArticleB, getArticleB } from '@/api/admin'
 
 export default {
   data() {
@@ -69,6 +69,8 @@ export default {
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }]
       },
+      //编辑页或新建页
+      type: undefined
     }
   },
   mounted() {
@@ -79,6 +81,7 @@ export default {
   methods: {
     //编辑页获取文章
     getArticle() {
+      this.type = 'edit'
       getArticleB({ id: this.$route.params.id }).then(res => {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
@@ -111,19 +114,38 @@ export default {
     },
     //提交审核
     submitArticle() {
-      let data = {
-        articleForm: this.articleForm,
-        category: 2
-      }
-      createArticleB(data).then(res => {
-        if(res.data.code === '0') {
-          this.$message.success(res.data.desc)
-        } else {
-          this.$message.error(res.data.desc)
+      if(this.type === 'edit') {
+        let data = {
+          id: this.$route.params.id,
+          articleForm: this.articleForm,
+          category: 2
         }
-      }).catch(err => {
-        this.$message.error(res.data.desc)
-      })
+        editArticleB(data).then(res => {
+          if(res.data.code === '0') {
+            this.$message.success(res.data.desc)
+          } else {
+            this.$message.error(res.data.desc)
+          }
+          this.getArticle()
+        }).catch(err => {
+          this.$message.error(res.data.desc)
+          this.getArticle()
+        })
+      } else {
+        let data = {
+          articleForm: this.articleForm,
+          category: 2
+        }
+        createArticleB(data).then(res => {
+          if(res.data.code === '0') {
+            this.$message.success(res.data.desc)
+          } else {
+            this.$message.error(res.data.desc)
+          }
+        }).catch(err => {
+          this.$message.error(res.data.desc)
+        })
+      }
     }
   },
   components: {

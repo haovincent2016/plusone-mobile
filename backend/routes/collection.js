@@ -7,4 +7,12 @@ const router = new Router({
 
 router.post('/getCollectionsByOwner', collectionController.getCollectionsByOwner)
 
+router.post('/createCollection', collectionController.createCollection)
+
+router.post('/addToCollection', collectionController.addToCollection)
+
+router.post('/deleteFromCollection', collectionController.deleteFromCollection)
+
+router.post('/editCollection', collectionController.editCollection)
+
 module.exports = router;

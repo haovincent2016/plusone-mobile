@@ -9,7 +9,7 @@
           <img :src="avatarUrl" class="avatar" />
         </div>
         <div class="username">
-          <div class="content">{{ userInfo.usernmae }}</div>
+          <div class="content">{{ userInfo.username }}</div>
           <van-button class="custom-btn" round type="info">编辑我的信息</van-button>
         </div>
       </div>
@@ -31,9 +31,6 @@
               <div class="item-author">
                 <div class="author-name">作者：{{ item.user.username }}</div>
                 <img :src="item.user.avatar" />
-              </div>
-              <div class="item-content">
-                {{ item.content }}
               </div>
               <div class="item-func">
                 <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ item.like }}</van-button>
@@ -137,7 +134,6 @@ export default {
       width 120px
       height 120px
       border-radius 50%
-      border 1px solid #fff
   .username
     text-align center
     .content

@@ -36,17 +36,19 @@ const collection = Collection.init({
 }, { sequelize, modelName: 'collection' })
 
 // 一个收藏夹包含多个文章
-collection.hasMany(article, {
-  foreignKey: {
-    name: 'colId',
-    allowNull: true
-  }
+// 一篇文章属于多个收藏夹
+
+// collection.hasMany(article, {
+//   foreignKey: {
+//     name: 'colId',
+//     allowNull: true
+//   }
+// })
+collection.belongsToMany(article, {
+  through: 'article_collection'
 })
-article.belongsTo(collection, {
-  foreignKey: {
-    name: 'colId',
-    allowNull: true
-  }
+article.belongsToMany(collection, {
+  through: 'article_collection'
 })
 
 module.exports = collection

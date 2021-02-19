@@ -343,7 +343,7 @@ class adminController {
     try {
       const req = ctx.request.body
       // 待做：需更新updatedAt
-      const users = await article.update(req.userForm, {
+      await article.update(req.articleForm, {
         where: {
           id: req.id
         }
@@ -353,6 +353,7 @@ class adminController {
         desc: '文章修改成功'
       }
     } catch(error) {
+      console.log(error)
       return ctx.body = {
         code: '-1',
         desc: '文章修改失败'
