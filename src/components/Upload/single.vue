@@ -1,48 +1,58 @@
 <template>
 <!-- 一次上传一张图片，有总上传图片数量限制 -->
 <!-- 应用场景：文章图片 -->
-  <div class="upload-container">
-    <el-upload
-      :action="`${uploadUrl}`+'/admin/uploadSingle'"
-      :multiple="false"
-      :limit="allowedNumber"
-      :show-file-list="allowedNumber > 1 ? true : false"
-      list-type="text"
-      :before-upload="beforeImageUpload"
-      :on-exceed="handleExceed"
-      :on-success="handleImageSuccess"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      name="image"
-      class="upload-image"
-      drag
-    >
-      <i class="el-icon-upload" />
-      <div class="el-upload__text">
-        将文件拖拽至此处，或<em>点击上传</em>
+  <el-dialog
+    title="上传资源"
+    :visible.sync="uploadVisible"
+    :append-to-body="true"
+    :close-on-click-modal="false"
+    width="700px">
+    <div class="upload-container">
+      <el-upload
+        :action="`${uploadUrl}`+'/admin/uploadSingle'"
+        :multiple="false"
+        :limit="allowedNumber"
+        :show-file-list="allowedNumber > 1 ? true : false"
+        list-type="text"
+        :before-upload="beforeImageUpload"
+        :on-exceed="handleExceed"
+        :on-success="handleImageSuccess"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        name="image"
+        class="upload-image"
+        drag
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">
+          将文件拖拽至此处，或<em>点击上传</em>
+        </div>
+        <div v-if="fileSize" class="upload-tip">
+          上传大小不超过<b style="color:#f56c6c">{{ fileSize }}MB</b>
+        </div>
+        <div v-if="fileType" class="upload-tip">
+          格式需为<b style="color:#f56c6c">{{ fileType.join("/") }}</b>
+        </div>
+      </el-upload>
+      <div class="image-preview">
+        <span class="demonstration">鼠标移入预览</span>
+        <el-popover
+          placement="left"
+          trigger="hover"
+          :disabled="!imageUrl">
+          <img :src="imageUrl" style="">
+          <el-image slot="reference" :src="imageUrl" fit="scare-down" class="preview">
+            <div slot="error" class="error-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+        </el-popover>
       </div>
-      <div v-if="fileSize" class="upload-tip">
-        上传大小不超过<b style="color:#f56c6c">{{ fileSize }}MB</b>
-      </div>
-      <div v-if="fileType" class="upload-tip">
-        格式需为<b style="color:#f56c6c">{{ fileType.join("/") }}</b>
-      </div>
-    </el-upload>
-    <div class="image-preview">
-      <span class="demonstration">鼠标移入预览</span>
-      <el-popover
-        placement="left"
-        trigger="hover"
-        :disabled="!imageUrl">
-        <img :src="imageUrl" style="">
-        <el-image slot="reference" :src="imageUrl" fit="scare-down" class="preview">
-          <div slot="error" class="error-slot">
-            <i class="el-icon-picture-outline"></i>
-          </div>
-        </el-image>
-      </el-popover>
     </div>
-  </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="uploadVisible = false">关闭</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
@@ -66,7 +76,7 @@ export default {
   },
   data() {
     return {
-      tempUrl: '',
+      uploadVisible: false,
       //是否打开预览
       showPreview: false,
       imageUrl: '',
@@ -80,6 +90,9 @@ export default {
     }
   },
   methods: {
+    openDialog() {
+      this.uploadVisible = true
+    },
     //上传前检测
     beforeImageUpload(file) {
       const len = this.tempList.length
@@ -216,5 +229,8 @@ export default {
       cursor: pointer;
     }
   }
+}
+.dialog-footer {
+  text-align: center;
 }
 </style>

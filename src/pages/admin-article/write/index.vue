@@ -11,10 +11,6 @@
     </sticky>
     <!-- 编辑表单 -->
     <el-form ref="articleForm" :model="articleForm" :rules="rules" class="form-wrapper">
-      <!-- 文章顶部图片 -->
-      <el-form-item>
-        <single-upload :allowedNumber="1" />
-      </el-form-item>
       <!-- 标题 -->
       <el-form-item prop="title" style="padding:0 10px">
         <MDinput v-model="articleForm.title" :maxlength="100" name="name" required>
@@ -23,17 +19,12 @@
       </el-form-item>
       <!-- 内容 -->
       <el-form-item prop="content">
-        <tinymce @openresource="handleOpenResource" v-model="articleForm.content" :height="350" />
+        <tinymce v-model="articleForm.content" :height="350" />
       </el-form-item>
     </el-form>
     <!-- 实时预览 -->
     <div class="preview-text">预览：</div>
     <div class="preview" v-html="articleForm.content"></div> 
-
-    <resource
-      ref="resource"
-      style="display:none"
-    ></resource>
   </div>
 </template>
 
@@ -41,8 +32,6 @@
 import Tinymce from '@/components/Editor'
 import Sticky from '@/components/Fixed'
 import MDinput from '@/components/MD'
-import SingleUpload from '@/components/Upload/single'
-import Resource from '@/components/Upload/resource'
 import { createArticleB, getArticleB } from '@/api/admin'
 
 export default {
@@ -135,21 +124,12 @@ export default {
       }).catch(err => {
         this.$message.error(res.data.desc)
       })
-    },
-    //
-    handleOpenResource() {
-      this.$nextTick(() => {
-        this.$refs.resource.openDialog()
-      })
     }
-    
   },
   components: {
     Tinymce,
     Sticky,
-    MDinput,
-    SingleUpload,
-    Resource
+    MDinput
   }
 }
 </script>
@@ -159,7 +139,7 @@ export default {
   margin: 10px;
 }
 .preview {
-  border: 1px solid #f5f5f5;
+  border: 1px solid #333;
   margin: 10px;
   padding: 10px;
 }

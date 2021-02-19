@@ -2,27 +2,43 @@ const path = require('path')
 const fs = require('fs')
 
 let mimes = {
+    'json': 'application/json',
+    'pdf': 'application/pdf',
+    'swf': 'application/x-shockwave-flash',
+    'xls': 'application/msexcel',
+    'xlsx': 'application/msexcel',
+    'ppt': 'application/mspowerpoint',
+    'doc': 'application/msword',
+    'exe': 'application/octet-stream',
+    'zip': 'application/zip',
+    'txt': 'text/plain',
     'css': 'text/css',
     'less': 'text/css',
-    'gif': 'image/gif',
     'html': 'text/html',
+    'xml': 'text/xml',
+    'js': 'text/javascript',
+    'gif': 'image/gif',
     'ico': 'image/x-icon',
     'jpeg': 'image/jpeg',
     'jpg': 'image/jpeg',
-    'js': 'text/javascript',
-    'json': 'application/json',
-    'pdf': 'application/pdf',
     'png': 'image/png',
     'svg': 'image/svg+xml',
-    'swf': 'application/x-shockwave-flash',
     'tiff': 'image/tiff',
-    'txt': 'text/plain',
     'wav': 'audio/x-wav',
     'wma': 'audio/x-ms-wma',
+    'mp3': 'audio/mpeg',
     'wmv': 'video/x-ms-wmv',
-    'xml': 'text/xml'
+    'mp4': 'video/mp4',
+    'ogv': 'video/ogg',
+    'flv': 'video/x-flv',
+    'avi': 'video/x-msvideo',
+    'rmvb': 'application/vnd.rn-realmedia',
+    'rm': 'application/vnd.rn-realmedia'
 }
-
+const imageTypes = ['gif', 'ico', 'jpg', 'jpeg', 'png', 'svg']
+const audioTypes = ['mp3', 'wav', 'wma']
+const videoTypes = ['wmv', 'mp4', 'ogv', 'flv', 'avi', 'rmvb', 'rm']
+const fileTypes = ['json', 'pdf', 'swf', 'xls', 'xlsx', 'ppt', 'doc', 'exe', 'txt', 'zip']
 /**
  * 遍历读取目录内容（子目录，文件名）
  * @param  {string} reqPath 请求资源的绝对路径
@@ -30,20 +46,31 @@ let mimes = {
  */
 function walk (reqPath) {
   let files = fs.readdirSync(reqPath)
-
   let dirList = []
   let fileList = []
   for (let i = 0, len = files.length; i < len; i++) {
     let item = files[i]
     let itemArr = item.split('.')
+    //console.log(itemArr)
     let itemMime = (itemArr.length > 1) ? itemArr[ itemArr.length - 1 ] : 'undefined'
-
+    //console.log(itemMime)
+    //0-图片，1-文件，2-文件夹，3-音频，4-视频，5-其他
     if (typeof mimes[ itemMime ] === 'undefined') {
-      dirList.push(files[i])
+      dirList.push({ name: files[i], type: 2 })
+    } else if(imageTypes.indexOf(itemMime) !== -1) {
+      fileList.push({ name: files[i], type: 0 })
+    } else if(fileTypes.indexOf(itemMime) !== -1) {
+      fileList.push({ name: files[i], type: 1 })
+    } else if(audioTypes.indexOf(itemMime) !== -1) {
+      fileList.push({ name: files[i], type: 3 })
+    } else if(videoTypes.indexOf(itemMime) !== -1) {
+      fileList.push({ name: files[i], type: 4 })
     } else {
-      fileList.push(files[i])
+      fileList.push({ name: files[i], type: 5 })
     }
   }
+  // console.log(dirList)
+  // console.log(fileList)
 
   let result = dirList.concat(fileList)
 
@@ -62,9 +89,9 @@ function dir (url, reqPath) {
   let list = []
   let addr = url === '/' ? '' : url
   for(let [ index, item ] of contentList.entries()) {
-    list.push({name: item, link: addr+'/'+item})
+    list.push({name: item.name, type: item.type, link: addr+'/'+item.name})
   }
-
+  //console.log(list)
   return list
 }
 
@@ -86,7 +113,12 @@ function file (filePath) {
  */
 async function content (ctx, fullStaticPath) {
   // 封装请求资源的完绝对径
-  let reqPath = path.join(fullStaticPath, ctx.url)
+  let reqPath
+  if(!ctx.params.directory) {
+    reqPath = path.join(fullStaticPath, ctx.url)
+  } else {
+    reqPath = path.join(fullStaticPath, '/public/'+ctx.params.directory)
+  }
 
   // 判断请求路径是否为存在目录或者文件
   let exist = fs.existsSync(reqPath)
@@ -100,15 +132,21 @@ async function content (ctx, fullStaticPath) {
   } else {
     // 判断访问地址是文件夹还是文件
     let stat = fs.statSync(reqPath)
-
+    //console.log(stat)
     if (stat.isDirectory()) {
       // 如果为目录，则渲读取目录内容
-      content = dir(ctx.url, reqPath)
+      if(!ctx.params.directory) {
+        content = dir(ctx.url, reqPath)
+      } else {
+        content = dir('/public/'+ctx.params.directory, reqPath)
+      }
     } else {
       // 如果请求为文件，则读取文件内容
       content = await file(reqPath)
     }
   }
+
+  //console.log(content)
 
   return content
 }

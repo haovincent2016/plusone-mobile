@@ -2,15 +2,27 @@
   <div class="tinymce-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="upload-container">
-      <el-button type="primary" plain icon="el-icon-upload2" size="mini">上传图片</el-button>
+      <el-button type="primary" plain icon="el-icon-upload2" size="mini" @click="uploadImage">上传图片</el-button>
       <el-button type="primary" plain icon="el-icon-folder-opened" size="mini" @click="selectResource">选择资源</el-button>
     </div>
+    <!-- 上传 -->
+    <single-upload
+      ref="upload" 
+      :allowedNumber="3" 
+    ></single-upload>
+    <!-- 资源管理器 -->
+    <resource
+      ref="resource"
+      style="display:none"
+      @confirm="insertFile"
+    ></resource>
   </div>
 </template>
 
 <script>
 import load from './dynamicLoad'
-import resource from '@/components/Upload/resource'
+import SingleUpload from '@/components/Upload/single'
+import Resource from '@/components/Upload/resource'
 
 const plugins = ['advlist anchor autolink autosave code codesample colorpicker colorpicker contextmenu directionality emoticons fullscreen hr image imagetools insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount']
 const toolbar = ['searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample', 'hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen']
@@ -145,13 +157,33 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
     },
+    //打开图片上传
+    uploadImage() {
+      this.$refs.upload.openDialog()
+    },
     //打开资源管理
     selectResource() {
-      this.$emit('openresource')
-    }
+      this.$refs.resource.openDialog()
+    },
+    //插入资源管理选择的图片
+    insertFile(data) {
+      let count = 0
+      data.forEach(v => {
+        //只插入图片类型
+        if(v.type === 0) {
+          window.tinymce.get(this.tinymceId).insertContent(`<img alt="Smiley face" src="${v.link}" >`)
+        } else {
+          count++
+        }
+      })
+      if(count > 0) {
+        this.$message.warning('当前只支持插入图片类型~')
+      }
+    } 
   },
   components: {
-    resource
+    SingleUpload,
+    Resource
   }
 }
 </script>
