@@ -69,13 +69,20 @@ const articleData = {
   like: 3
 }
 
-const collectionData = {
+const collectionData = [{
+  id: 1,
+  title: '默认收藏',
+  description: '暂无描述~',
+  public: true,
+  ownerId: 1
+}, 
+{
   id: 2,
   title: '我的收藏',
   description: '主要关于英语学习类文章',
   public: true,
   ownerId: 1
-}
+}]
 
 const tasksData = [{
   id: 1,
@@ -83,7 +90,8 @@ const tasksData = [{
   finishVideo: false,
   taskImages: 'file-1611795545829.png',
   userId: 1
-},{
+}, 
+{
   id: 2,
   finishWrite: false,
   finishVideo: false,
@@ -91,29 +99,20 @@ const tasksData = [{
   userId: 1
 }]
 
-// load data
-sequelize.drop().then(() => {
-  user.sync().then(() => {
-    user.bulkCreate(usersData)
-  })
-  collection.sync().then(() => {
-    collection.create(collectionData)
-  })
-  article.sync().then(() => {
-    article.create(articleData)
-  })
-  setTimeout(() => {
-    task.sync().then(() => {
-      task.bulkCreate(tasksData)
-    })
-  }, 2000)
-})
+// sequelize.drop().then(() => {
+//   sequelize.sync().then(async() => {
+//     await user.bulkCreate(usersData)
+//     await collection.bulkCreate(collectionData)
+//     await article.create(articleData)
+//     await task.bulkCreate(tasksData)
+//   })
+// })
 
 // simple
-// user.sync()
-// collection.sync()
-// article.sync()
-// task.sync()
+user.sync()
+collection.sync()
+article.sync()
+task.sync()
 
 // error handler
 onerror(app)

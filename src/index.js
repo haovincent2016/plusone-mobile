@@ -2,7 +2,7 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import App from './App'
-import { Badge, Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
+import { RadioGroup, Radio, Tag, Badge, Step, Steps, Checkbox, Uploader, CountDown, Form, Tab, Tabs, Col, Row, Image as VanImage, Field, Switch, DropdownMenu, DropdownItem, Icon, Cell, CellGroup, Popup, NoticeBar, Dialog, Button, Tabbar, TabbarItem, Swipe, SwipeItem, Lazyload, NavBar, Toast, Collapse, CollapseItem, Divider} from 'vant'
 import 'font-awesome/css/font-awesome.min.css'
 import 'assets/css/app.styl'
 import 'assets/css/index.scss'
@@ -23,6 +23,9 @@ Vue.config.productionTip = false
 Vue.component('TableToolbar', TableToolbar)
 Vue.component('Pagination', Pagination)
 
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(Tag)
 Vue.use(Badge)
 Vue.use(Step)
 Vue.use(Steps)

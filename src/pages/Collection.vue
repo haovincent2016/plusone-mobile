@@ -18,7 +18,11 @@
         <van-tabs v-model="active">
         <van-tab title="收藏">
           <div class="col-body" v-for="item in collections" :key="item.id">
-            <div class="col-title">{{ item.title }}</div>
+            <div class="col-title">
+              <span>{{ item.title }}</span>
+              <van-tag plain :type="item.public ? 'primary' : 'warning'">{{ item.public | typeText }}</van-tag>
+            </div>
+            <div class="col-desc">描述：{{ item.description }}</div>
             <div class="col-date">创建日期：{{ item.createdAt | convertTime }}</div>
           </div>
         </van-tab>
@@ -32,10 +36,10 @@
                 <div class="author-name">作者：{{ item.user.username }}</div>
                 <img :src="item.user.avatar" />
               </div>
-              <div class="item-func">
+              <!-- <div class="item-func">
                 <van-button icon="good-job-o" class="like" type="info" plain>点赞 {{ item.like }}</van-button>
                 <van-button icon="star-o" class="like" color="#ff9900" plain>收藏</van-button>
-              </div>
+              </div> -->
             </div>
           </div>
       </van-tab>
@@ -64,6 +68,13 @@ export default {
   filters: {
     convertTime: function(val) {
       return new Date(val).toLocaleDateString()
+    },
+    typeText: function(val) {
+      if(!val) {
+        return '私有'
+      } else {
+        return '公开'
+      }
     }
   },
   computed: mapState([ 'logined', 'userInfo' ]),
@@ -154,14 +165,20 @@ export default {
   margin 15px 10px
   .col-title
     padding 15px
+  .col-desc
+    color #aaa
+    padding 0 15px 15px 15px
+    height 36px
+    overflow-y auto
   .col-date
+    color #aaa
     padding 0 15px 15px 15px
 .list
   padding 15px
   .list-item
     box-shadow 0 1px 3px rgba(18,18,18,.1)
-    margin 8px 0
-    padding 8px 0
+    margin 8px
+    padding 8px
     .item-title
       font-size 18px
     .item-author

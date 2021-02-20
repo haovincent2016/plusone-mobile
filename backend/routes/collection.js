@@ -11,8 +11,14 @@ router.post('/createCollection', collectionController.createCollection)
 
 router.post('/addToCollection', collectionController.addToCollection)
 
+router.post('/collectionHasArticle', collectionController.collectionHasArticle)
+
 router.post('/deleteFromCollection', collectionController.deleteFromCollection)
 
+router.post('/clearCollection', collectionController.clearCollection)
+
 router.post('/editCollection', collectionController.editCollection)
+
+router.post('/deleteCollection', collectionController.deleteCollection)
 
 module.exports = router;
