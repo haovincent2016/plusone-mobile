@@ -12,22 +12,21 @@
     <div class="avatar-wrapper">
       <input class="imageRead" ref="imageRead" @change="selectImage" accept="image/*" type="file" />
       <div class="photo-wrap mt20">
-        <span class="f38 bold">头像</span>
-        <span>
-          <img @click="clickPhoto" class :src="userAvatar" alt />
-        </span>
+        <img @click="clickPhoto" class="photo" :src="userAvatar" alt />
       </div>
-      <van-overlay style="z-index:2;background-color:rgba(0,0,0,.85);" :show="showCrop">
+      <van-overlay z-index="2" style="background-color:rgba(0,0,0,.85)!important;" :show="showCrop">
         <div class="crop-wrapper" @click.stop>
           <div>
             <img id="cropImage" ref="cropImage" src alt />
           </div>
           <div class="crop-options">
-            <van-button plain type="info" @click="cancelCrop">取消</van-button>
-            <van-button plain type="info" @click="resetCrop">复位</van-button>
-            <van-button plain type="info" @click="scaleCrop">反转</van-button>
-            <van-button plain type="info" @click="rotateCrop">旋转</van-button>
-            <van-button plain type="info" @click="submitCrop">确定</van-button>
+            <van-button plain type="info" size="small" @click="cancelCrop">取消</van-button>
+            <van-button plain type="info" size="small" @click="largerImg">放大</van-button>
+            <van-button plain type="info" size="small" @click="smallerImg">缩小</van-button>
+            <van-button plain type="info" size="small" @click="resetCrop">复位</van-button>
+            <van-button plain type="info" size="small" @click="scaleCrop">反转</van-button>
+            <van-button plain type="info" size="small" @click="rotateCrop">旋转</van-button>
+            <van-button plain type="info" size="small" @click="submitCrop">确定</van-button>
           </div>
         </div>
       </van-overlay>
@@ -52,11 +51,13 @@
     <!-- 主页背景图添加 -->
     <div class="bg">
       <van-uploader 
+        preview-size="200px"
         v-model="bg"
         :max-count="1"
         upload-text="限5MB"
         upload-icon="plus"
-        :max-size="5*1024*1024" @oversize="onOversize" />
+        :max-size="5*1024*1024" 
+        @oversize="onOversize" />
     </div>
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
@@ -131,11 +132,11 @@ export default {
         // preview: ".previewBox",
         guides: false, // 裁剪框的虚线(九宫格)
         autoCropArea: 0.5, // 0-1之间的数值，定义自动剪裁区域的大小，默认0.8
-        // movable: false, // 是否允许移动图片
+        movable: true, // 是否允许移动图片
         dragCrop: true, // 是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
         movable: true, // 是否允许移动剪裁框
         resizable: true, // 是否允许改变裁剪框的大小
-        // zoomable: false, // 是否允许缩放图片大小
+        zoomable: true, // 是否允许缩放图片大小
         mouseWheelZoom: false, // 是否允许通过鼠标滚轮来缩放图片
         touchDragZoom: true, // 是否允许通过触摸移动来缩放图片
         rotatable: true, // 是否允许旋转图片
@@ -174,6 +175,12 @@ export default {
     // 取消裁剪
     cancelCrop() {
       this.showCrop = false;
+    },
+    largerImg() {
+      this.myCropper.zoom(0.1)
+    },
+    smallerImg() {
+      this.myCropper.zoom(-0.1)
     },
     // 复位
     resetCrop() {
@@ -250,20 +257,14 @@ export default {
 }
 .photo-wrap {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  & > span:last-child {
-    width: px2rem(200);
-    height: px2rem(200);
+  .photo {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    overflow: hidden;
-    background: black;
+    object-fit: contain;
     box-shadow: 0 0 px2rem(17) gray;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
 }
 </style>
