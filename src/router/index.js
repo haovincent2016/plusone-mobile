@@ -1,17 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from 'pages/Home'
-import Price from 'pages/Price'
-import About from 'pages/About'
-import Contact from 'pages/Contact'
-import User from 'pages/User'
-import Login from 'pages/Login'
-import Quiz from 'pages/Quiz'
-import Collection from 'pages/Collection'
-import Task from 'pages/Task'
-import Files from 'pages/Files'
-import Article from 'pages/Article'
+import Home from 'pages/frontend/Home'
+import Price from 'pages/frontend/Price'
+import About from 'pages/frontend/About'
+import Contact from 'pages/frontend/Contact'
+import User from 'pages/frontend/User'
+import Login from 'pages/frontend/Login'
+import Quiz from 'pages/frontend/Quiz'
+import Collection from 'pages/frontend/Collection'
+import Task from 'pages/frontend/Task'
+import Files from 'pages/frontend/Files'
+import Article from 'pages/frontend/Article'
+import UserEdit from 'pages/frontend/UserEdit'
+import CollectionDetail from 'pages/frontend/CollectionDetail'
 
 //后台管理系统
 import Layout from '@/layout'
@@ -49,6 +51,12 @@ export const siteRoutes = [
     component: Login,
     name: 'Login'
   },
+  //个人信息编辑页（头像，名称，背景图）
+  {
+    path: '/user/edit',
+    component: UserEdit,
+    name: 'UserEdit'
+  },
   //每日任务打卡
   {
     path: '/task',
@@ -66,6 +74,12 @@ export const siteRoutes = [
     path: '/collection',
     component: Collection,
     name: 'Collection'
+  },
+  //收藏夹详情页
+  {
+    path: '/collection/:id',
+    component: CollectionDetail,
+    name: 'CollectionDetail'
   },
   //资料下载中心
   {

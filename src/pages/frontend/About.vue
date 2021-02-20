@@ -72,11 +72,11 @@ import TopPart from 'components/Home/TopPart'
 export default {
   data() {
     return {
-      topUrl: require('../../static/img/about.png'),
-      img1: require('../../static/img/lucy.png'),
-      img2: require('../../static/img/vince.jpg'),
-      video1: require('../../static/video/lucy.mp4'),
-      video2: require('../../static/video/vince.mp4')
+      topUrl: require('../../../static/img/about.png'),
+      img1: require('../../../static/img/lucy.png'),
+      img2: require('../../../static/img/vince.jpg'),
+      video1: require('../../../static/video/lucy.mp4'),
+      video2: require('../../../static/video/vince.mp4')
     }
   },
   components: {

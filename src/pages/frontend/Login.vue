@@ -91,7 +91,7 @@
 
 <script>
 import TopPart from 'components/Home/TopPart'
-import { register, testNameB } from '../api/user'
+import { register, testNameB } from '@/api/user'
 import { mapMutations } from 'vuex'
 
 export default {

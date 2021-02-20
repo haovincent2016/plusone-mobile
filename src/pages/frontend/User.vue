@@ -50,7 +50,7 @@
 <script>
 import TopPart from 'components/Home/TopPart'
 import { mapState, mapMutations } from 'vuex'
-import { getArticles } from '../api/article'
+import { getArticles } from '@/api/article'
 
 export default {
   data() {

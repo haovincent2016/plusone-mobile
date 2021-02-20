@@ -52,7 +52,7 @@ service.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          this.$toast.error("登录过期，请重新登录")
+          this.$toast.fail("登录过期，请重新登录")
           localStorage.removeItem("token")
           route.replace({ //跳转到登录页面
             path: '/Login',
@@ -62,7 +62,7 @@ service.interceptors.response.use(
             } 
           })
         case 403:
-          this.$toast.error("您没有访问权限")
+          this.$toast.fail("您没有访问权限")
           route.replace({ //跳转到登录页面
             path: '/Login',
             query: {

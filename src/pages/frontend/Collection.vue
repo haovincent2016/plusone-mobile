@@ -6,11 +6,12 @@
       <div class="col-header">
         <img :src="backgroundUrl" class="background" />
         <div class="wrapper">
-          <img :src="avatarUrl" class="avatar" />
+          <img :src="userInfo.avatar" class="avatar" />
         </div>
         <div class="username">
-          <div class="content">{{ userInfo.username }}</div>
-          <van-button class="custom-btn" round type="info">编辑我的信息</van-button>
+          <div class="content">{{ userInfo.nickname }}</div>
+          <div class="content">({{ userInfo.username }})</div>
+          <van-button class="custom-btn" round type="info" @click="editInfo">编辑我的信息</van-button>
         </div>
       </div>
       <!-- 收藏页tab -->
@@ -52,8 +53,8 @@
 <script>
 import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
-import { getCollectionsByOwner } from '../api/collection'
-import { getArticles } from '../api/article'
+import { getCollectionsByOwner } from '@/api/collection'
+import { getArticles } from '@/api/article'
 
 export default {
   data() {
@@ -61,8 +62,8 @@ export default {
       active: 0,
       collections: [],
       articles: [],
-      backgroundUrl: require('../../static/img/bg1.png'),
-      avatarUrl: require('../../static/img/vince.jpg'),
+      backgroundUrl: require('../../../static/img/bg1.png'),
+      avatarUrl: require('../../../static/img/vince.jpg'),
     }
   },
   filters: {
@@ -120,6 +121,9 @@ export default {
     },
     goDetail(id) {
       this.$router.push('/articles/'+id)
+    },
+    editInfo() {
+      this.$router.push('/user/edit')
     }
   },
   components: {

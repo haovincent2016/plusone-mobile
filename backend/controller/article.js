@@ -102,6 +102,55 @@ class articleController {
       }
     }
   }
+
+  // 喜欢文章+1
+  static async likeArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      const id = req.id
+      const like = req.like
+      await article.update({
+        like
+      }, {
+        where: {
+          id
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '点赞成功~'
+      }
+    } catch(error) {
+      return ctx.body = {
+        code: '-1',
+        desc: '点赞失败'
+      }
+    }
+  }
+
+  // 文章浏览量+1
+  static async viewArticle(ctx) {
+    try {
+      const req = ctx.request.body
+      const id = req.id
+      const view = req.view
+      await article.update({
+        view
+      }, {
+        where: {
+          id
+        }
+      })
+      return ctx.body = {
+        code: '0'
+      }
+    } catch(error) {
+      console.log(error)
+      return ctx.body = {
+        code: '-1'
+      }
+    }
+  }
 }
 
 module.exports = articleController

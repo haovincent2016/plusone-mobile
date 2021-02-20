@@ -79,7 +79,7 @@
           <div class="author">{{ scope.row.user.username }}</div>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="collection"
         label="收藏夹"
         header-align="center"
@@ -88,7 +88,7 @@
         <template slot-scope="scope">
           <div class="col-name">{{ scope.row.collection.title }}</div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="picture"
         label="文章大图"

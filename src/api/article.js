@@ -31,3 +31,19 @@ export function getArticleById(data) {
         data: data
     })
 }
+
+export function likeArticleB(data) {
+    return request({ 
+        url: '/article/likeArticle', 
+        method: 'post',
+        data: data
+    })
+}
+
+export function viewArticleB(data) {
+    return request({ 
+        url: '/article/viewArticle', 
+        method: 'post',
+        data: data
+    })
+}

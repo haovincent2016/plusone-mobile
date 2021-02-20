@@ -31,8 +31,8 @@ import VueStar from 'vue-star'
 export default {
   data() {
     return {
-      topUrl: require('../../static/img/about.png'),
-      qrUrl: require('../../static/img/wechatcode.jpg')
+      topUrl: require('../../../static/img/about.png'),
+      qrUrl: require('../../../static/img/wechatcode.jpg')
     }
   },
   components: {

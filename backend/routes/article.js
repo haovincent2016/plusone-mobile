@@ -13,4 +13,8 @@ router.post('/getArticlesByCollection', articleController.getArticlesByCollectio
 
 router.post('/getArticleById', articleController.getArticleById)
 
+router.post('/likeArticle', articleController.likeArticle)
+
+router.post('/viewArticle', articleController.viewArticle)
+
 module.exports = router;

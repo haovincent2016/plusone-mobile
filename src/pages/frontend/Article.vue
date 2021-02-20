@@ -4,7 +4,7 @@
     <div class="article-header">
       <div class="title">{{ article.title }}</div>
     </div>
-    <div class="article-info">
+    <div class="article-info" v-if="article.user">
       <div class="author">{{ article.user.username }}</div>
       <img class="avatar" :src="article.user.avatar" />
     </div>
@@ -16,6 +16,7 @@
         type="info"
         size="small" 
         plain
+        :disabled="isLiked"
         @click="likeArticle">
         点赞 {{ article.like }}
       </van-button>
@@ -28,7 +29,7 @@
         @click="addArticle">
         收藏
       </van-button>
-      <div class="view">浏览量 {{ article.view}}</div>
+      <div class="view">浏览量 {{ article.view+1}}</div>
       <van-popup 
         v-model="show" 
         position="bottom" 
@@ -109,9 +110,8 @@
 <script>
 import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
-import { getArticleById } from '@/api/article'
+import { getArticleById, likeArticleB, viewArticleB } from '@/api/article'
 import { getCollectionsByOwner, addToCollectionB, collectionHasArticleB, createCollectionB } from '@/api/collection'
-
 export default {
   data() {
     return {
@@ -127,7 +127,9 @@ export default {
       status: [],
       title: '',
       description: '暂无描述~',
-      isPublic: true
+      isPublic: true,
+      //是否已点赞(暂时不限制点赞次数)
+      isLiked: false
     }
   },
   computed: mapState([ 'userInfo' ]),
@@ -145,15 +147,16 @@ export default {
     this.getCollections()
   },
   methods: {
-    getData() {
+    getData(type = true) {
       let data = { id: this.$route.params.id }
       getArticleById(data).then(res => {
         if(res.data.code === '0') {
-          this.$toast.success(res.data.desc)
+          //this.$toast.success(res.data.desc)
           this.article = JSON.parse(res.data.detail)
-        } else {
-          this.$toast.fail(res.data.desc)
-        }
+          if(type) {
+            this.viewArticle()
+          }
+        } 
       }).catch(err => {
         this.$toast.fail(res.data.desc)
       })
@@ -171,7 +174,23 @@ export default {
     },
     //点赞
     likeArticle() {
-      
+      likeArticleB({ like: this.article.like+1, id: this.article.id }).then(res => {
+        if(res.data.code === '0') {
+          //this.$toast.success(res.data.desc)
+          this.isLiked = true
+          this.getData(false)
+        }
+      }).catch(err => {
+        this.$toast.fail(res.data.desc)
+      })
+    },
+    //浏览量
+    viewArticle() {
+      viewArticleB({ view: this.article.view+1, id: this.article.id }).then(res => {
+        if(res.data.code === '0') {
+        }
+      }).catch(err => {
+      })
     },
     //打开收藏
     addArticle() {
@@ -186,10 +205,9 @@ export default {
             this.status.push(res.data.detail)
           }
         }).catch(err => {
-          this.$toast.fail(res.data.desc)
+          //this.$toast.fail(res.data.desc)
         })
       })
-      console.log(this.status)
     },
     //加入收藏夹
     addToCollection(item) {
