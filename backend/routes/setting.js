@@ -8,7 +8,7 @@ const router = new Router()
 
 router.post('/setting/all', settingController.getAllSettings)
 
-router.post('/setting/:id', settingController.getSetting)
+router.post('/setting/item', settingController.getSetting)
 
 router.post('/setting/create', settingController.createSetting)
 

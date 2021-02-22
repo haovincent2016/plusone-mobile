@@ -21,8 +21,8 @@ class settingController {
   }
   static async getSetting(ctx) {
     try {
-      const id = ctx.params.id
-      const detail = await setting.findByPk(id)
+      const req = ctx.request.body
+      const detail = await setting.findByPk(req.id)
       return ctx.body = {
         code: '0',
         content: JSON.stringify(detail),

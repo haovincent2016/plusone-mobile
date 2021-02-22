@@ -203,7 +203,7 @@ export function getAllSettingsB (data) {
 /* 获取指定主页设置 */
 export function getSettingB (data) {
     return request({ 
-        url: '/setting/'+data.id, 
+        url: '/setting/item', 
         method: 'post',
         data: data
     })

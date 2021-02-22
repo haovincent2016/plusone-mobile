@@ -204,6 +204,10 @@ export default {
             })
           } else {
             //创建
+            if(!this.settingForm.settingTitle) {
+              this.$message.error('请填写设置名后再提交~')
+              return
+            }
             createSettingB({
               title: this.settingForm.settingTitle,
               content: JSON.stringify(this.view)

@@ -153,6 +153,7 @@ export default {
           deleteSettingB({ id: id }).then(res => {
             if(res.data.code == 0) {
               this.$message.success(res.data.desc)
+              this.getTableList()
             }
           }).catch(err => {
             this.$message.error(res.data.desc)
