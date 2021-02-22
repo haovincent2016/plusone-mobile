@@ -4,6 +4,11 @@
   <!-- 中间view, 右侧传入view，右侧修改view，双向绑定-->
   <div class="special-wrapper">
     <div class="left-content">
+      <el-form :model="settingForm" :rules="rules" label-width="80px" class="form-wrapper">
+        <el-form-item label="设置名称">
+          <el-input v-model="settingForm.settingTitle" placeholder="请输入设置名称" clearable></el-input>
+        </el-form-item>
+      </el-form>
       <div 
         class="content-wrapper"
         @dragstart="dragStart"
@@ -16,6 +21,7 @@
           :key="index + 1">
           <span :class="val.icon"></span>
           <p>{{val.name}}</p>
+          <p>{{key}}</p>
         </div>
       </div>
     </div>
@@ -44,13 +50,14 @@
                 class="item"
                 @click="selectType(index, item)">
                   <!-- waiting -->
-                  <template v-if="item.status && item.status == 2">
+                  <!-- <template v-if="item.status && item.status == 2">
                     <div class="wait" v-if="item.type == 'nav'">头部组件</div>
                     <div class="wait" v-if="item.type == 'banner'">轮播图组件</div>
                     <div class="wait" v-if="item.type == 'video'">视频组件</div>
                     <div class="wait" v-if="item.type == 'course'">内容组件</div>
-                  </template>
-                  <template v-else>
+                    <div class="wait" v-if="item.type == 'news'">新闻组件</div>
+                  </template> -->
+                  <template >
                     <component 
                       :is="typeList[item.type]['com']" 
                       :data="item"
@@ -82,12 +89,21 @@ import { mapState } from 'vuex'
 import Banner from './views/banner'
 import Video from './views/video'
 import Course from './views/course'
-import Images from "./settings/images"
-import Nav from "./settings/nav"
+import News from './views/news'
+// import Images from "./settings/images"
+// import Nav from "./settings/nav"
 import Editor from './editor'
+import { createSettingB, getSettingB, editSettingB } from '@/api/admin'
 export default {
   data() {
     return {
+      type: undefined,
+      settingForm: {
+        settingTitle: ''
+      },
+      rules: {
+        username: [{ required: true, message: '设置名为必填项', trigger: 'blur' }],
+      },
       index: null,
       view: [
         //头部
@@ -115,6 +131,12 @@ export default {
           name: '内容设置',
           icon: 'el-icon-edit-outline',
           com: 'Course'
+        },
+        //首页新闻组件
+        news: {
+          name: '新闻设置',
+          icon: 'el-icon-news',
+          com: 'News'
         }
       },
       //向表单传值（右侧）
@@ -141,14 +163,67 @@ export default {
       return this.view[0]
     }
   },
+  mounted() {
+    if(this.$route.params.id) {
+      this.type = 'edit'
+      this.getSetting()
+    }
+  },
   methods: {
+    //编辑页获取数据
+    getSetting() {
+      getSettingB({ id: this.$route.params.id }).then(res => {
+        if(res.data.code === '0') {
+          let detail = JSON.parse(res.data.content)
+          this.settingForm.settingTitle = detail.title
+          this.view = JSON.parse(detail.content)
+        }
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+      })
+    },
+    //上传设置
     uploadData() {
-      //console.log(this.view)
+      this.$confirm('确定保存并上传该设置？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(this.type === 'edit') {
+            //修改
+            editSettingB({
+              id: this.$route.params.id,
+              title: this.settingForm.settingTitle,
+              content: JSON.stringify(this.view)
+            }).then(res => {
+              if(res.data.code == 0) {
+                this.$message.success(res.data.desc)
+              }
+            }).catch(err => {
+              this.$message.error(res.data.desc)
+            })
+          } else {
+            //创建
+            createSettingB({
+              title: this.settingForm.settingTitle,
+              content: JSON.stringify(this.view)
+            }).then(res => {
+              if(res.data.code == 0) {
+                this.$message.success(res.data.desc)
+              }
+            }).catch(err => {
+              this.$message.error(res.data.desc)
+            })
+          }
+        }).catch(err => {
+        })
     },
     //开始拖拽
     dragStart(e) {
       this.type = e.target.dataset.type    
       let list = this.view.filter(i => i.type === this.type)
+      //console.log(this.view)
+      //console.log(list)
       if(list.length >= 1){
         this.$message.error('相同组件只能添加一次')
         this.dragEnd(e)
@@ -180,7 +255,7 @@ export default {
 
       let className = e.target.className
       let name = className !== 'view-content' ? 'item' : 'view-content'
-      //默认数据
+      //默认数据, status = 2为拖动状态
       const defaultData = {
         type: this.type,    // 组件类型
         status: 2,          // 默认状态
@@ -308,12 +383,21 @@ export default {
           }
         ]
       }
+      //新闻
+      const newsData = {
+        contents: [
+          {title: '拜登总统就任典礼签署17项行政命令，留学生移民迎来新时代...', link: 'https://mp.weixin.qq.com/s/j3Tvn7lZuAwexgTf4oUUng'},
+          {title: '拜登欢迎留学生：博士直接拿绿卡，扩大就业签证配额...', link: 'https://mp.weixin.qq.com/s/9YYTOtWiHTVsIEE962xbqQ'}
+        ]
+      }
       //加入组件特殊数据
       let data = {}
       if(this.type === 'video') {
         data = Object.assign(videoData, defaultData)
       } else if (this.type === 'course') {
         data = Object.assign(courseData, defaultData)
+      } else if (this.type === 'news') {
+        data = Object.assign(newsData, defaultData)
       } else {
         data = defaultData
       }
@@ -359,6 +443,7 @@ export default {
         this.index = curIndex
         this.isAdded = true
       }
+      console.log(this.view)
     },
     //切换视图（右侧）
     selectType(index, item) {
@@ -374,6 +459,9 @@ export default {
         this.props = data[0]
       } else if (item.type === 'course') {
         let data = this.view.filter(i => i.type === 'course')
+        this.props = data[0]
+      } else if (item.type === 'news') {
+        let data = this.view.filter(i => i.type === 'news')
         this.props = data[0]
       }
       this.$nextTick(() => {
@@ -396,18 +484,23 @@ export default {
     //总编辑组件
     Editor,
     //头部编辑组件
-    Nav,
+    //Nav,
     //轮播图编辑组件
-    Images,
+    //Images,
     //视频设置组件
     Video,
     //内容设置组件
-    Course
+    Course,
+    //新闻设置组件
+    News
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  padding-right: 10px;
+}
 .special-wrapper {
   display: flex;
   justify-content: center;
@@ -421,7 +514,7 @@ export default {
     margin: 0 5px;
   }
   .left-content {
-    height: 750px;
+    height: 650px;
     .content-wrapper {
       .content-item {
         width: 80px;
@@ -494,7 +587,7 @@ export default {
     .center-body {
       .view-content {
         width: 400px;
-        height: 700px;
+        height: 610px;
         background: #f5f5f5;
         overflow-y: auto;
         overflow-x: hidden;

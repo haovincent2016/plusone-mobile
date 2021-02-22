@@ -24,6 +24,7 @@ import Images from "./settings/images"
 import Nav from "./settings/nav"
 import Links from './settings/links'
 import Contents from './settings/contents'
+import Titles from './settings/titles'
 
 export default {
   name: 'Editor',
@@ -52,6 +53,10 @@ export default {
         'course': {
             tit: '内容设置',
             com: 'Contents'
+        },
+        'news': {
+            tit: '新闻设置',
+            com: 'Titles'
         }
       },
       tabType: {
@@ -85,7 +90,8 @@ export default {
     Nav,
     Images,
     Links,
-    Contents
+    Contents,
+    Titles
   }
 }
 </script>

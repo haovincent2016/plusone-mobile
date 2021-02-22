@@ -1,4 +1,3 @@
-const { sequelize } = require('../config/db')
 const task = require('../model/task')
 const user = require('../model/user')
 const moment = require('moment')

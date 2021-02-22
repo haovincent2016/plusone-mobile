@@ -32,17 +32,7 @@
       </van-overlay>
     </div>
     <div class="btn-wrapper">
-      <!-- <van-button 
-        id="pick-avatar" 
-        round 
-        class="upload-btn" 
-        type="info">上传头像</van-button> -->
     </div>
-    <!-- <avatar-cropper
-      @uploaded="handleUploaded"
-      trigger="#pick-avatar"
-      upload-url="/files/upload" 
-    /> -->
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
@@ -88,7 +78,6 @@ import { mapState } from 'vuex'
 import TopPart from 'components/Home/TopPart'
 import "cropperjs/dist/cropper.css"
 import Cropper from "cropperjs"
-import AvatarCropper from "vue-avatar-cropper"
 
 export default {
   computed: mapState([ 'userInfo' ]),
@@ -208,8 +197,7 @@ export default {
     }
   },
   components: {
-    TopPart,
-    AvatarCropper
+    TopPart
   }
 }
 </script>

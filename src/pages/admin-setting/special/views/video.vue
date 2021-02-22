@@ -19,7 +19,6 @@ export default {
   watch: {
     data: {
       handler(val){
-        console.log(val)
         this.reload()
       },
       deep: true

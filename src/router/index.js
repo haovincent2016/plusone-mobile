@@ -202,10 +202,22 @@ export const siteRoutes = [
         meta: { title: '常规设置' }
       },
       {
-        path: 'special',
+        path: 'special-list',
+        component: () => import('@/pages/admin-setting/list'),
+        name: 'SpecialList',
+        meta: { title: '主页设置' }
+      },
+      {
+        path: 'create',
         component: () => import('@/pages/admin-setting/special'),
-        name: 'Special',
-        meta: { title: '特殊设置' }
+        name: 'CreateSetting',
+        meta: { title: '新建设置' }
+      },
+      {
+        path: 'edit/:id',
+        component: () => import('@/pages/admin-setting/special'),
+        name: 'EditSetting',
+        meta: { title: '修改设置' }
       }
     ]
   },

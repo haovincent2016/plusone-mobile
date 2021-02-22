@@ -1,4 +1,4 @@
-//待完善：token过期和刷新
+//已完善：token过期和刷新
 //https://www.jianshu.com/p/d1a3fb71eb99
 
 const koa = require('koa')
@@ -11,6 +11,9 @@ const logger = require('koa-logger')
   , koastatic = require('koa-static')
   , convert = require('koa-convert')
 
+//引入初始数据
+const initialData = require('./utils/initial') 
+
 //引入routes
 const users = require('./routes/users')
 const articles = require('./routes/article')
@@ -19,92 +22,24 @@ const tasks = require('./routes/task')
 const downloads = require('./routes/download')
 const admins = require('./routes/admin')
 const files = require('./routes/files')
+const settings = require('./routes/setting')
 
 //引入数据表模型
 const user = require('./model/user')
 const collection = require('./model/collection')
 const article = require('./model/article')
 const task = require('./model/task')
+const setting = require('./model/setting')
 
 // 引入middleware
 const auth = require('./utils/auth')
-const { sequelize } = require('./config/db')
-
-//自动创建表，并导入初始数据,导入数据需按顺序
-//正式环境需删除
-const usersData = [
-  {
-    id: 1,
-    type: 'admin',
-    status: true,
-    username: 'haovincent',
-    password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
-    points: 233,
-    nickname: '遨游',
-    phone: '18639289962',
-    description: '此人很懒，什么也没写'
-  },
-  {
-    id: 2,
-    type: 'user',
-    status: false,
-    username: 'hao',
-    password: '$2a$05$kaesAZ4tGEj4aMo/UIKSk.Xe78CnvUb0fN7dkeI9kVCU4FqE1jW5u',
-    points: 211,
-    nickname: '小小遨游',
-    phone: '18639289962',
-    description: '此人勤快，但也什么也没写'
-  }
-]
-
-const articleData = {
-  id: 1,
-  authorId: 1,
-  title: '三千字说废就废',
-  userId: 1,
-  content: '我最近在靠写历史稿吃饭，昨天写了一篇三千字的，其实稿费只有三十五元，不过因我文笔一般，愣是写了一个多小时。当我把它发给老板之后，很快就被打回来了',
-  picture: '/static/img/bg2.png',
-  status: 3,
-  view: 101,
-  like: 3
-}
-
-const collectionData = [{
-  id: 1,
-  title: '默认收藏',
-  description: '暂无描述~',
-  public: true,
-  ownerId: 1
-}, 
-{
-  id: 2,
-  title: '我的收藏',
-  description: '主要关于英语学习类文章',
-  public: true,
-  ownerId: 1
-}]
-
-const tasksData = [{
-  id: 1,
-  finishWrite: true,
-  finishVideo: false,
-  taskImages: 'file-1611795545829.png',
-  userId: 1
-}, 
-{
-  id: 2,
-  finishWrite: false,
-  finishVideo: false,
-  taskImages: 'file-1611795545829.png',
-  userId: 1
-}]
 
 // sequelize.drop().then(() => {
 //   sequelize.sync().then(async() => {
-//     await user.bulkCreate(usersData)
-//     await collection.bulkCreate(collectionData)
-//     await article.create(articleData)
-//     await task.bulkCreate(tasksData)
+//     await user.bulkCreate(initialData.usersData)
+//     await collection.bulkCreate(initialData.collectionsData)
+//     await article.create(initialData.articleData)
+//     await task.bulkCreate(initialData.tasksData)
 //   })
 // })
 
@@ -113,6 +48,9 @@ user.sync()
 collection.sync()
 article.sync()
 task.sync()
+setting.sync({
+  alter: true
+})
 
 // error handler
 onerror(app)
@@ -123,6 +61,7 @@ app.use(json())
 app.use(logger())
 app.use(koacors())
 
+// 打印请求详情
 app.use(convert(function *(next){
   const start = new Date
   yield next
@@ -130,6 +69,7 @@ app.use(convert(function *(next){
   console.log(`${this.method} ${this.url} - ${ms}ms`)
 }))
 
+// 设置公共资源文件夹
 app.use(convert(koastatic(__dirname + '/public')))
 
 // routes definition
@@ -140,6 +80,7 @@ app.use(tasks.routes(), tasks.allowedMethods())
 app.use(downloads.routes(), downloads.allowedMethods())
 app.use(admins.routes(), admins.allowedMethods())
 app.use(files.routes(), files.allowedMethods())
+app.use(settings.routes(), settings.allowedMethods())
 
 // 验证token
 app.use(auth)

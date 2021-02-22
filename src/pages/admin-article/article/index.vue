@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { getArticlesB, createArticleB, editArticleB, deleteArticleB, batchDeleteArticlesB } from '@/api/admin'
+import { getArticlesB, deleteArticleB, batchDeleteArticlesB } from '@/api/admin'
 
 export default {
   data() {

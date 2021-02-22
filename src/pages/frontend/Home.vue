@@ -36,7 +36,7 @@
 
     <!-- <video :src="videoUrl" width="100%" height="310px" controls="controls">暂不支持播放</video> -->
     <div style="text-align:center">
-      <iframe frameborder="0" style="width:100%;height:310px;" src="https://v.qq.com/txp/iframe/player.html?vid=k3223ziv8nq" allowFullScreen="true"></iframe>
+      <iframe frameborder="0" style="width:100%;height:310px;" src="https://player.youku.com/embed/XNTA5NzE0MDUzNg==" allowFullScreen="true"></iframe>
     </div>
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"

@@ -186,3 +186,49 @@ export function batchDeleteTasksB (data) {
         data: data
     })
 }
+
+
+/**
+ * 设置部分
+ * @param {*} data 
+ */
+/* 获取所有主页设置 */
+export function getAllSettingsB (data) {
+    return request({ 
+        url: '/setting/all', 
+        method: 'post',
+        data: data
+    })
+}
+/* 获取指定主页设置 */
+export function getSettingB (data) {
+    return request({ 
+        url: '/setting/'+data.id, 
+        method: 'post',
+        data: data
+    })
+}
+/* 创建主页设置 */
+export function createSettingB (data) {
+    return request({ 
+        url: '/setting/create', 
+        method: 'post',
+        data: data
+    })
+}
+/* 编辑主页设置 */
+export function editSettingB (data) {
+    return request({ 
+        url: '/setting/edit/'+data.id, 
+        method: 'post',
+        data: data
+    })
+}
+/* 删除主页设置 */
+export function deleteSettingB (data) {
+    return request({ 
+        url: '/setting/delete', 
+        method: 'post',
+        data: data
+    })
+}

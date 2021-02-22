@@ -8,7 +8,7 @@
         <el-input v-model="videoData.link" placeholder="iframe链接，链接中有iframe" clearable></el-input>
       </el-form-item>
       <!-- 待做：视频尺寸 -->
-       <el-form-item style="text-align:center;">
+      <el-form-item style="text-align:center;">
         <el-button type="" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>

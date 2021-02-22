@@ -81,7 +81,7 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/admin-setting/common">常规设置</el-menu-item>
-            <el-menu-item index="/admin-setting/special">特殊设置</el-menu-item>
+            <el-menu-item index="/admin-setting/special-list">主页设置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
 
