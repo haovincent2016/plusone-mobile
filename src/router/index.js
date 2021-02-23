@@ -222,25 +222,25 @@ export const siteRoutes = [
     ]
   },
   //后台管理 - 资源管理
-  {
-    path: '/admin-assets',
-    component: Layout,
-    redirect: '/admin-assets/list',
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/pages/admin-assets/list'),
-        name: 'AssetsList',
-        meta: { title: '资源管理' }
-      },
-      {
-        path: 'upload',
-        component: () => import('@/pages/admin-assets/upload'),
-        name: 'Upload',
-        meta: { title: '资源上传' }
-      }
-    ]
-  },
+  // {
+  //   path: '/admin-assets',
+  //   component: Layout,
+  //   redirect: '/admin-assets/list',
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/pages/admin-assets/list'),
+  //       name: 'AssetsList',
+  //       meta: { title: '资源管理' }
+  //     },
+  //     {
+  //       path: 'upload',
+  //       component: () => import('@/pages/admin-assets/upload'),
+  //       name: 'Upload',
+  //       meta: { title: '资源上传' }
+  //     }
+  //   ]
+  // },
   //后台管理 - 测试管理
   {
     path: '/admin-tests',
@@ -260,10 +260,16 @@ export const siteRoutes = [
         meta: { title: '测试列表' }
       },
       {
-        path: 'list/:id',
+        path: 'edit/:id',
         component: () => import('@/pages/admin-tests/detail'),
-        name: 'TestDetail',
-        meta: { title: '测试详情' }
+        name: 'EditTest',
+        meta: { title: '修改测试' }
+      },
+      {
+        path: 'create',
+        component: () => import('@/pages/admin-tests/detail'),
+        name: 'CreateTest',
+        meta: { title: '新建测试' }
       }
     ]
   },

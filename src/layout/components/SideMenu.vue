@@ -52,7 +52,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="/admin-assets">
+        <!-- <el-submenu index="/admin-assets">
           <template slot="title">
             <i class="el-icon-picture-outline"></i>
             <span>资源管理</span>
@@ -61,7 +61,7 @@
             <el-menu-item index="/admin-assets/list">资源管理</el-menu-item>
             <el-menu-item index="/admin-assets/upload">资源上传</el-menu-item>
           </el-menu-item-group>
-        </el-submenu>
+        </el-submenu> -->
 
         <el-submenu index="/admin-tests">
           <template slot="title">

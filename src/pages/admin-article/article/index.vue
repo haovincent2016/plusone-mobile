@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <!-- 搜索栏 -->
-    <el-form :inline="true" :model="searchForm" class="search-container" label-width="80px">
+    <el-form v-show="showSearch" :inline="true" :model="searchForm" class="search-container" label-width="80px">
       <el-form-item label="文章名">
         <el-input v-model="searchForm.title" clearable></el-input>
       </el-form-item>
@@ -47,6 +47,7 @@
           @click="batchDelete()"
         >批量删除</el-button>
       </el-col>
+      <table-toolbar :showSearch.sync="showSearch" @queryTable="getTableList" :columns="columns"></table-toolbar>
     </el-row>
     <el-table
       :data="tableList"
@@ -66,14 +67,16 @@
         label="文章名"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[0].visible">
       </el-table-column>
       <el-table-column
         prop="user"
         label="作者"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[1].visible">
         <template slot-scope="scope">
           <img :src="scope.row.user.avatar" class="avatar" />
           <div class="author">{{ scope.row.user.username }}</div>
@@ -94,7 +97,8 @@
         label="文章大图"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[2].visible">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -110,7 +114,8 @@
         label="审核状态"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[3].visible">
         <template slot-scope="scope">
           <el-tag type="info" v-if="scope.row.status === 1">待审核</el-tag>
           <el-tag v-if="scope.row.status === 2">审核中</el-tag>
@@ -123,28 +128,32 @@
         label="浏览量"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[4].visible">
       </el-table-column>
       <el-table-column
         prop="like"
         label="点赞数"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[5].visible">
       </el-table-column>
       <el-table-column
         prop="createdAt"
         label="创建日期"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[6].visible">
       </el-table-column>
       <el-table-column
         prop="updatedAt"
         label="更新日期"
         header-align="center"
         align="center"
-        width="150">
+        width="150"
+        v-if="columns[7].visible">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -187,7 +196,20 @@ export default {
         sort: '+id'
       },
       //总数
-      total: 0
+      total: 0,
+      // 显示搜索条件
+      showSearch: true,
+      // 列信息
+      columns: [
+        { key: 0, label: `文章名`, visible: true },
+        { key: 1, label: `作者`, visible: true },
+        { key: 2, label: `文章大图`, visible: true },
+        { key: 3, label: `审核状态`, visible: true },
+        { key: 4, label: `浏览量`, visible: true },
+        { key: 5, label: `点赞数`, visible: true },
+        { key: 6, label: `创建日期`, visible: true },
+        { key: 7, label: `更新日期`, visible: true }
+      ],
     }
   },
   filters: {

@@ -1,9 +1,10 @@
 <template>
   <div class="content-wrapper">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedView">
+      <!-- <keep-alive :include="cachedView">
         <router-view :key="key" />
-      </keep-alive>
+      </keep-alive> -->
+      <router-view :key="key" />
     </transition>
   </div>
 </template>
