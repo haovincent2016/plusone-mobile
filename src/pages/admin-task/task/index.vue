@@ -335,7 +335,7 @@ export default {
               this.taskLoading = false
             }
           })
-        }, 1500)
+        }, 1000)
     },
     //根据用户名搜索用户(query为搜索数据)
     queryTaskUser(query) {

@@ -232,3 +232,48 @@ export function deleteSettingB (data) {
         data: data
     })
 }
+
+/**
+ * 试卷部分
+ * @param {*} data 
+ */
+/* 获取所有试卷 */
+export function getAllTestsB (data) {
+    return request({ 
+        url: '/test/all', 
+        method: 'post',
+        data: data
+    })
+}
+/* 获取指定试卷 */
+export function getTestB (data) {
+    return request({ 
+        url: '/test/item', 
+        method: 'post',
+        data: data
+    })
+}
+/* 创建试卷 */
+export function createTestB (data) {
+    return request({ 
+        url: '/test/create', 
+        method: 'post',
+        data: data
+    })
+}
+/* 编辑试卷 */
+export function editTestB (data) {
+    return request({ 
+        url: '/test/edit/'+data.id, 
+        method: 'post',
+        data: data
+    })
+}
+/* 删除试卷 */
+export function deleteTestB (data) {
+    return request({ 
+        url: '/test/delete', 
+        method: 'post',
+        data: data
+    })
+}

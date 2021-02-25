@@ -11,6 +11,12 @@ const logger = require('koa-logger')
   , koastatic = require('koa-static')
   , convert = require('koa-convert')
 
+  //引入db配置
+  const db = require('./config/db')
+  
+  //引入sequelize对象
+  const sequelize = db.sequelize
+
 //引入初始数据
 const initialData = require('./utils/initial') 
 
@@ -23,6 +29,7 @@ const downloads = require('./routes/download')
 const admins = require('./routes/admin')
 const files = require('./routes/files')
 const settings = require('./routes/setting')
+const tests = require('./routes/test')
 
 //引入数据表模型
 const user = require('./model/user')
@@ -30,6 +37,7 @@ const collection = require('./model/collection')
 const article = require('./model/article')
 const task = require('./model/task')
 const setting = require('./model/setting')
+const test = require('./model/test')
 
 // 引入middleware
 const auth = require('./utils/auth')
@@ -48,9 +56,8 @@ user.sync()
 collection.sync()
 article.sync()
 task.sync()
-setting.sync({
-  alter: true
-})
+setting.sync()
+test.sync()
 
 // error handler
 onerror(app)
@@ -81,6 +88,7 @@ app.use(downloads.routes(), downloads.allowedMethods())
 app.use(admins.routes(), admins.allowedMethods())
 app.use(files.routes(), files.allowedMethods())
 app.use(settings.routes(), settings.allowedMethods())
+app.use(tests.routes(), tests.allowedMethods())
 
 // 验证token
 app.use(auth)

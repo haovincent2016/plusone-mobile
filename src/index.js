@@ -14,6 +14,9 @@ import * as echarts from 'echarts'
 //自定义表格操作
 import TableToolbar from "@/components/TableToolbar"
 import Pagination from "@/components/Pagination"
+//moment
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 
 Vue.prototype.$axios = axios
 Vue.prototype.$echarts = echarts
