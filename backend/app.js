@@ -1,5 +1,5 @@
-//已完善：token过期和刷新
-//https://www.jianshu.com/p/d1a3fb71eb99
+// 已完善：token过期和刷新
+// https://www.jianshu.com/p/d1a3fb71eb99
 
 const koa = require('koa')
 const app = new koa()
@@ -11,16 +11,14 @@ const logger = require('koa-logger')
   , koastatic = require('koa-static')
   , convert = require('koa-convert')
 
-  //引入db配置
-  const db = require('./config/db')
-  
-  //引入sequelize对象
-  const sequelize = db.sequelize
-
-//引入初始数据
+// 引入db配置
+const db = require('./config/db')
+// 引入sequelize对象
+const sequelize = db.sequelize
+// 引入初始数据
 const initialData = require('./utils/initial') 
 
-//引入routes
+// 引入routes
 const users = require('./routes/users')
 const articles = require('./routes/article')
 const collections = require('./routes/collection')
@@ -31,7 +29,7 @@ const files = require('./routes/files')
 const settings = require('./routes/setting')
 const tests = require('./routes/test')
 
-//引入数据表模型
+// 引入数据表模型
 const user = require('./model/user')
 const collection = require('./model/collection')
 const article = require('./model/article')
@@ -42,6 +40,7 @@ const test = require('./model/test')
 // 引入middleware
 const auth = require('./utils/auth')
 
+// 引入初始数据 
 // sequelize.drop().then(() => {
 //   sequelize.sync().then(async() => {
 //     await user.bulkCreate(initialData.usersData)
@@ -51,7 +50,7 @@ const auth = require('./utils/auth')
 //   })
 // })
 
-// simple
+// 初始化表
 user.sync()
 collection.sync()
 article.sync()
@@ -95,7 +94,7 @@ app.use(auth)
 
 const secret = 'qweasd789456'
 
-//koa jwt验证token
+// koa jwt验证token
 app.use(koajwt({
   secret: secret
 }).unless({

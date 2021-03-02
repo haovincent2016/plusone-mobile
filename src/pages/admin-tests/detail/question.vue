@@ -22,6 +22,8 @@
         type="textarea"
         placeholder="请输入题干内容..."
       />
+      <!-- 题目图片 -->
+      
     </el-form-item>
     <!--单选、多选-->
     <el-form-item label="内容" v-if="question.typeId === 1 || question.typeId === 2" style="margin-bottom: 0px">
@@ -43,7 +45,7 @@
           {{ item }}
           </el-checkbox-button>
         </el-col>
-        <el-col :span="23">
+        <el-col :span="15">
           <el-input
             v-model="question.content[index]"
             placeholder="请输入选项..."

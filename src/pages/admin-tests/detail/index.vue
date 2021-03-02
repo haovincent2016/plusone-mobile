@@ -6,7 +6,7 @@
     <!-- 操作栏 -->
     <sticky :z-index="20" :class-name="'operation'">
       <el-button v-loading="loading" plain round icon="el-icon-plus" type="primary" @click="createTest">
-        创建
+        {{ type === 'edit' ? '修改' : '创建' }}
       </el-button>
     </sticky>
     <!-- 编辑表单 -->
@@ -17,7 +17,6 @@
           v-model="testForm.selectedUsers"
           multiple
           filterable
-          allow-create
           default-first-option
           remote
           :remote-method="queryList"
@@ -79,11 +78,13 @@
 <script>
 import Sticky from '@/components/Fixed'
 import Question from './question'
-import { getUserInfoB, createTestB } from '@/api/admin'
+import { getUserInfoB, getTestB, createTestB, editTestB } from '@/api/admin'
 
 export default {
   data() {
     return {
+      //页面类型
+      type: undefined,
       //考生列表loading
       listLoading: false,
       //创建试卷loading
@@ -100,6 +101,10 @@ export default {
         title: '',
         //问题
         questions: []
+      },
+      // 编辑页面考生ids
+      editForm: {
+        ids: []
       },
       //试题类型
       questionTypes: [
@@ -119,7 +124,38 @@ export default {
       },
     }
   },
+  mounted() {
+    if(this.$route.params.id) {
+      this.getTest()
+    } else {
+      this.type = 'create'
+    }
+  },
   methods: {
+    // 获取指定修改试卷
+    getTest() {
+      this.type = 'edit'
+      getTestB({ id: this.$route.params.id }).then(res => {
+        if(res.data.code === '0') {
+          this.$message.success(res.data.desc)
+          let test = JSON.parse(res.data.detail)
+          let testers = JSON.parse(res.data.testers)
+          // 编辑页面，填入数据
+          this.testForm.title = test.title
+          this.testForm.deadline = test.deadline
+          testers.forEach(item => {
+            this.testForm.selectedUsers.push(item.username)
+            this.editForm.ids.push(item.id)
+          })
+          this.testForm.questions = JSON.parse(test.questions)
+        } else {
+          this.$message.error(res.data.desc)
+        }
+      }).catch(err => {
+        this.$message.error(res.data.desc)
+      })
+    },
+    // 搜索考生信息
     getUserInfo(query) {
       setTimeout(() => {
           let data = {
@@ -127,8 +163,11 @@ export default {
           }
           getUserInfoB(data).then(res => {
             if(res.data.code === '0') {
-              //this.$message.success(res.data.desc)
-              this.userList = JSON.parse(res.data.detail)
+              if (JSON.parse(res.data.detail).length > 0) {
+                this.userList = JSON.parse(res.data.detail)
+              } else {
+                this.userList = []
+              }
             } else {
               this.$message.error(res.data.desc)
             }
@@ -137,7 +176,7 @@ export default {
             this.$message.error(res.data.desc)
             this.listLoading = false
           })
-        }, 1000)
+        }, 500)
     },
     //根据用户名搜索用户(query为搜索数据)
     queryList(query) {
@@ -193,24 +232,74 @@ export default {
           return
         }
         // 通过验证
-        let data = {
-          userId: this.testForm.selectedUsers,
-          title: this.testForm.title,
-          deadline: this.testForm.deadline,
-          questions: JSON.stringify(this.testForm.questions) 
-        }
-        createTestB(data).then(res => {
-          if(res.data.code === '0') {
-            this.$message.success(res.data.desc)
-            // let detail = JSON.parse(res.data.content)
-            // this.settingForm.settingTitle = detail.title
-            // this.view = JSON.parse(detail.questions)
-            this.loading = false
+        if(this.type === 'create') {
+          let data = {
+            userId: this.testForm.selectedUsers,
+            title: this.testForm.title,
+            deadline: this.testForm.deadline,
+            questions: JSON.stringify(this.testForm.questions) 
           }
-        }).catch(err => {
-          this.$message.error(res.data.desc)
-          this.loading = false
-        })
+          createTestB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.loading = false
+              // 重置新建页面数据
+              this.testForm = {
+                //选择的考生
+                selectedUsers: [],
+                //截止时间
+                deadline: undefined,
+                //试卷标题
+                title: '',
+                //问题
+                questions: []
+              }
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+            this.loading = false
+          })
+        } else if (this.type === 'edit') {
+          console.log('1:' + this.editForm.ids)
+          console.log('2:' + this.testForm.selectedUsers)
+          
+          let length = this.editForm.ids.length
+          let ids = this.editForm.ids.concat(this.testForm.selectedUsers.slice(length))
+          
+          let data = {
+            id: this.$route.params.id,
+            userId: ids,
+            title: this.testForm.title,
+            deadline: this.testForm.deadline,
+            questions: JSON.stringify(this.testForm.questions) 
+          }
+          editTestB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.loading = false
+              // 重置新建页面数据
+              this.editForm = {
+                ids: []
+              }
+              this.testForm = {
+                //选择的考生
+                selectedUsers: [],
+                //截止时间
+                deadline: undefined,
+                //试卷标题
+                title: '',
+                //问题
+                questions: []
+              }
+              this.getTest()
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+            this.loading = false
+          })
+        } else {
+          this.$message.error('未知错误，请刷新页面重试~')
+        }
       })
 
     },

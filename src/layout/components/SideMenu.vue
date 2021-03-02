@@ -71,6 +71,7 @@
           <el-menu-item-group>
             <el-menu-item index="/admin-tests/grade">成绩管理</el-menu-item>
             <el-menu-item index="/admin-tests/list">测试管理</el-menu-item>
+            <el-menu-item index="/admin-tests/mytests">我的考试</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
 

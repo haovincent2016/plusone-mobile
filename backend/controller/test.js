@@ -1,5 +1,6 @@
 //引入model
 const test = require('../model/test')
+const user = require('../model/user')
 
 class testController {
   static async getAllTests(ctx) {
@@ -20,13 +21,34 @@ class testController {
     }
   }
 
+  static async getUserTests(ctx) {
+    try {
+      const req = ctx.request.body
+      const u = await user.findByPk(req.id)
+      const ts = await u.getTests()
+      return ctx.body = {
+        code: '0',
+        content: JSON.stringify(ts),
+        desc: '获取成功'
+      }
+    } catch(error) {
+      console.log(error)
+      return ctx.body = {
+        code: '-1',
+        desc: '获取失败'
+      }
+    }
+  }
+
   static async getTest(ctx) {
     try {
       const req = ctx.request.body
-      const detail = await test.findByPk(req.id)
+      const t = await test.findByPk(req.id)
+      const ts = await t.getUsers()
       return ctx.body = {
         code: '0',
-        content: JSON.stringify(detail),
+        detail: JSON.stringify(t),
+        testers: JSON.stringify(ts),
         desc: '获取成功'
       }
     } catch(error) {
@@ -69,17 +91,24 @@ class testController {
   static async editTest(ctx) {
     try {
       const req = ctx.request.body
-      const id = ctx.params.id
-      const title = req.title 
-      const content = req.content
+      const id = req.id
+      const title = req.title
+      const deadline = req.deadline
+      const questions = req.questions
       await test.update({
         title,
-        content
+        deadline,
+        questions
       }, {
         where: {
           id
         }
       })
+      const testItem = await test.findByPk(id)
+      //userId允许多个，为数组
+      const userId = req.userId
+      await testItem.setUsers(userId)
+
       return ctx.body = {
         code: '0',
         desc: '修改成功'
@@ -110,6 +139,29 @@ class testController {
       return ctx.body = {
         code: '-1',
         desc: '删除失败'
+      }
+    }
+  }
+
+  static async batchDeleteTests(ctx) {
+    try {
+      const req = ctx.request.body
+      await user.destroy({
+        where: {
+          id: {
+            [Op.in]: req.ids
+          }
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        desc: '批量删除成功'
+      }
+    } catch(error) {
+      console.log(error)
+      return ctx.body = {
+        code: '-1',
+        desc: '批量删除失败'
       }
     }
   }

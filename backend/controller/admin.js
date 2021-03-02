@@ -231,7 +231,7 @@ class adminController {
   static async batchDeleteUsers(ctx) {
     try {
       const req = ctx.request.body
-      const users = await user.destroy({
+      await user.destroy({
         where: {
           id: {
             [Op.in]: req.ids

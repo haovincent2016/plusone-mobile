@@ -22,6 +22,12 @@ const test = Test.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    // 完成时间（默认90分钟）
+    timelimit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 90
+    },
     // 截止时间
     deadline: {
         type: DataTypes.DATE,

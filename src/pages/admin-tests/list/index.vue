@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <el-form v-show="showSearch" :inline="true" :model="searchForm" class="search-container" label-width="80px">
-      <el-form-item label="文章名">
+      <el-form-item label="试卷名">
         <el-input v-model="searchForm.title" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -47,24 +47,27 @@
       </el-table-column>
       <el-table-column
         prop="title"
-        label="试卷名称"
+        label="试卷名"
         header-align="center"
         align="center"
-        width="250">
+        width="250"
+        v-if="columns[0].visible">
       </el-table-column>
       <el-table-column
         prop="deadline"
         label="截止时间"
         header-align="center"
         align="center"
-        width="250">
+        width="250"
+        v-if="columns[1].visible">
       </el-table-column>
       <el-table-column
         prop="questions"
-        label="题目顺序"
+        label="题目顺序【题号：题型】"
         header-align="center"
         align="center"
-        width="250">
+        width="250"
+        v-if="columns[2].visible">
         <template slot-scope="scope">
           <el-tag v-for="item in JSON.parse(scope.row.questions)" :key="item.id" class="tag-space">{{ item | getTypes }}</el-tag>
         </template>
@@ -74,7 +77,8 @@
         label="题目总分"
         header-align="center"
         align="center"
-        width="250">
+        width="250"
+        v-if="columns[3].visible">
         <template slot-scope="scope">
           {{ calcScores(JSON.parse(scope.row.questions)) }}
         </template>
@@ -84,7 +88,8 @@
         label="题目数量"
         header-align="center"
         align="center"
-        width="250">
+        width="250"
+        v-if="columns[4].visible">
         <template slot-scope="scope">
           {{ JSON.parse(scope.row.questions).length }}
         </template>
@@ -98,7 +103,7 @@
         <template slot-scope="scope">
           <!-- 跳转文章页 -->
           <el-button plain icon="el-icon-edit" size="mini" @click="editTest(scope.row.id)">编辑</el-button>
-          <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteTest(scope.row.id)">删除</el-button>
+          <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="deleteTest(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,7 +111,7 @@
 </template>
 
 <script>
-import { getAllTestsB } from '@/api/admin'
+import { getAllTestsB, deleteTestB, batchDeleteTestsB } from '@/api/admin'
 import moment from 'moment'
 export default {
   data() {
@@ -116,7 +121,14 @@ export default {
       },
       selectedData: [],
       showSearch: true,
-      columns: [],
+      // 列信息
+      columns: [
+        { key: 0, label: `试卷名`, visible: true },
+        { key: 1, label: `截止日期`, visible: true },
+        { key: 2, label: `题目顺序`, visible: true },
+        { key: 3, label: `题目总分`, visible: true },
+        { key: 4, label: `题目数量`, visible: true }
+      ],
 
       tableListLoading: false,
       tableList: []
@@ -147,6 +159,7 @@ export default {
     this.getTableList()
   },
   methods: {
+    // 计算试卷总分
     calcScores(questions) {
       let total = 0
       questions.forEach(item => {
@@ -169,21 +182,69 @@ export default {
         })
     },
     resetSearch() {
-
+      this.searchForm.title = ''
     },
+    // 新建页
     createPage() {
       this.$router.push({ name: 'CreateTest' })
     },
-    editTest() {
-
+    // 编辑页
+    editTest(id) {
+      this.$router.push({ path: '/admin-tests/edit/'+id })
     },
-    deleteTest() {
-
+    // 删除指定试卷
+    deleteTest(row) {
+      this.$confirm('此操作将永久删除试卷'+`[${row.title}]`+', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            id: row.id
+          }
+          deleteTestB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.getTableList()
+            } else {
+              this.$message.error(res.data.desc)
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
     },
+    // 批量删除试卷
     batchDelete() {
-
+      this.$confirm('此操作将永久删除选择的试卷, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let ids = []
+          this.selectedData.forEach(item => {
+            ids.push(item.id)
+          })
+          let data = {
+            ids: ids
+          }
+          batchDeleteTestsB(data).then(res => {
+            if(res.data.code === '0') {
+              this.$message.success(res.data.desc)
+              this.getTableList()
+            } else {
+              this.$message.error(res.data.desc)
+            }
+          }).catch(err => {
+            this.$message.error(res.data.desc)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
     },
-    //数据多选
+    // 数据多选
     handleSelectionChange(val) {
       this.selectedData = val
     },

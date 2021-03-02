@@ -270,6 +270,13 @@ export const siteRoutes = [
         component: () => import('@/pages/admin-tests/detail'),
         name: 'CreateTest',
         meta: { title: '新建测试' }
+      },
+      //我的考试列表
+      {
+        path: 'mytests',
+        component: () => import('@/pages/admin-tests/mytests'),
+        name: 'MyTests',
+        meta: { title: '我的考试' }
       }
     ]
   },

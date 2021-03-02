@@ -253,6 +253,14 @@ export function getTestB (data) {
         data: data
     })
 }
+/* 获取指定给用户的试卷 */
+export function getUserTestsB (data) {
+    return request({ 
+        url: '/test/userAll', 
+        method: 'post',
+        data: data
+    })
+}
 /* 创建试卷 */
 export function createTestB (data) {
     return request({ 
@@ -273,6 +281,14 @@ export function editTestB (data) {
 export function deleteTestB (data) {
     return request({ 
         url: '/test/delete', 
+        method: 'post',
+        data: data
+    })
+}
+/* 批量删除试卷 */
+export function batchDeleteTestsB (data) {
+    return request({ 
+        url: '/test/batchDelete', 
         method: 'post',
         data: data
     })
