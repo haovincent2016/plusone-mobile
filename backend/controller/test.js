@@ -2,6 +2,7 @@
 const test = require('../model/test')
 const user = require('../model/user')
 
+//应区分题目接口及答案接口，答案接口一般不返回
 class testController {
   static async getAllTests(ctx) {
     try {
@@ -40,6 +41,7 @@ class testController {
     }
   }
 
+  // 获取特指考试数据（包括考生及答案）
   static async getTest(ctx) {
     try {
       const req = ctx.request.body
@@ -49,6 +51,45 @@ class testController {
         code: '0',
         detail: JSON.stringify(t),
         testers: JSON.stringify(ts),
+        desc: '获取成功'
+      }
+    } catch(error) {
+      console.log(error)
+      return ctx.body = {
+        code: '-1',
+        desc: '获取失败'
+      }
+    }
+  }
+
+  // 考生获取特指试卷（不包括考生及答案）
+  static async getUserTest(ctx) {
+    try {
+      const req = ctx.request.body
+      const id = req.id
+      // 获取考试数据（去掉答案）
+      const t = await test.findByPk(req.id)
+      // ({
+      //   where: {
+      //     id
+      //   },
+      //   attributes: {
+      //     exclude: ['questions']
+      //   }
+      // })
+      t.questions = JSON.parse(t.questions).map(i => {
+        return {
+          id: i.id,
+          typeId: i.typeId,
+          title: i.title,
+          score: i.score,
+          answer: [],
+          content: i.content
+        }
+      })
+      return ctx.body = {
+        code: '0',
+        detail: JSON.stringify(t),
         desc: '获取成功'
       }
     } catch(error) {

@@ -12,6 +12,8 @@ router.post('/test/userAll', testController.getUserTests)
 
 router.post('/test/item', testController.getTest)
 
+router.post('/test/userItem', testController.getUserTest)
+
 router.post('/test/create', testController.createTest)
 
 router.post('/test/edit/:id', testController.editTest)

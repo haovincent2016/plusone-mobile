@@ -253,10 +253,18 @@ export function getTestB (data) {
         data: data
     })
 }
-/* 获取指定给用户的试卷 */
+/* 获取指定给用户的试卷列表 */
 export function getUserTestsB (data) {
     return request({ 
         url: '/test/userAll', 
+        method: 'post',
+        data: data
+    })
+}
+/* 获取试卷内容 */
+export function getUserTestB (data) {
+    return request({ 
+        url: '/test/userItem', 
         method: 'post',
         data: data
     })

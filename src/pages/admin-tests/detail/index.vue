@@ -114,8 +114,6 @@ export default {
         {id: 4, icon: 'el-icon-arrow-up', name: '判断题'},
         {id: 5, icon: 'el-icon-edit-outline', name: '简答题'}
       ],
-      //试题编号
-      questionId: 0,
       //表单验证
       rules: {
         selectedUsers: [{ required: true, message: '考生为必填项', trigger: 'blur' }],
@@ -137,7 +135,7 @@ export default {
       this.type = 'edit'
       getTestB({ id: this.$route.params.id }).then(res => {
         if(res.data.code === '0') {
-          this.$message.success(res.data.desc)
+          //this.$message.success(res.data.desc)
           let test = JSON.parse(res.data.detail)
           let testers = JSON.parse(res.data.testers)
           // 编辑页面，填入数据
@@ -206,13 +204,9 @@ export default {
           return
         }
         this.testForm.questions.forEach(item => {
+          // 各题型都有的内容
           if(item.title === '') {
             message = '请设置题干'
-            isSubmit = false
-            return
-          }
-          if(item.content.length === 0) {
-            message = '请设置选项内容'
             isSubmit = false
             return
           }
@@ -220,6 +214,14 @@ export default {
             message = '请设置答案'
             isSubmit = false
             return
+          }
+          // 只有选择题有content
+          if(item.typeId === 1 || item.typeId === 2) {
+            if(item.content.length === 0) {
+              message = '请设置选项内容'
+              isSubmit = false
+              return
+            }
           }
         })
         if(!isSubmit) {
@@ -305,8 +307,10 @@ export default {
     },
     // 添加题目
     addQuestion(id) {
+      // 试题总数
+      let total = this.testForm.questions.length
       const q = {
-        id: this.questionId,
+        id: total,
         typeId: id,
         title: '',
         //题目分值
@@ -317,7 +321,6 @@ export default {
         content: []
       }
       this.testForm.questions.push(q)
-      this.questionId++
     },
     // 删除题目
     removeQuestion(id) {

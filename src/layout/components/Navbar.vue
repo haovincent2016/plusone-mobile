@@ -100,7 +100,7 @@ export default {
     // breadcrumb内容
     getData() {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-      console.log(this.$route.matched)
+      //console.log(this.$route.matched)
       const first = matched[0]
 
       if (!this.isDashboard(first)) {

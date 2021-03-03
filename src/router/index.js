@@ -277,6 +277,13 @@ export const siteRoutes = [
         component: () => import('@/pages/admin-tests/mytests'),
         name: 'MyTests',
         meta: { title: '我的考试' }
+      },
+      //考试界面
+      {
+        path: 'mytests/:id',
+        component: () => import('@/pages/admin-tests/mytests/content'),
+        name: 'TestContent',
+        meta: { title: '考试界面' }
       }
     ]
   },

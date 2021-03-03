@@ -73,7 +73,7 @@ export default {
       routes.forEach(route => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
-          console.log(route)
+          //console.log(route)
           tags.push({
             fullPath: tagPath,
             path: tagPath,
@@ -132,7 +132,7 @@ export default {
     //关闭tag，去上一个tag页面
     toLastView(visitedView) {
       const latestView = visitedView.slice(-1)[0]
-      console.log(latestView)
+      //console.log(latestView)
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
