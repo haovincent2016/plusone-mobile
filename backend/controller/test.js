@@ -69,14 +69,6 @@ class testController {
       const id = req.id
       // 获取考试数据（去掉答案）
       const t = await test.findByPk(req.id)
-      // ({
-      //   where: {
-      //     id
-      //   },
-      //   attributes: {
-      //     exclude: ['questions']
-      //   }
-      // })
       t.questions = JSON.parse(t.questions).map(i => {
         return {
           id: i.id,
@@ -203,6 +195,48 @@ class testController {
       return ctx.body = {
         code: '-1',
         desc: '批量删除失败'
+      }
+    }
+  }
+
+  // 计算分数（仅包括选择和判断）
+  static async calScore(ctx) {
+    try {
+      const req = ctx.request.body
+      const id = req.id
+      // 考生答案，格式为[{ id: id, typeId: typeId, score: score, answer: answer }]
+      const answers = req.answers
+      // 找到测试题
+      const t = await test.findByPk(id)
+      // 重新赋值问题内容
+      t.questions = JSON.parse(t.questions).map(i => {
+        return {
+          id: i.id,
+          typeId: i.typeId,
+          score: i.score,
+          answer: i.answer
+        }
+      })
+      // 分类计算分数
+      // 多选题错一个不得分，简答和填空需人工给分
+      let total = 0
+      answers.forEach(a => {
+        // 找匹配题目id
+        let q = t.questions.find(i => { return i.id == a.id })
+        if(JSON.stringify(q.answer) === JSON.stringify(a.answer)) {
+          total += Number(q.score)
+        }
+      })
+
+      return ctx.body = {
+        code: '0',
+        score: total
+      }
+    } catch(error) {
+      console.log(error)
+      return ctx.body = {
+        code: '-1',
+        desc: '分数计算失败，请重试~'
       }
     }
   }

@@ -301,3 +301,11 @@ export function batchDeleteTestsB (data) {
         data: data
     })
 }
+/* 提交试卷，计算客观题分数 */
+export function calScoreB (data) {
+    return request({ 
+        url: '/test/calScore', 
+        method: 'post',
+        data: data
+    })
+}

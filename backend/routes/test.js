@@ -22,4 +22,6 @@ router.post('/test/delete', testController.deleteTest)
 
 router.post('/test/batchDelete', testController.batchDeleteTests)
 
+router.post('/test/calScore', testController.calScore)
+
 module.exports = router
