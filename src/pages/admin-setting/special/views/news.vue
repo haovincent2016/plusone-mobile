@@ -1,10 +1,16 @@
 <template>
   <div class="news-container">
-    <div v-for="item in list.contents" :key="item.id"> 
-      <a
-        style="text-decoration:none;color:#1989fa;" 
-        :href="item.link" target="_blank">{{ item.title }}</a>
-    </div>
+    <van-notice-bar
+      v-for="item in list.contents" :key="item.id"
+      left-icon="info-o"
+      color="#1989fa" 
+      background="#f4f4f4"
+      mode="link"
+      :scrollable="false">
+        <a
+          style="text-decoration:none;color:#1989fa;" 
+          :href="item.link" target="_blank">{{ item.title }}</a>
+    </van-notice-bar>
   </div>
 </template>
 

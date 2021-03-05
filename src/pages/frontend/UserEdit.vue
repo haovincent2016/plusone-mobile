@@ -252,7 +252,7 @@ export default {
     height: 150px;
     border-radius: 50%;
     object-fit: contain;
-    box-shadow: 0 0 px2rem(17) gray;
+    box-shadow: 0 1px 4px rgba(0,21,41,.08)
   }
 }
 </style>

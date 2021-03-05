@@ -123,7 +123,7 @@ export default {
   border: none!important;
 }
 .custom-checkbox .el-checkbox-button__inner {
-  padding: 9px;
+  padding: 9px 5px;
 } 
 </style>
 <style lang="scss" scoped>

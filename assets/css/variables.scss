@@ -26,6 +26,9 @@ $sideMenuWidth: 210px;
 // tags
 $tagColor: #409EFF;
 
+// 上传组件
+$uploadHeader: linear-gradient(45deg, #0081ff, #1cbbb4);
+
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
@@ -38,4 +41,6 @@ $tagColor: #409EFF;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;
   sideMenuWidth: $sideMenuWidth;
+  tagColor: $tagColor;
+  uploadHeader: $uploadHeader;
 }

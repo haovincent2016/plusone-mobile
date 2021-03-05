@@ -105,6 +105,9 @@ export default {
     getName: function(val) {
       switch (val.type) {
         case 'nav':
+          return '导航栏'
+        
+        case 'banner':
           return '轮播图'
 
         case 'video':
@@ -115,6 +118,9 @@ export default {
 
         case 'news':
           return '新闻'
+        
+        default:
+          return '未知组件'
       }
     }
   },

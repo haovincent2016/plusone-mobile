@@ -2,83 +2,94 @@
   <!-- 主页布局拖拽式设置 -->
   <!-- https://github.com/wsydxiangwang/Visualization-Page -->
   <!-- 中间view, 右侧传入view，右侧修改view，双向绑定-->
-  <div class="special-wrapper">
-    <div class="left-content">
-      <el-form :model="settingForm" :rules="rules" label-width="80px" class="form-wrapper">
-        <el-form-item label="设置名称">
-          <el-input v-model="settingForm.settingTitle" placeholder="请输入设置名称" clearable></el-input>
-        </el-form-item>
-      </el-form>
-      <div 
-        class="content-wrapper"
-        @dragstart="dragStart"
-        @dragend="dragEnd">
+  <div>
+    <!-- 操作栏 -->
+    <sticky :z-index="20" :class-name="'operation'">
+      <el-button v-loading="loading" plain round icon="el-icon-plus" type="primary" @click="uploadData">
+        提交
+      </el-button>
+    </sticky>
+    <div class="special-wrapper">
+      <div class="left-content">
+        <el-form :model="settingForm" :rules="rules" label-width="80px" class="form-wrapper">
+          <el-form-item label="设置名称">
+            <el-input v-model="settingForm.settingTitle" placeholder="请输入设置名称" clearable></el-input>
+          </el-form-item>
+        </el-form>
         <div 
-          class="content-item"
-          v-for="(val, key, index) in typeList"
-          draggable 
-          :data-type="key"
-          :key="index + 1">
-          <span :class="val.icon"></span>
-          <p>{{val.name}}</p>
-          <p>{{key}}</p>
+          class="content-wrapper"
+          @dragstart="dragStart"
+          @dragend="dragEnd">
+          <div 
+            class="content-item"
+            v-for="(val, key, index) in typeList"
+            draggable 
+            :data-type="key"
+            :key="index + 1">
+            <span :class="val.icon"></span>
+            <p>{{val.name}}</p>
+            <p>{{key}}</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="center-content">
-      <!-- 固定头部 -->
-      <div class="center-header" @click="selectType(0)">
-        <img src="/static/img/navbar.png">
-        <span class="header-title">{{ info.title }}</span>
-      </div>
-      <!-- 可删内容 -->
-      <div class="center-body">
-        <div 
-          class="view-content"
-          @drop="drop"
-          @dragover="dragOver"
-          :style="{ backgroundColor: info.backgroundColor }">
-          <Draggable
-            v-model="view"
-            draggable=".item">
-            <template v-for="(item, index) in view">
-              <!-- 非头部组件 -->
-              <div
-                v-if="index > 0"
-                :data-index="index"
-                :key="index"
-                class="item"
-                @click="selectType(index, item)">
-                  <!-- waiting -->
-                  <!-- <template v-if="item.status && item.status == 2">
-                    <div class="wait" v-if="item.type == 'nav'">头部组件</div>
-                    <div class="wait" v-if="item.type == 'banner'">轮播图组件</div>
-                    <div class="wait" v-if="item.type == 'video'">视频组件</div>
-                    <div class="wait" v-if="item.type == 'course'">内容组件</div>
-                    <div class="wait" v-if="item.type == 'news'">新闻组件</div>
-                  </template> -->
-                  <template >
-                    <component 
-                      :is="typeList[item.type]['com']" 
-                      :data="item"
-                      :class="className[item.tabType]">
-                    </component>
-                  </template>
-                  <i @click="deleteItem($event, index)" class="el-icon-error"></i>
-              </div>
-            </template>
-          </Draggable>
+      <div class="center-content">
+        <!-- 固定头部 -->
+        <div class="center-header" @click="selectType(0)">
+          <img src="/static/img/navbar.png">
+          <span class="header-title">{{ info.title }}</span>
+        </div>
+        <!-- 可删内容 -->
+        <div class="center-body">
+          <div 
+            class="view-content"
+            @drop="drop"
+            @dragover="dragOver"
+            :style="{ backgroundColor: info.backgroundColor }">
+            <Draggable
+              v-model="view"
+              draggable=".item">
+              <template v-for="(item, index) in view">
+                <!-- 非头部组件 -->
+                <div
+                  v-if="index > 0"
+                  :data-index="index"
+                  :key="index"
+                  class="item"
+                  @click="selectType(index, item)">
+                    <!-- waiting -->
+                    <template v-if="item.status && item.status == 2">
+                      <div class="wait" v-if="item.type == 'nav'">头部组件</div>
+                      <div class="wait" v-if="item.type == 'banner'">轮播图组件</div>
+                      <div class="wait" v-if="item.type == 'video'">视频组件</div>
+                      <div class="wait" v-if="item.type == 'course'">内容组件</div>
+                      <div class="wait" v-if="item.type == 'news'">新闻组件</div>
+                      <div class="wait" v-if="item.type == 'separator'">分栏行</div>
+                      <div class="wait" v-if="item.type == 'intro'">教师简介</div>
+                    </template>
+                    <template >
+                      <component 
+                        :is="typeList[item.type]['com']" 
+                        :data="item"
+                        :class="className[item.tabType]">
+                      </component>
+                    </template>
+                    <i @click="deleteItem($event, index)" class="el-icon-error"></i>
+                </div>
+              </template>
+            </Draggable>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="right-content">
-      <Editor
-        :data="props"
-        v-if="showRight"
-      ></Editor>
-    </div>
-    <div class="submit-btn">
-      <el-button @click="uploadData" type="primary" plain round>保存</el-button>
+      <div class="right-content">
+        <div class="editor-title">编辑组件</div>
+        <Editor
+          :data="props"
+          v-if="showRight"
+        ></Editor>
+      </div>
+      <!-- <div class="submit-btn">
+        <el-button @click="uploadData" type="primary" plain round>保存</el-button>
+      </div> -->
     </div>
   </div>
 </template>
@@ -90,13 +101,17 @@ import Banner from './views/banner'
 import Video from './views/video'
 import Course from './views/course'
 import News from './views/news'
+import Intro from './views/intro'
+import Separator from './views/separator'
 // import Images from "./settings/images"
 // import Nav from "./settings/nav"
 import Editor from './editor'
+import Sticky from '@/components/Fixed'
 import { createSettingB, getSettingB, editSettingB } from '@/api/admin'
 export default {
   data() {
     return {
+      loading: false,
       type: undefined,
       settingForm: {
         settingTitle: ''
@@ -105,6 +120,7 @@ export default {
         username: [{ required: true, message: '设置名为必填项', trigger: 'blur' }],
       },
       index: null,
+
       view: [
         //头部
         {
@@ -112,6 +128,7 @@ export default {
           title: '标题'
         }
       ],
+
       //类型（左侧）
       typeList: {
         //首页轮播图
@@ -119,6 +136,18 @@ export default {
           name: '轮播图',
           icon: 'el-icon-picture',
           com: 'Banner'
+        },
+        //分栏行
+        separator: {
+          name: '分栏行',
+          icon: 'el-icon-more-outline',
+          com: 'Separator'
+        },
+        //教师简介
+        intro: {
+          name: '教师简介',
+          icon: 'el-icon-s-custom',
+          com: 'Intro'
         },
         //首页视频链接
         video: {
@@ -189,6 +218,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          this.loading = true
           if(this.type === 'edit') {
             //修改
             editSettingB({
@@ -219,7 +249,9 @@ export default {
               this.$message.error(res.data.desc)
             })
           }
+          this.loading = false
         }).catch(err => {
+          console.log(err)
         })
     },
     //开始拖拽
@@ -264,6 +296,20 @@ export default {
         type: this.type,    // 组件类型
         status: 2,          // 默认状态
         data: []            // 默认数据
+      }
+      //分行栏
+      const separatorData = {
+        color: '#1989fa',
+        borderColor: '#1989fa',
+        paddingLeft: 16,
+        paddingRight: 16,
+        icon: 'thumb-circle-o',
+        iconColor: '#1989fa',
+        name: '我们的课程'
+      }
+      //教师简介
+      const introData = {
+        contents: ['Vince老师' ,'多年英语教学经验', '助力孩子英语能力长足提高']
       }
       //视频
       const videoData = {
@@ -402,6 +448,10 @@ export default {
         data = Object.assign(courseData, defaultData)
       } else if (this.type === 'news') {
         data = Object.assign(newsData, defaultData)
+      } else if (this.type === 'separator') {
+        data = Object.assign(separatorData, defaultData)
+      } else if (this.type === 'intro') {
+        data = Object.assign(introData, defaultData)
       } else {
         data = defaultData
       }
@@ -447,7 +497,7 @@ export default {
         this.index = curIndex
         this.isAdded = true
       }
-      console.log(this.view)
+      //console.log(this.view)
     },
     //切换视图（右侧）
     selectType(index, item) {
@@ -467,6 +517,12 @@ export default {
       } else if (item.type === 'news') {
         let data = this.view.filter(i => i.type === 'news')
         this.props = data[0]
+      } else if (item.type === 'separator') {
+        let data = this.view.filter(i => i.type === 'separator')
+        this.props = data[0]
+      } else if (item.type === 'intro') {
+        let data = this.view.filter(i => i.type === 'intro')
+        this.props = data[0]
       }
       this.$nextTick(() => {
         this.showRight = true
@@ -482,15 +538,16 @@ export default {
     }
   },
   components: {
+    Sticky,
     Draggable,
-    //轮播图显示组件
-    Banner,
     //总编辑组件
     Editor,
-    //头部编辑组件
-    //Nav,
-    //轮播图编辑组件
-    //Images,
+    //轮播图设置组件
+    Banner,
+    //教师简介设置
+    Intro,
+    //分栏行设置
+    Separator,
     //视频设置组件
     Video,
     //内容设置组件
@@ -511,11 +568,13 @@ export default {
   padding: 15px;
   background: #f7f8f9;
   position: relative;
+  padding-top: 40px;
   .left-content, .right-content {
     width: 350px;
     padding: 15px 0;
     background: #fff;
     margin: 0 5px;
+    box-shadow: 0 2px 6px #ccc;
   }
   .left-content {
     height: 650px;
@@ -595,8 +654,8 @@ export default {
         background: #f5f5f5;
         overflow-y: auto;
         overflow-x: hidden;
-        padding-top: 72px;
         box-shadow: 0 2px 6px #ccc;
+        padding-top: 72px;
         &::-webkit-scrollbar{
           width: 6px;
         }
@@ -642,12 +701,19 @@ export default {
         }
       }
     }
-  }    
-  .submit-btn{
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
   }
+  .right-content {
+    .editor-title {
+      text-align: center;
+      font-size: 14px;
+      color: #606266;
+    }
+  }
+  // .submit-btn{
+  //   position: absolute;
+  //   bottom: 30px;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  // }
 }
 </style>

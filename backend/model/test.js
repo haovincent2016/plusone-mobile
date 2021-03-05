@@ -42,11 +42,11 @@ const test = Test.init({
 
 // 一张试卷对应多个学生
 // 一个学生对应多张试卷
-user.belongsToMany(test, {
-    through: 'test_user'
-})
-test.belongsToMany(user, {
-    through: 'test_user'
-})
+// user.belongsToMany(test, {
+//     through: 'test_user'
+// })
+// test.belongsToMany(user, {
+//     through: 'test_user'
+// })
 
 module.exports = test

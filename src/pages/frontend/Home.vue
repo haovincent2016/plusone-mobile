@@ -24,7 +24,7 @@
     </van-divider>
 
     <div class="description">
-      <p style="font-size:14px;">Lucy老师和Vince老师</p>
+      <p style="font-size:14px;">Vince老师</p>
       <p style="font-size:14px;">多年英语教学经验</p>
       <p style="font-size:14px;">助力孩子英语能力长足提高</p>
       <!-- <van-button plain hairline type="info" @click="showVideo">查看视频</van-button> -->

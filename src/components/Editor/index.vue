@@ -9,6 +9,7 @@
     <single-upload
       ref="upload" 
       :allowedNumber="3" 
+      @uploaded="insertUploaded"
     ></single-upload>
     <!-- 资源管理器 -->
     <resource
@@ -164,6 +165,12 @@ export default {
     //打开资源管理
     selectResource() {
       this.$refs.resource.openDialog()
+    },
+    //插入上传的图片
+    insertUploaded(data) {
+      data.forEach(d => {
+         window.tinymce.get(this.tinymceId).insertContent(`<img alt="Smiley face" class="content-img" src="${d}" >`)
+      })
     },
     //插入资源管理选择的图片
     insertFile(data) {

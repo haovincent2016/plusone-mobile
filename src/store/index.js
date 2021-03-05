@@ -35,7 +35,12 @@ const state = {
   isFixedView: true,
 
   //特殊设置 - 已添加的组件
-  componentsList: []
+  componentsList: [],
+  //考试界面
+  test: {
+    time: '',
+    questions: []
+  }
 }
 
 const mutations = {
@@ -120,6 +125,17 @@ const mutations = {
   //添加特殊设置中的组件
   addComponents(state, item) {
     state.componentsList.push(item)
+  },
+
+  //保存考试答案及时间
+  saveTestData(state, item) {
+    state.test.time = item.time 
+    state.test.questions = item.questions
+    sessionStorage.setItem("testData", state.test)
+  },
+  //删除考试答案及时间
+  deleteTestData(state, item) {
+    sessionStorage.removeItem("testData")
   }
 }
 

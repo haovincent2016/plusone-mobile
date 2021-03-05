@@ -50,6 +50,7 @@
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
+      <el-button type="primary" plain @click="handleConfirm()">插入</el-button>
       <el-button @click="uploadVisible = false">关闭</el-button>
     </div>
   </el-dialog>
@@ -162,15 +163,46 @@ export default {
         message: '图片已删掉',
         type: 'success'
       })
+    },
+    //确认
+    handleConfirm() {
+      let list = []
+      for(const value of this.tempList) {
+        list.push(value)
+      }
+      this.$emit('uploaded', list)
+      this.uploadVisible = false
     }
   }
 }
 </script>
 
 <style lang="scss">
+@import "~assets/css/variables.scss";
+.el-dialog {
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+  border-radius: 18px;
+}
+.el-dialog__header {
+  background-image: $uploadHeader;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+.el-dialog__title {
+  color: #fff;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  color: #fff;
+  font-size: 1.25rem;
+  &:hover {
+    color: #ddd;
+  }
+}
+
 .el-upload-dragger {
   width: 250px;
   height: 225px;
+  border-radius: 18px;
 }
 .el-upload-list__item {
   width: 250px;
@@ -201,6 +233,9 @@ export default {
   display: flex;
   justify-content: center;
   background-color: #f4f4f4;
+  padding: 4px 0px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
 }
 
 .upload-container {
@@ -223,6 +258,7 @@ export default {
     margin-left: 20px;
     height: 223px;
     width: 250px;
+    border-radius: 18px;
     .preview {
       height: 138px;
       width: 100%;

@@ -36,6 +36,7 @@ const article = require('./model/article')
 const task = require('./model/task')
 const setting = require('./model/setting')
 const test = require('./model/test')
+const userTest = require('./model/usertest')
 
 // 引入middleware
 const auth = require('./utils/auth')
@@ -57,6 +58,7 @@ article.sync()
 task.sync()
 setting.sync()
 test.sync()
+userTest.sync()
 
 // error handler
 onerror(app)

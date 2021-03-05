@@ -13,17 +13,31 @@
         交卷
       </el-button>
     </sticky>
-    <!-- 时间区 -->
-
-    <!-- 试卷区 -->
-    <div class="test-title">{{ testForm.title }}</div>
-    <div class="info">
-      <span>限时：{{ timelimit }} 分</span>
-      <el-divider direction="vertical"></el-divider>
-      <span>题数：{{ totalNumber }}</span>
-      <el-divider direction="vertical"></el-divider>
-      <span>分数: {{ totalScore }}</span>
+    <!-- 待做：时间区（简单时间+倒数进度条） -->
+    <!-- https://github.com/f/vue-wait -->
+    <div class="time-wrapper">
+      <div class="time">时间：{{ time }} / 90:00 分钟</div>
+      <el-button v-if="!isStarted" circle type="primary" icon="el-icon-caret-right" size="mini" @click="start"></el-button>
+      <el-button v-else circle icon="el-icon-minus" size="mini" @click="stop"></el-button>
     </div>
+    <!-- 试卷区 -->
+    <el-row :gutter="20">
+      <el-col :span="8" :offset="8">
+        <el-divider></el-divider>
+        <div class="test-title">{{ testForm.title }}</div>
+        <div class="info">
+          <span>限时：{{ timelimit }} 分</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>题数：{{ totalNumber }}</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>分数: {{ totalScore }}</span>
+        </div>
+        <div class="warning">
+          请勿刷新页面，否则将丢失数据
+        </div>
+        <el-divider></el-divider>
+      </el-col>
+    </el-row>
     <el-row :gutter="20">
       <el-col :span="14" :offset="5">
         <question
@@ -39,11 +53,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { getUserTestB, calScoreB } from '@/api/admin'
 import Sticky from '@/components/Fixed'
 import Question from '../detail/question'
 
 export default {
+  computed: mapState([ 'adminInfo']),
   data() {
     return {
       loading: false,
@@ -63,7 +79,17 @@ export default {
       // 试卷总题数
       totalNumber: 0,
       // 试卷限时
-      timelimit: 0
+      timelimit: 0,
+
+      // 是否正在计时
+      isStarted: false,
+      timer: 0,
+      time: '',
+      // 定义时，分，秒
+      h: 0,
+      m: 0,
+      s: 0,
+      ms: 0
     }
   },
   mounted() {
@@ -71,6 +97,14 @@ export default {
       this.getTest()
     }
   },
+  // 刷新销毁页面前保存数据
+  // beforeDesotry() {
+  //   let data = {
+  //     time: this.time,
+  //     questions: this.testForm.questions
+  //   }
+  //   this.$store.commit('saveTestData', data)
+  // },
   methods: {
     // 计算试卷总分
     calculateTotal(questions) {
@@ -94,6 +128,8 @@ export default {
           this.timelimit = test.timelimit
           this.totalNumber = test.questions.length
           this.totalScore = this.calculateTotal(test.questions)
+          //开始计时
+          this.start()
         } else {
           this.$message.error(res.data.desc)
         }
@@ -113,6 +149,7 @@ export default {
         }).then(() => {
           let data = {
             id: this.$route.params.id,
+            userid: this.adminInfo.id,
             answers: this.testForm.questions
           }
           calScoreB(data).then(res => {
@@ -127,6 +164,47 @@ export default {
         }).catch(err => {
           console.log(err)
         })
+    },
+
+    setTime() {
+      this.ms = this.ms + 50      
+	    if(this.ms >= 1000) {
+	      this.ms = 0
+	      this.s = this.s + 1;        
+	    }
+      if(this.s >= 60){
+        this.s = 0
+        this.m = this.m + 1     
+      }
+      if(this.m >= 60){
+        this.m = 0;
+        this.h = this.h + 1;        
+      }
+      this.time = this.toDub(this.m) + ":" + this.toDub(this.s)
+    },
+    reset() {  
+      clearInterval(this.timer)
+      this.h = 0
+      this.m = 0
+      this.s = 0
+      this.ms = 0
+      this.time = "00:00"
+    },
+    start() {
+      this.timer = setInterval(this.setTime, 50)
+      this.isStarted = true
+    },
+    stop() { 
+      clearInterval(this.timer)
+      this.isStarted = false
+    },
+    toDub(n) {
+      if(n < 10){
+        return "0" + n
+      }
+      else {
+        return "" + n
+      }
     }
   },
   components: {
@@ -137,17 +215,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.time-wrapper {
+  font-size: 1rem;
+  color: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  .time {
+    margin-right: 10px;
+  }
+}
 .test-title {
   text-align: center;
   margin: 2rem 0;
   font-size: 1.5rem;
-  color: #666;
+  color: #409eff;
 }
 .info {
   text-align: center;
   margin: 15px 0;
   font-size: 1rem;
   color: #666;
+}
+.warning {
+  text-align: center;
+  margin: 15px 0;
+  font-size: 1rem;
+  color: #e6a23c;
 }
 .score {
   margin-right: 20px;

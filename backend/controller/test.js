@@ -1,6 +1,7 @@
 //引入model
 const test = require('../model/test')
 const user = require('../model/user')
+const usertest = require('../model/usertest')
 
 //应区分题目接口及答案接口，答案接口一般不返回
 class testController {
@@ -27,9 +28,19 @@ class testController {
       const req = ctx.request.body
       const u = await user.findByPk(req.id)
       const ts = await u.getTests()
+
+      // 获取考生考试记录
+      const rs = await usertest.findAll({
+        attributes: { exclude: ['answers'] },
+        where: {
+          userId: req.id
+        }
+      })
+
       return ctx.body = {
         code: '0',
         content: JSON.stringify(ts),
+        records: JSON.stringify(rs),
         desc: '获取成功'
       }
     } catch(error) {
@@ -66,7 +77,6 @@ class testController {
   static async getUserTest(ctx) {
     try {
       const req = ctx.request.body
-      const id = req.id
       // 获取考试数据（去掉答案）
       const t = await test.findByPk(req.id)
       t.questions = JSON.parse(t.questions).map(i => {
@@ -204,8 +214,9 @@ class testController {
     try {
       const req = ctx.request.body
       const id = req.id
+      const userid = req.userid
       // 考生答案，格式为[{ id: id, typeId: typeId, score: score, answer: answer }]
-      const answers = req.answers
+      const as = req.answers
       // 找到测试题
       const t = await test.findByPk(id)
       // 重新赋值问题内容
@@ -220,11 +231,22 @@ class testController {
       // 分类计算分数
       // 多选题错一个不得分，简答和填空需人工给分
       let total = 0
-      answers.forEach(a => {
+      as.forEach(a => {
         // 找匹配题目id
         let q = t.questions.find(i => { return i.id == a.id })
         if(JSON.stringify(q.answer) === JSON.stringify(a.answer)) {
           total += Number(q.score)
+        }
+      })
+
+      // 把考生答案和分数存入usertest表中
+      await usertest.update({
+        score: total,
+        answers: JSON.stringify(as)
+      }, {
+        where: {
+          userId: userid,
+          testId: id
         }
       })
 

@@ -23,6 +23,17 @@
             总分数：<br> {{ calcScores(JSON.parse(item.questions)) }} 分
           </div>
           <el-divider></el-divider>
+          <div class="item">
+            考试记录：<br>
+            <div v-for="r in records" :key="r.id">
+              <div v-if="r.testId === item.id">
+                <span>第 {{ r.id }} 次：</span>
+                <span style="color:#409EFF;font-size:1.25rem;">{{ r.score }}</span>
+                <span> 分</span>
+              </div>
+            </div>
+          </div>
+          <el-divider></el-divider>
           <div style="text-align:center;">
             <div class="item">
               祝你好运，加油~
@@ -44,7 +55,8 @@ export default {
   computed: mapState([ 'adminInfo' ]),
   data() {
     return {
-      list: []
+      list: [],
+      records: []
     }
   },
   filters: {
@@ -70,6 +82,7 @@ export default {
         if(res.data.code === '0') {
           this.$message.success(res.data.desc)
           this.list = JSON.parse(res.data.content)
+          this.records = JSON.parse(res.data.records)
         } else {
           this.$message.error(res.data.desc)
         }
@@ -79,7 +92,15 @@ export default {
     },
     // 开始考试
     startTest(id) {
-      this.$router.push({ path: '/admin-tests/mytests/'+id })
+      this.$confirm('准备好开始考试了吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push({ path: '/admin-tests/mytests/'+id })
+        }).catch(err => {
+          console.log(err)
+        })
     }
   }
 }

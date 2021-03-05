@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     reset() {
-      console.log("重置")
       //恢复原始数据
       this.$set(this.videoData, 'link', 'https://player.youku.com/embed/XNTA5NzE0MDUzNg==')
       this.$set(this.videoData, 'videoStyle', 'width:100%;height:310px;')

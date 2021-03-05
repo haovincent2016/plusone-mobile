@@ -25,6 +25,8 @@ import Nav from "./settings/nav"
 import Links from './settings/links'
 import Contents from './settings/contents'
 import Titles from './settings/titles'
+import IntroSetting from './settings/introsetting'
+import SepSetting from './settings/sepsetting'
 
 export default {
   name: 'Editor',
@@ -39,24 +41,32 @@ export default {
       type: '',
       list: {
         'nav': {
-            tit: '页面信息',
-            com: 'Nav'
+          tit: '页面信息',
+          com: 'Nav'
         },
         'banner': {
-            tit: '轮播图',
-            com: 'Images'
+          tit: '轮播图',
+          com: 'Images'
         },
         'video': {
-            tit: '视频设置',
-            com: 'Links'
+          tit: '视频设置',
+          com: 'Links'
         },
         'course': {
-            tit: '内容设置',
-            com: 'Contents'
+          tit: '内容设置',
+          com: 'Contents'
         },
         'news': {
-            tit: '新闻设置',
-            com: 'Titles'
+          tit: '新闻设置',
+          com: 'Titles'
+        },
+        'intro': {
+          tit: '教师简介',
+          com: 'IntroSetting'
+        },
+        'separator': {
+          tit: '分栏行',
+          com: 'SepSetting'
         }
       },
       tabType: {
@@ -91,7 +101,9 @@ export default {
     Images,
     Links,
     Contents,
-    Titles
+    Titles,
+    IntroSetting,
+    SepSetting
   }
 }
 </script>
